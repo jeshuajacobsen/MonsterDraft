@@ -1,0 +1,91 @@
+using UnityEngine;
+
+using System.Collections.Generic;
+using TMPro;
+
+public class RoundManager : MonoBehaviour
+{
+    public static RoundManager instance;
+    [SerializeField] private GameObject roundPanel;
+    [SerializeField] private SmallCardView SmallCardViewPrefab;
+    [SerializeField] private GameObject HandContent;
+    public GameObject DungeonPanel;
+    public Monster MonsterPrefab;
+
+    public GameState gameState;
+
+    public RoundDeck roundDeck;
+    public DiscardPile discardPile;
+
+    public LayerMask draggableLayer; 
+
+    public List<SmallCardView> hand = new List<SmallCardView>();
+
+    [SerializeField] private GameObject DeckDiscardPanel;
+    private int _coins;
+    public int Coins { get { return _coins; } 
+        set { 
+            _coins = value; 
+            DeckDiscardPanel.transform.Find("CoinsImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
+        } 
+    }
+
+    private int _mana;
+    public int Mana { get { return _mana; } 
+        set { 
+            _mana = value; 
+            DeckDiscardPanel.transform.Find("ManaImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
+        } 
+    }
+
+    private int _actions;
+    public int Actions { get { return _actions; } 
+        set { 
+            _actions = value; 
+            DeckDiscardPanel.transform.Find("ActionsImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
+        } 
+    }
+
+    void Awake()
+    {
+
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void Start()
+    {
+        
+    }
+
+    public void StartRound()
+    {
+        roundPanel.gameObject.SetActive(true);
+        roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
+        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound();
+        roundDeck = new RoundDeck(RunManager.instance.runDeck);
+        List<Card> newHand = roundDeck.DrawHand();
+        foreach (Card card in newHand)
+        {
+            SmallCardView newCard = Instantiate(SmallCardViewPrefab, HandContent.transform);
+            newCard.InitValues(card);
+            hand.Add(newCard);
+        }
+        gameState = new MainPhase(this);
+        gameState.EnterState();
+    }
+
+    public void SwitchState(GameState newState)
+    {
+        gameState?.ExitState(); // Exit the current state
+        gameState = newState;
+        gameState.EnterState(); // Enter the new state
+    }
+}

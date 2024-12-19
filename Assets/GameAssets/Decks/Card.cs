@@ -1,0 +1,28 @@
+public class Card
+{
+    public string Name { get; set; }
+    public string Type { get; set; }
+    public string Description { get; set; }
+
+    public Card(string name, string type)
+    {
+        Name = name;
+        Type = type;
+        if (type == "Monster")
+        {
+            BaseStatsData baseStats = GameManager.instance.gameData.GetBaseStatsData(name);
+            Description = baseStats.Description;
+        }
+        else if (type == "Treasure")
+        {
+            TreasureData baseStats = GameManager.instance.gameData.GetTreasureData(name);
+            Description = baseStats.Description;
+        }
+        else if (type == "Action")
+        {
+            BaseActionData baseStats = GameManager.instance.gameData.GetActionData(name);
+            Description = baseStats.Description;
+        }
+
+    }
+}
