@@ -3,6 +3,7 @@ public class Card
     public string Name { get; set; }
     public string Type { get; set; }
     public string Description { get; set; }
+    public int Cost { get; set; }
 
     public Card(string name, string type)
     {
@@ -12,16 +13,19 @@ public class Card
         {
             BaseStatsData baseStats = GameManager.instance.gameData.GetBaseStatsData(name);
             Description = baseStats.Description;
+            Cost = baseStats.Cost;
         }
         else if (type == "Treasure")
         {
             TreasureData baseStats = GameManager.instance.gameData.GetTreasureData(name);
             Description = baseStats.Description;
+            Cost = baseStats.Cost;
         }
         else if (type == "Action")
         {
             BaseActionData baseStats = GameManager.instance.gameData.GetActionData(name);
             Description = baseStats.Description;
+            Cost = baseStats.Cost;
         }
 
     }

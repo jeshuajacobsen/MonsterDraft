@@ -10,7 +10,7 @@ public class SmallCardView : MonoBehaviour
     public Card card;
 
     private Camera mainCamera;
-    private bool isDragging = false;
+    public bool isDragging = false;
     private Vector3 originalPosition;
     private ScrollRect scrollRect;
     private Transform originalParent;
@@ -39,52 +39,50 @@ public class SmallCardView : MonoBehaviour
     void Update()
     {
         #if UNITY_EDITOR || UNITY_STANDALONE
-        HandleMouseInput();
+            if (isDragging)
+            {
+                Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
+                transform.position = new Vector3(mousePosition.x, mousePosition.y, transform.position.z);
+            }
         #else
         HandleTouchInput();
         #endif
     }
 
-    private void HandleMouseInput()
+    public void HandleMouseDown()
+    {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject == gameObject)
+            {
+                isDragging = true;
+                originalPosition = transform.position;
+                originalParent = transform.parent;
+                if (dragCanvas != null)
+                {
+                    MoveToCanvas(dragCanvas);
+                }
+
+                if (scrollRect != null)
+                {
+                    scrollRect.enabled = false;
+                }
+                return;
+            }
+        }
+    }
+
+    public void HandleMouseUp()
     {
         if (isDragging)
-        {
-            Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
-            transform.position = new Vector3(mousePosition.x, mousePosition.y, transform.position.z);
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            PointerEventData pointerData = new PointerEventData(EventSystem.current)
-            {
-                position = Input.mousePosition
-            };
-
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-
-            foreach (RaycastResult result in results)
-            {
-                if (result.gameObject == gameObject)
-                {
-                    isDragging = true;
-                    originalPosition = transform.position;
-                    originalParent = transform.parent;
-                    if (dragCanvas != null)
-                    {
-                        MoveToCanvas(dragCanvas);
-                    }
-
-                    if (scrollRect != null)
-                    {
-                        scrollRect.enabled = false;
-                    }
-                    return;
-                }
-            }
-
-            
-        }
-        else if (Input.GetMouseButtonUp(0) && isDragging)
         {
             isDragging = false;
             bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
@@ -195,7 +193,6 @@ public class SmallCardView : MonoBehaviour
     public void InitValues(Card card)
     {
         this.card = card;
-        Debug.Log("Card Name: " + card.Name);
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(card.Name);
         //transform.Find("CardCost").GetComponent<TextMesh>().text = card.cost.ToString();

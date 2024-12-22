@@ -4,15 +4,44 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Monster monster;
+    private Camera mainCamera;
+
     void Start()
     {
-        
+        mainCamera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        #if UNITY_EDITOR || UNITY_STANDALONE
         
+        #else
+        HandleTouchInput();
+        #endif
+    }
+
+    public void HandleMouseDown()
+    {
+        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null && collider.OverlapPoint(mousePosition))
+        {
+            RoundManager.instance.gameState.SelectTile(this, mousePosition);
+        }
+    }
+
+    public void HandleTouchInput()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            Vector3 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, mainCamera.nearClipPlane + 1.0f));
+            Collider2D collider = GetComponent<Collider2D>();
+            if (collider != null && collider.OverlapPoint(touchPosition))
+            {
+                RoundManager.instance.gameState.SelectTile(this, touchPosition);
+            }
+        }
     }
 }

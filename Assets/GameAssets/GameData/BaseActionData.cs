@@ -17,15 +17,19 @@ public class BaseActionData
         {
             case "Fireball":
                 Effects.Add("Deal 3 damage to target");
+                Cost = 2;
                 break;
             case "Heal":
                 Effects.Add("Restore 3 health to target");
+                Cost = 2;
                 break;
             case "Shield":
                 Effects.Add("Give target 3 defense");
+                Cost = 2;
                 break;
             default:
                 Effects.Add("No effect");
+                Cost = 0;
                 break;
         }
     }

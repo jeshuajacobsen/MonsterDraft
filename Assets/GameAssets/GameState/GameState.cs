@@ -18,4 +18,6 @@ public abstract class GameState : MonoBehaviour
 
     public abstract bool CanPlayCard(Card card, Vector3 position);
     public abstract void PlayCard(Card card, Vector3 position);
+
+    public abstract void SelectTile(Tile tile, Vector3 position);
 }

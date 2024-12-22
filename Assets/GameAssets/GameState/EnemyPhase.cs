@@ -6,7 +6,7 @@ public class EnemyPhase : GameState
 
     public override void EnterState()
     {
-        Debug.Log("Entering Draw Phase");
+        Debug.Log("Entering Enemy Phase");
     }
 
     public override void UpdateState()
@@ -15,7 +15,7 @@ public class EnemyPhase : GameState
 
     public override void ExitState()
     {
-        Debug.Log("Exiting Draw Phase");
+        Debug.Log("Exiting Enemy Phase");
     }
 
     public override bool CanPlayCard(Card card, Vector3 position)
@@ -26,5 +26,10 @@ public class EnemyPhase : GameState
     public override void PlayCard(Card card, Vector3 position)
     {
         Debug.LogError("Cards cannot be played during the Draw Phase!");
+    }
+
+    public override void SelectTile(Tile tile, Vector3 position)
+    {
+        Debug.LogError("Tiles cannot be selected during the Draw Phase!");
     }
 }

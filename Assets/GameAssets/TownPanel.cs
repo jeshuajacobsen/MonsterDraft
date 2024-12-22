@@ -26,37 +26,37 @@ public class TownPanel : MonoBehaviour
             Destroy(child.gameObject);
         }
         StockPile stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues("Copper", 10, 10);
+        stockPile.InitValues("Copper", 10, "Treasure");
         stockPiles.Add(stockPile);
 
         stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues("Silver", 10, 20);
+        stockPile.InitValues("Silver", 10, "Treasure");
         stockPiles.Add(stockPile);
 
         stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues("Mana Vial", 10, 20);
+        stockPile.InitValues("Mana Vial", 10, "Treasure");
         stockPiles.Add(stockPile);
 
         List<string> treasureNames = new List<string> { "Copper", "Silver", "Mana Vial" };
 
         stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, 10);
+        stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, "Treasure");
         stockPiles.Add(stockPile);
 
         List<string> monsterNames = new List<string>();
         for(int i = 0; i <= 3; i++)
         {
             stockPile = Instantiate(stockPilePrefab, transform);
-            stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames), 10, 10);
+            stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames), 10, "Monster");
             monsterNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
         }
 
         List<string> actionNames = new List<string>();
-        for(int i = 0; i <= 3; i++)
+        for(int i = 0; i <= 2; i++)
         {
             stockPile = Instantiate(stockPilePrefab, transform);
-            stockPile.InitValues(GameManager.instance.gameData.GetRandomActionName(actionNames), 10, 10);
+            stockPile.InitValues(GameManager.instance.gameData.GetRandomActionName(actionNames), 10, "Action");
             actionNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
         }

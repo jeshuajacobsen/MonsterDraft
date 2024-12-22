@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Monster : MonoBehaviour
 {
@@ -10,25 +11,40 @@ public class Monster : MonoBehaviour
     public int Health { get; set; }
     public int Attack { get; set; }
     public int Defense { get; set; }
+    public int Movement { get; set; }
+    public Tile tileOn;
 
-    // Start is called before the first frame update
+    public List<string> actionsUsedThisTurn = new List<string>();
+
     void Start()
     {
-        
+        MainPhase.ExitMainPhase.AddListener(() => actionsUsedThisTurn.Clear());
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
 
-    public void InitValues(string name, MonsterCard monsterCard)
+    public void InitValues(MonsterCard monsterCard, Tile tile)
     {
-        this.name = name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(name);
+        this.tileOn = tile;
+        this.name = monsterCard.Name;
+        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(this.name);
+        transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = this.name;
         this.Health = monsterCard.Health;
         this.Attack = monsterCard.Attack;
         this.Defense = monsterCard.Defense;
+        this.Movement = monsterCard.Movement;
+    }
+
+    public void MoveTile(Tile tile)
+    {
+        tileOn.monster = null;
+        tileOn = tile;
+        tile.monster = this;
+        transform.SetParent(tile.transform);
+        transform.position = tile.transform.position;
+        actionsUsedThisTurn.Add("Movement");
     }
 }

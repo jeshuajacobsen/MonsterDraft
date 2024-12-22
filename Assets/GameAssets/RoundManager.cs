@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System;
 using System.Collections.Generic;
 using TMPro;
 
@@ -20,8 +20,12 @@ public class RoundManager : MonoBehaviour
     public LayerMask draggableLayer; 
 
     public List<SmallCardView> hand = new List<SmallCardView>();
+    public DungeonRow dungeonRow1;
+    public DungeonRow dungeonRow2;
+    public DungeonRow dungeonRow3;
 
     [SerializeField] private GameObject DeckDiscardPanel;
+    public GameObject monsterOptionPanel;
     private int _coins;
     public int Coins { get { return _coins; } 
         set { 
@@ -65,6 +69,17 @@ public class RoundManager : MonoBehaviour
         
     }
 
+    public void Update()
+    {
+        try
+        {
+            gameState.UpdateState();
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
     public void StartRound()
     {
         roundPanel.gameObject.SetActive(true);
@@ -87,5 +102,47 @@ public class RoundManager : MonoBehaviour
         gameState?.ExitState(); // Exit the current state
         gameState = newState;
         gameState.EnterState(); // Enter the new state
+    }
+
+    public void EndTurn()
+    {
+        if (gameState is MainPhase)
+        {
+            SwitchState(new DrawPhase(this));
+            SwitchState(new EnemyPhase(this));
+            SwitchState(new MainPhase(this));
+        }
+    }
+
+    public void DiscardHand()
+    {
+        for (int i = hand.Count - 1; i >= 0; i--)
+        {
+            if (hand[i] != null)
+            {
+                discardPile.AddCard(hand[i].card);
+                Destroy(hand[i].gameObject);
+            }
+        }
+        hand.Clear();
+    }
+
+    public void AddCardToHand(Card card)
+    {
+        SmallCardView newCard = Instantiate(SmallCardViewPrefab, HandContent.transform);
+        newCard.InitValues(card);
+        hand.Add(newCard);
+    }
+
+    public void MoveMonster(Monster monster)
+    {
+        string tileName = monster.tileOn.name;
+        int currentTileNumber = int.Parse(tileName.Substring(4));
+        Transform parentTransform = monster.tileOn.transform.parent;
+        int newTileNumber = Math.Min(currentTileNumber + monster.Movement, 7);
+        Transform newTile = parentTransform.Find("Tile" + newTileNumber);
+
+        monster.MoveTile(newTile.GetComponent<Tile>());
+        monsterOptionPanel.gameObject.SetActive(false);
     }
 }
