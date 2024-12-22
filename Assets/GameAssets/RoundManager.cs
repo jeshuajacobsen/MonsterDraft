@@ -136,13 +136,27 @@ public class RoundManager : MonoBehaviour
 
     public void MoveMonster(Monster monster)
     {
+        int maxDistance = monster.Movement;
+        for (int i = 1; i <= monster.Movement; i++)
+        {
+            Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i);
+            if (nextTile != null && nextTile.GetComponent<Tile>().monster != null)
+            {
+                maxDistance = i;
+                break;
+            }
+        }
         string tileName = monster.tileOn.name;
         int currentTileNumber = int.Parse(tileName.Substring(4));
         Transform parentTransform = monster.tileOn.transform.parent;
-        int newTileNumber = Math.Min(currentTileNumber + monster.Movement, 7);
+        int newTileNumber = Math.Min(currentTileNumber + monster.Movement, currentTileNumber + maxDistance);
+        if (newTileNumber > 7)
+        {
+            newTileNumber = 7;
+        }
         Transform newTile = parentTransform.Find("Tile" + newTileNumber);
-
+        monster.tileOn.monster = null;
+Debug.Log("Moving monster to " + newTile.name);
         monster.MoveTile(newTile.GetComponent<Tile>());
-        monsterOptionPanel.gameObject.SetActive(false);
     }
 }

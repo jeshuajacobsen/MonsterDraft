@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
     public Monster monster;
     private Camera mainCamera;
+    public DungeonRow dungeonRow;
 
     void Start()
     {

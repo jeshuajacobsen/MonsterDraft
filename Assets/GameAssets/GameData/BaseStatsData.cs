@@ -9,6 +9,9 @@ public class BaseStatsData
     public string Description { get; set; }
     public int Cost { get; set; }
 
+    public string skill1Name;
+    public string skill2Name;
+
     public BaseStatsData(string name)
     {
         Description = "This is the description for " + name;
@@ -21,6 +24,8 @@ public class BaseStatsData
                 Movement = 1;
                 ManaCost = 1;
                 Cost = 2;
+                skill1Name = "Zap";
+                skill2Name = "Shock";
                 break;
             case "Owisp":
                 Attack = 3;
@@ -29,6 +34,8 @@ public class BaseStatsData
                 Movement = 1;
                 ManaCost = 1;
                 Cost =2;
+                skill1Name = "Spark";
+                skill2Name = "Burn";
                 break;
             case "Leafree":
                 Attack = 2;
@@ -37,6 +44,8 @@ public class BaseStatsData
                 Movement = 2;
                 ManaCost = 2;
                 Cost = 2;
+                skill1Name = "Leaf";
+                skill2Name = "Growth";
                 break;
             case "Borble":
                 Attack = 4;
@@ -45,6 +54,8 @@ public class BaseStatsData
                 Movement = 1;
                 ManaCost = 2;
                 Cost = 2;
+                skill1Name = "Bubble";
+                skill2Name = "Wave";
                 break;
             default:
                 Attack = 0;
@@ -52,6 +63,8 @@ public class BaseStatsData
                 Defense = 0;
                 ManaCost = 0;
                 Cost = 0;
+                skill1Name = "Zap";
+                skill2Name = "Spark";
                 break;
         }
     }

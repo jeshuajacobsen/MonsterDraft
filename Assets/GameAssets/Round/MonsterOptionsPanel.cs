@@ -32,5 +32,19 @@ public class MonsterOptionsPanel : MonoBehaviour
         {
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
         }
+
+        optionButton = Instantiate(monsterOptionButtonPrefab, transform);
+        optionButton.InitValues(activeTile.monster, "Skill1");
+        if (activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill1.name))
+        {
+            optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        }
+
+        optionButton = Instantiate(monsterOptionButtonPrefab, transform);
+        optionButton.InitValues(activeTile.monster, "Skill2");
+        if (activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill2.name))
+        {
+            optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        }
     }
 }

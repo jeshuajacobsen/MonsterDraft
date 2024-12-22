@@ -8,6 +8,8 @@ public class GameData
     private Dictionary<string, BaseActionData> _actionData;
     private Dictionary<string, TreasureData> _treasureData;
 
+    private Dictionary<string, SkillData> _skills;
+
     public GameData()
     {
         _baseStatsData = new Dictionary<string, BaseStatsData>();
@@ -28,6 +30,17 @@ public class GameData
         _treasureData.Add("Mana Vial", new TreasureData("Mana Vial"));
         _treasureData.Add("Mana Crystal", new TreasureData("Mana Crystal"));
         _treasureData.Add("Mana Gem", new TreasureData("Mana Gem"));
+
+        _skills = new Dictionary<string, SkillData>();
+        _skills.Add("Zap", new SkillData("Zap"));
+        _skills.Add("Bubble", new SkillData("Bubble"));
+        _skills.Add("Leaf", new SkillData("Leaf"));
+        _skills.Add("Spark", new SkillData("Spark"));
+        _skills.Add("Shock", new SkillData("Shock"));
+        _skills.Add("Burn", new SkillData("Burn"));
+        _skills.Add("Wave", new SkillData("Wave"));
+        _skills.Add("Growth", new SkillData("Growth"));
+
     }
 
     public BaseStatsData GetBaseStatsData(string name)
@@ -43,6 +56,11 @@ public class GameData
     public TreasureData GetTreasureData(string name)
     {
         return _treasureData[name];
+    }
+
+    public SkillData GetSkill(string name)
+    {
+        return _skills[name];
     }
 
     public string GetRandomTreasureName(List<string> exclude)
