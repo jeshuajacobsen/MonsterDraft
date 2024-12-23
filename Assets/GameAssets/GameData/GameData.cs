@@ -9,6 +9,7 @@ public class GameData
     private Dictionary<string, TreasureData> _treasureData;
 
     private Dictionary<string, SkillData> _skills;
+    private Dictionary<string, List<string>> DungeonData;
 
     public GameData()
     {
@@ -41,6 +42,8 @@ public class GameData
         _skills.Add("Wave", new SkillData("Wave"));
         _skills.Add("Growth", new SkillData("Growth"));
 
+        DungeonData = new Dictionary<string, List<string>>();
+        DungeonData.Add("Dungeon1", new List<string> { "Zaple", "Owisp", "Leafree", "Borble" });
     }
 
     public BaseStatsData GetBaseStatsData(string name)
@@ -86,5 +89,10 @@ public class GameData
             return "";
         }
         return actionNames[Random.Range(0, actionNames.Count)];
+    }
+
+    public List<string> GetDungeonMonsters(string name)
+    {
+        return DungeonData[name];
     }
 }

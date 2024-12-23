@@ -8,7 +8,33 @@ public class Monster : MonoBehaviour
 {
 
     public string name;
-    public int Health { get; set; }
+
+    private int _health;
+    public int Health { 
+        get
+        {
+            return _health;
+        }
+        set
+        {
+            _health = value;
+            GameObject healthBar = transform.Find("HealthBar/BarFill").gameObject;
+            if (healthBar != null)
+            {
+                RectTransform barRectTransform = healthBar.GetComponent<RectTransform>();
+
+                float healthPercent = Mathf.Clamp01((float)_health / MaxHealth);
+
+                barRectTransform.localScale = new Vector3(healthPercent, 1, 1);
+            }
+            if (_health <= 0)
+            {
+                tileOn.monster = null;
+                Destroy(gameObject);
+            }
+        }
+    }
+    public int MaxHealth { get; set; }
     public int Attack { get; set; }
     public int Defense { get; set; }
     public int Movement { get; set; }
@@ -20,6 +46,8 @@ public class Monster : MonoBehaviour
     public SkillData skill1;
     public SkillData skill2;
 
+    public string team;
+
     void Start()
     {
         MainPhase.ExitMainPhase.AddListener(() => actionsUsedThisTurn.Clear());
@@ -30,12 +58,14 @@ public class Monster : MonoBehaviour
         
     }
 
-    public void InitValues(MonsterCard monsterCard, Tile tile)
+    public void InitValues(MonsterCard monsterCard, Tile tile, string team)
     {
+        this.team = team;
         this.tileOn = tile;
         this.name = monsterCard.Name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(this.name);
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = this.name;
+        this.MaxHealth = monsterCard.Health;
         this.Health = monsterCard.Health;
         this.Attack = monsterCard.Attack;
         this.Defense = monsterCard.Defense;

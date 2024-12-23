@@ -85,6 +85,7 @@ public class SmallCardView : MonoBehaviour
         if (isDragging)
         {
             isDragging = false;
+            MoveToCanvas(originalCanvas);
             bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
                 originalParent.GetComponent<RectTransform>(),
                 Input.mousePosition,
@@ -92,7 +93,6 @@ public class SmallCardView : MonoBehaviour
             );
             if (isInsideOriginalParent)
             {
-                MoveToCanvas(originalCanvas);
                 transform.SetParent(originalParent);
                 transform.position = originalPosition;
             } else {
@@ -101,7 +101,6 @@ public class SmallCardView : MonoBehaviour
                     RoundManager.instance.gameState.PlayCard(card, transform.position);
                     Destroy(gameObject);
                 } else {
-                    MoveToCanvas(originalCanvas);
                     transform.SetParent(originalParent);
                     transform.position = originalPosition;
                 }

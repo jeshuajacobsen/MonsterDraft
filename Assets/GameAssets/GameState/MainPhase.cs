@@ -39,8 +39,6 @@ public class MainPhase : GameState
                 }
             }
 
-            
-            
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -127,11 +125,12 @@ public class MainPhase : GameState
                     Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                     if (tileTransform != null && tileTransform.GetComponent<Collider2D>().bounds.Contains(position))
                     {
-                        Monster newMonster = Instantiate(RoundManager.instance.MonsterPrefab, tileTransform);
-                        newMonster.InitValues(monsterCard, tileTransform.GetComponent<Tile>());
+                        Monster newMonster = Instantiate(roundManager.MonsterPrefab, tileTransform);
+                        newMonster.InitValues(monsterCard, tileTransform.GetComponent<Tile>(), "Player");
                         tileTransform.GetComponent<Tile>().monster = newMonster;
-                        RoundManager.instance.discardPile.AddCard(card);
+                        roundManager.discardPile.AddCard(card);
                         roundManager.hand.Remove(roundManager.hand.Find(x => x.card == card));
+                        roundManager.Mana -= monsterCard.ManaCost;
                         return;
                     }
                 }

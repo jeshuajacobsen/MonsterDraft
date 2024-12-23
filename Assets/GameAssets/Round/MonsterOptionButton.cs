@@ -27,27 +27,43 @@ public class MonsterOptionButton : MonoBehaviour
         if (option == "Movement")
         {
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = "Move " + monster.Movement;
+            if (RoundManager.CheckForMonster(monster.tileOn, 1) != null)
+            {
+                transform.GetComponent<Button>().interactable = false;
+            }
         }
         else if (option == "Skill1")
         {
+            transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill1.name;
+            for (int i = 1; i <= monster.skill1.Range; i++)
+            {
+                if (RoundManager.CheckForMonster(monster.tileOn, i) != null)
+                {
+                    transform.GetComponent<Button>().interactable = true;
+                }
+            }
         }
         else if (option == "Skill2")
         {
+            transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill2.name;
+            for (int i = 1; i <= monster.skill1.Range; i++)
+            {
+                if (RoundManager.CheckForMonster(monster.tileOn, i) != null)
+                {
+                    transform.GetComponent<Button>().interactable = true;
+                }
+            }
         }
 
-        if (CheckForMonster(monster.tileOn, 1) != null)
-        {
-            transform.GetComponent<Button>().interactable = false;
-        }
+        
 
 
     }
 
     public void OnClick()
     {
-        Debug.Log("Clicked " + option);
         if (option == "Movement")
         {
             RoundManager.instance.MoveMonster(monster);
@@ -56,23 +72,13 @@ public class MonsterOptionButton : MonoBehaviour
         else if (option == "Skill1")
         {
 
-            //RoundManager.instance.AttackMonster();
+            RoundManager.instance.UseSkill(monster, monster.skill1);
             RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
         }
         else if (option == "Skill2")
         {
-            //RoundManager.instance.AttackMonster();
+            RoundManager.instance.UseSkill(monster, monster.skill2);
             RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
         }
-    }
-
-    public Monster CheckForMonster(Tile currentTile, int distance)
-    {
-        Tile nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance);
-        if (nextTile != null && nextTile.monster != null)
-        {
-            return nextTile.monster;
-        }
-        return null;
     }
 }

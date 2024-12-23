@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using UnityEngine;
+using System;
 
 public class BaseStatsData
 {
@@ -19,7 +22,7 @@ public class BaseStatsData
         {
             case "Zaple":
                 Attack = 3;
-                Health = 2;
+                Health = 10;
                 Defense = 1;
                 Movement = 1;
                 ManaCost = 1;
@@ -29,7 +32,7 @@ public class BaseStatsData
                 break;
             case "Owisp":
                 Attack = 3;
-                Health = 1;
+                Health = 10;
                 Defense = 2;
                 Movement = 1;
                 ManaCost = 1;
@@ -39,7 +42,7 @@ public class BaseStatsData
                 break;
             case "Leafree":
                 Attack = 2;
-                Health = 4;
+                Health = 12;
                 Defense = 3;
                 Movement = 2;
                 ManaCost = 2;
@@ -49,7 +52,7 @@ public class BaseStatsData
                 break;
             case "Borble":
                 Attack = 4;
-                Health = 2;
+                Health = 13;
                 Defense = 2;
                 Movement = 1;
                 ManaCost = 2;
@@ -58,6 +61,7 @@ public class BaseStatsData
                 skill2Name = "Wave";
                 break;
             default:
+                Debug.Log("Invalid name: " + name);
                 Attack = 0;
                 Health = 0;
                 Defense = 0;

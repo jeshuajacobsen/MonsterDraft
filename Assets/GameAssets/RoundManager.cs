@@ -23,6 +23,7 @@ public class RoundManager : MonoBehaviour
     public DungeonRow dungeonRow1;
     public DungeonRow dungeonRow2;
     public DungeonRow dungeonRow3;
+    public Dungeon currentDungeon;
 
     [SerializeField] private GameObject DeckDiscardPanel;
     public GameObject monsterOptionPanel;
@@ -93,6 +94,7 @@ public class RoundManager : MonoBehaviour
             newCard.InitValues(card);
             hand.Add(newCard);
         }
+        currentDungeon = new Dungeon("Dungeon1");
         gameState = new MainPhase(this);
         gameState.EnterState();
     }
@@ -156,7 +158,64 @@ public class RoundManager : MonoBehaviour
         }
         Transform newTile = parentTransform.Find("Tile" + newTileNumber);
         monster.tileOn.monster = null;
-Debug.Log("Moving monster to " + newTile.name);
         monster.MoveTile(newTile.GetComponent<Tile>());
+    }
+
+    public bool CanMoveMonster(Monster monster)
+    {
+        Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, 1);
+        return nextTile != null && nextTile.GetComponent<Tile>().monster == null;
+    }
+
+    public void MoveEnemyMonster(Monster monster)
+    {
+        int maxDistance = monster.Movement;
+        for (int i = 7; i <= monster.Movement; i--)
+        {
+            Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i);
+            if (nextTile != null && nextTile.GetComponent<Tile>().monster != null)
+            {
+                maxDistance = i;
+                break;
+            }
+        }
+        string tileName = monster.tileOn.name;
+        int currentTileNumber = int.Parse(tileName.Substring(4));
+        Transform parentTransform = monster.tileOn.transform.parent;
+        int newTileNumber = Math.Min(currentTileNumber + monster.Movement, currentTileNumber + maxDistance);
+        if (newTileNumber > 7)
+        {
+            newTileNumber = 7;
+        }
+        Transform newTile = parentTransform.Find("Tile" + newTileNumber);
+        monster.tileOn.monster = null;
+        monster.MoveTile(newTile.GetComponent<Tile>());
+    }
+
+    public void UseSkill(Monster monster, SkillData skill)
+    {
+        if(skill.ManaCost > Mana)
+        {
+            for (int i = 1; i <= skill.Range; i++)
+            {
+                Monster target = CheckForMonster(monster.tileOn, i);
+                if (target != null)
+                {
+                    target.Health -= skill.Damage;
+                    monster.actionsUsedThisTurn.Add(skill.name);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static Monster CheckForMonster(Tile currentTile, int distance)
+    {
+        Tile nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance);
+        if (nextTile != null && nextTile.monster != null)
+        {
+            return nextTile.monster;
+        }
+        return null;
     }
 }
