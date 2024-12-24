@@ -27,15 +27,15 @@ public class DungeonRow : MonoBehaviour
         return tile.dungeonRow.transform.Find(nextTileName)?.GetComponent<Tile>();
     }
 
-    public Tile GetEnemyNextTile(Tile tile, int distance)
+    public Tile GetPreviousTile(Tile tile, int distance)
     {
         int tileIndex = int.Parse(tile.name.Replace("Tile", ""));
-        if (tileIndex == 0)
+        if (tileIndex == 1)
         {
             return null;
         }
-        string nextTileName = "Tile" + (tileIndex + distance);
-        return GameObject.Find(nextTileName)?.GetComponent<Tile>();
+        string nextTileName = "Tile" + (tileIndex - distance);
+        return tile.dungeonRow.transform.Find(nextTileName)?.GetComponent<Tile>();
     }
 
 }

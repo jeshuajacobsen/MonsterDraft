@@ -61,7 +61,14 @@ public class Monster : MonoBehaviour
     public void InitValues(MonsterCard monsterCard, Tile tile, string team)
     {
         this.team = team;
+        if (team == "Enemy")
+        {
+            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetUISprite("EnemyBackground");
+        } else {
+            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetUISprite("PlayerBackground");
+        }
         this.tileOn = tile;
+        this.tileOn.monster = this;
         this.name = monsterCard.Name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(this.name);
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = this.name;
@@ -84,14 +91,4 @@ public class Monster : MonoBehaviour
         actionsUsedThisTurn.Add("Movement");
     }
 
-    public void AttackMonster(Monster target)
-    {
-        int damage = Attack - target.Defense;
-        if (damage < 0)
-        {
-            damage = 0;
-        }
-        target.Health -= damage;
-        actionsUsedThisTurn.Add(skill1.name);
-    }
 }

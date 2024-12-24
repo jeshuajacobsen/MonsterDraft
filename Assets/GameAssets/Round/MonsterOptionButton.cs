@@ -48,7 +48,7 @@ public class MonsterOptionButton : MonoBehaviour
         {
             transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill2.name;
-            for (int i = 1; i <= monster.skill1.Range; i++)
+            for (int i = 1; i <= monster.skill2.Range; i++)
             {
                 if (RoundManager.CheckForMonster(monster.tileOn, i) != null)
                 {

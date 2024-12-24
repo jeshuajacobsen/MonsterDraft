@@ -156,6 +156,10 @@ public class RoundManager : MonoBehaviour
         {
             newTileNumber = 7;
         }
+        if (newTileNumber < 1)
+        {
+            newTileNumber = 1;
+        }
         Transform newTile = parentTransform.Find("Tile" + newTileNumber);
         monster.tileOn.monster = null;
         monster.MoveTile(newTile.GetComponent<Tile>());
@@ -167,29 +171,42 @@ public class RoundManager : MonoBehaviour
         return nextTile != null && nextTile.GetComponent<Tile>().monster == null;
     }
 
+    public bool EnemyCanMove(Monster monster)
+    {
+        return CheckForMonster(monster.tileOn, -1) == null;
+    }
+
     public void MoveEnemyMonster(Monster monster)
     {
+
         int maxDistance = monster.Movement;
-        for (int i = 7; i <= monster.Movement; i--)
+        for (int i = 1; i <= monster.Movement; i++)
         {
-            Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i);
-            if (nextTile != null && nextTile.GetComponent<Tile>().monster != null)
+            Monster blockingMonster = CheckForMonster(monster.tileOn, -i);
+            if (blockingMonster != null)
             {
-                maxDistance = i;
+                maxDistance = i - 1;
                 break;
             }
         }
         string tileName = monster.tileOn.name;
         int currentTileNumber = int.Parse(tileName.Substring(4));
         Transform parentTransform = monster.tileOn.transform.parent;
-        int newTileNumber = Math.Min(currentTileNumber + monster.Movement, currentTileNumber + maxDistance);
+        int newTileNumber = Math.Max(currentTileNumber - monster.Movement, currentTileNumber - maxDistance);
         if (newTileNumber > 7)
         {
             newTileNumber = 7;
         }
+        if (newTileNumber < 1)
+        {
+            newTileNumber = 1;
+        }
         Transform newTile = parentTransform.Find("Tile" + newTileNumber);
         monster.tileOn.monster = null;
+        monster.tileOn = newTile.GetComponent<Tile>();
         monster.MoveTile(newTile.GetComponent<Tile>());
+
+        
     }
 
     public void UseSkill(Monster monster, SkillData skill)
@@ -209,9 +226,49 @@ public class RoundManager : MonoBehaviour
         }
     }
 
+    public bool EnemyCanUseSkill(Monster monster, SkillData skill)
+    {
+        for (int i = 1; i <= skill.Range; i++)
+        {
+            Monster target = CheckForMonster(monster.tileOn, -i);
+            if (target != null && target.team == "Player")
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void EnemyUseSkill(Monster monster, SkillData skill)
+    {
+        for (int i = 1; i <= skill.Range; i++)
+        {
+            Monster target = CheckForMonster(monster.tileOn, -i);
+            if (target != null)
+            {
+                target.Health -= skill.Damage;
+                monster.actionsUsedThisTurn.Add(skill.name);
+                break;
+            }
+        }
+    }
+
     public static Monster CheckForMonster(Tile currentTile, int distance)
     {
-        Tile nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance);
+        Tile nextTile;
+        if (distance < 0)
+        {
+            Debug.Log("enemy monster at " + currentTile.name);
+            Debug.Log("Distance: " + distance);
+            nextTile = currentTile.dungeonRow.GetPreviousTile(currentTile, -distance);
+            Debug.Log("Checking for monster at " + nextTile.name);
+            if (nextTile != null && nextTile.monster != null)
+            {
+                return nextTile.monster;
+            }
+            return null;
+        }
+        nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance);
         if (nextTile != null && nextTile.monster != null)
         {
             return nextTile.monster;

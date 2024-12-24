@@ -29,7 +29,8 @@ public class MonsterOptionsPanel : MonoBehaviour
         MonsterOptionButton optionButton = Instantiate(monsterOptionButtonPrefab, transform);
         optionButton.InitValues(activeTile.monster, "Movement");
 
-        if (activeTile.monster.actionsUsedThisTurn.Contains("Movement") || !RoundManager.instance.CanMoveMonster(activeTile.monster))
+
+        if (activeTile.monster.team == "Enemy" || activeTile.monster.actionsUsedThisTurn.Contains("Movement") || !RoundManager.instance.CanMoveMonster(activeTile.monster))
         {
             Debug.Log("Cant move");
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
@@ -37,7 +38,9 @@ public class MonsterOptionsPanel : MonoBehaviour
 
         optionButton = Instantiate(monsterOptionButtonPrefab, transform);
         optionButton.InitValues(activeTile.monster, "Skill1");
-        if (activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill1.name))
+        if (activeTile.monster.team == "Enemy" || 
+            activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill1.name) || 
+            activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill2.name))
         {
             Debug.Log("Skill1 used");
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
@@ -45,7 +48,9 @@ public class MonsterOptionsPanel : MonoBehaviour
 
         optionButton = Instantiate(monsterOptionButtonPrefab, transform);
         optionButton.InitValues(activeTile.monster, "Skill2");
-        if (activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill2.name))
+        if (activeTile.monster.team == "Enemy" || 
+            activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill2.name) ||
+            activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill1.name))
         {
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
         }

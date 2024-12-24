@@ -20,6 +20,10 @@ public class SpriteManager : MonoBehaviour
     public Sprite leafree;
     public Sprite borble;
 
+
+    public Sprite enemyBackground;
+    public Sprite playerBackground;
+
     void Awake() 
     {
         if (instance == null)
@@ -30,6 +34,20 @@ public class SpriteManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    public Sprite GetUISprite(string spriteName)
+    {
+        switch (spriteName)
+        {
+            case "EnemyBackground":
+                return enemyBackground;
+            case "PlayerBackground":
+                return playerBackground;
+            default:
+                return enemyBackground;
+            
         }
     }
 

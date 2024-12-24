@@ -8,6 +8,36 @@ public class EnemyPhase : GameState
     public override void EnterState()
     {
         Debug.Log("Entering Enemy Phase");
+        
+
+        for (int row = 1; row <= 3; row++)
+        {
+            for (int i = 1; i <= 7; i++)
+            {
+                Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                if (tile.monster != null && tile.monster.team == "Enemy")
+                {
+                    Monster currentMonster = tile.monster;
+                    if (roundManager.EnemyCanMove(tile.monster))
+                    {
+                        roundManager.MoveEnemyMonster(tile.monster);
+                    }
+                    bool usedSkill = false;
+                    if (roundManager.EnemyCanUseSkill(currentMonster, currentMonster.skill1))
+                    {
+                        Debug.Log("Enemy using skill 1");
+                        usedSkill = true;
+                        roundManager.EnemyUseSkill(currentMonster, currentMonster.skill1);
+                    }
+                    if (!usedSkill && roundManager.EnemyCanUseSkill(currentMonster, currentMonster.skill2))
+                    {
+                        Debug.Log("Enemy using skill 2");
+                        roundManager.EnemyUseSkill(currentMonster, currentMonster.skill2);
+                    }
+                }
+            }
+        }
+
         Card card = roundManager.currentDungeon.DrawCard();
         if (card != null && card is MonsterCard)
         {
@@ -24,18 +54,9 @@ public class EnemyPhase : GameState
                     }
                 }
             }
-            PlayMonsterCardOnTile((MonsterCard)card, openTiles[Random.Range(0, openTiles.Count)]);
-        }
-
-        for (int row = 1; row <= 3; row++)
-        {
-            for (int i = 1; i <= 7; i++)
+            if (openTiles.Count > 0)
             {
-                Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
-                if (tile.monster != null && tile.monster.team == "Enemy")
-                {
-                    
-                }
+                PlayMonsterCardOnTile((MonsterCard)card, openTiles[Random.Range(0, openTiles.Count)]);
             }
         }
     }

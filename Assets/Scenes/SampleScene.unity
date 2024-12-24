@@ -2577,6 +2577,8 @@ MonoBehaviour:
   owisp: {fileID: 21300000, guid: 32bace7fd26d6e749ae5b7446d43bc19, type: 3}
   leafree: {fileID: 21300000, guid: 9045d116c2c23d5409a8b4a619a57482, type: 3}
   borble: {fileID: 21300000, guid: 4646615e0dba5774592d21a98afe7f54, type: 3}
+  enemyBackground: {fileID: 21300000, guid: 1a0a71cfdfcdca241aa6051d3d0d653b, type: 3}
+  playerBackground: {fileID: 21300000, guid: dc19f151b783fed478c7a1379bfb374d, type: 3}
 --- !u!4 &1184803088
 Transform:
   m_ObjectHideFlags: 0
