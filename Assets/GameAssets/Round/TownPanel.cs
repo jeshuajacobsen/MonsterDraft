@@ -41,6 +41,12 @@ public class TownPanel : MonoBehaviour
 
         stockPile = Instantiate(stockPilePrefab, transform);
         stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, "Treasure");
+        treasureNames.Add(stockPile.Name);
+        stockPiles.Add(stockPile);
+
+        stockPile = Instantiate(stockPilePrefab, transform);
+        stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, "Treasure");
+        treasureNames.Add(stockPile.Name);
         stockPiles.Add(stockPile);
 
         List<string> monsterNames = new List<string>();

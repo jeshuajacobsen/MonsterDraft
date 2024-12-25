@@ -20,6 +20,7 @@ public class MonsterOptionButton : MonoBehaviour
         
     }
 
+//TODO: the monsterOptionsPanel does some checks. I should combine them here.
     public void InitValues(Monster monster, string option)
     {
         this.monster = monster;
@@ -27,7 +28,7 @@ public class MonsterOptionButton : MonoBehaviour
         if (option == "Movement")
         {
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = "Move " + monster.Movement;
-            if (RoundManager.CheckForMonster(monster.tileOn, 1) != null)
+            if (RoundManager.CheckForMonster(monster.tileOn, 1) != null && monster.tileOn.name != "Tile7")
             {
                 transform.GetComponent<Button>().interactable = false;
             }
@@ -35,24 +36,34 @@ public class MonsterOptionButton : MonoBehaviour
         else if (option == "Skill1")
         {
             transform.GetComponent<Button>().interactable = false;
-            transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill1.name;
-            for (int i = 1; i <= monster.skill1.Range; i++)
+            if (RoundManager.instance.Mana >= monster.skill1.ManaCost)
             {
-                if (RoundManager.CheckForMonster(monster.tileOn, i) != null)
+                transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill1.name;
+                for (int i = 1; i <= monster.skill1.Range; i++)
                 {
-                    transform.GetComponent<Button>().interactable = true;
+                    int tileNumber = int.Parse(monster.tileOn.name.Replace("Tile", ""));
+                    Monster monsterOnTile = RoundManager.CheckForMonster(monster.tileOn, i);
+                    if ((monsterOnTile != null && monsterOnTile.team == "Enemy") || tileNumber + i > 7)
+                    {
+                        transform.GetComponent<Button>().interactable = true;
+                    }
                 }
             }
         }
         else if (option == "Skill2")
         {
             transform.GetComponent<Button>().interactable = false;
-            transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill2.name;
-            for (int i = 1; i <= monster.skill2.Range; i++)
+            if (RoundManager.instance.Mana >= monster.skill2.ManaCost)
             {
-                if (RoundManager.CheckForMonster(monster.tileOn, i) != null)
+                transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill2.name;
+                for (int i = 1; i <= monster.skill2.Range; i++)
                 {
-                    transform.GetComponent<Button>().interactable = true;
+                    int tileNumber = int.Parse(monster.tileOn.name.Replace("Tile", ""));
+                    Monster monsterOnTile = RoundManager.CheckForMonster(monster.tileOn, i);
+                    if ((monsterOnTile != null && monsterOnTile.team == "Enemy") || tileNumber + i > 7)
+                    {
+                        transform.GetComponent<Button>().interactable = true;
+                    }
                 }
             }
         }

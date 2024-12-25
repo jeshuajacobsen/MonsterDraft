@@ -51,6 +51,9 @@ public class RoundManager : MonoBehaviour
         } 
     }
 
+    public GameObject EnemyBase;
+    public GameObject PlayerBase;
+
     void Awake()
     {
 
@@ -211,15 +214,20 @@ public class RoundManager : MonoBehaviour
 
     public void UseSkill(Monster monster, SkillData skill)
     {
-        if(skill.ManaCost > Mana)
+        if(skill.ManaCost <= Mana)
         {
+            Mana -= skill.ManaCost;
             for (int i = 1; i <= skill.Range; i++)
             {
                 Monster target = CheckForMonster(monster.tileOn, i);
-                if (target != null)
+                if (target != null && target.team == "Enemy")
                 {
                     target.Health -= skill.Damage;
                     monster.actionsUsedThisTurn.Add(skill.name);
+                    break;
+                } else if (monster.tileOn.name == "Tile7")
+                {
+                    EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
                     break;
                 }
             }
@@ -231,7 +239,8 @@ public class RoundManager : MonoBehaviour
         for (int i = 1; i <= skill.Range; i++)
         {
             Monster target = CheckForMonster(monster.tileOn, -i);
-            if (target != null && target.team == "Player")
+            int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
+            if ((target != null && target.team == "Player") || currentTileNumber - i < 1)
             {
                 return true;
             }
@@ -243,11 +252,16 @@ public class RoundManager : MonoBehaviour
     {
         for (int i = 1; i <= skill.Range; i++)
         {
+            int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
             Monster target = CheckForMonster(monster.tileOn, -i);
             if (target != null)
             {
                 target.Health -= skill.Damage;
                 monster.actionsUsedThisTurn.Add(skill.name);
+                break;
+            } else if (currentTileNumber - i < 1)
+            {
+                PlayerBase.GetComponent<PlayerBase>().Health -= skill.Damage;
                 break;
             }
         }
@@ -258,10 +272,7 @@ public class RoundManager : MonoBehaviour
         Tile nextTile;
         if (distance < 0)
         {
-            Debug.Log("enemy monster at " + currentTile.name);
-            Debug.Log("Distance: " + distance);
             nextTile = currentTile.dungeonRow.GetPreviousTile(currentTile, -distance);
-            Debug.Log("Checking for monster at " + nextTile.name);
             if (nextTile != null && nextTile.monster != null)
             {
                 return nextTile.monster;
