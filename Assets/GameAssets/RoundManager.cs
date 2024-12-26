@@ -147,7 +147,7 @@ public class RoundManager : MonoBehaviour
             Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i);
             if (nextTile != null && nextTile.GetComponent<Tile>().monster != null)
             {
-                maxDistance = i;
+                maxDistance = i - 1;
                 break;
             }
         }

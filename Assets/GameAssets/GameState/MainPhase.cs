@@ -56,20 +56,7 @@ public class MainPhase : GameState
                         return;
                     }
                 }
-                for (int j = 0; j < roundManager.hand.Count; j++)
-                {
-                    if (roundManager.hand[j].isDragging)
-                    {
-                        roundManager.hand[j].CancelPlay();
-                        selectingTarget = false;
-                        validTargets.ForEach(tile => {
-                            tile.GetComponent<Image>().color = Color.white;
-                        });
-                        validTargets.Clear();
-                        playedActionCardStep = 0;
-                        return;
-                    }
-                }
+                CancelPlay();
             }
         } else 
         {
@@ -175,7 +162,26 @@ public class MainPhase : GameState
         {
             return true;
         }
+        CancelPlay();
         return false;
+    }
+
+    private void CancelPlay()
+    {
+        for (int j = 0; j < roundManager.hand.Count; j++)
+        {
+            if (roundManager.hand[j].isDragging)
+            {
+                roundManager.hand[j].CancelPlay();
+                selectingTarget = false;
+                validTargets.ForEach(tile => {
+                    tile.GetComponent<Image>().color = Color.white;
+                });
+                validTargets.Clear();
+                playedActionCardStep = 0;
+                return;
+            }
+        }
     }
 
     public bool RequirementsMet(ActionCard actionCard)
