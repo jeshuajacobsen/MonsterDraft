@@ -15,5 +15,6 @@ public class InitialDeck : Deck
         cards.Add(new TreasureCard("Mana Vial"));
         cards.Add(new MonsterCard("Zaple"));
         cards.Add(new MonsterCard("Zaple"));
+        cards.Add(new ActionCard("Fireball"));
     }
 }

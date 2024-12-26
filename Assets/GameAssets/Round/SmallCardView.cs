@@ -80,6 +80,12 @@ public class SmallCardView : MonoBehaviour
         }
     }
 
+    public void CancelPlay()
+    {
+        transform.SetParent(originalParent);
+        transform.position = originalPosition;
+    }
+
     public void HandleMouseUp()
     {
         if (isDragging)

@@ -5,6 +5,7 @@ public class BaseActionData
     public string Name { get; set; }
     public string Description { get; set; }
     public List<string> Effects { get; set; }
+    public List<string> Requirements { get; set; }
     public int Cost { get; set; }
 
     public BaseActionData(string name)
@@ -12,24 +13,24 @@ public class BaseActionData
         Name = name;
         Description = "This is the description for " + name;
         Effects = new List<string>();
+        Requirements = new List<string>();
 
         switch (name)
         {
             case "Fireball":
-                Effects.Add("Deal 3 damage to target");
-                Cost = 2;
+                Requirements.Add("Enemy Target");
+                Effects.Add("Target Enemy");
+                Effects.Add("Damage 3");
+                
                 break;
             case "Heal":
-                Effects.Add("Restore 3 health to target");
-                Cost = 2;
-                break;
-            case "Shield":
-                Effects.Add("Give target 3 defense");
-                Cost = 2;
+                Requirements.Add("Ally Target");
+                Effects.Add("Target Ally");
+                Effects.Add("Heal 3");
+                
                 break;
             default:
                 Effects.Add("No effect");
-                Cost = 0;
                 break;
         }
     }
