@@ -39,10 +39,7 @@ public class MainPhase : GameState
                         selectingTarget = false;
                         selectedTile = validTargets[i];
                         validTargets.ForEach(tile => {
-                            if (tile != selectedTile)
-                            {
-                                tile.GetComponent<Image>().color = Color.white;
-                            }
+                            tile.GetComponent<Image>().color = Color.white;
                         });
                         validTargets.Clear();
                         for (int j = 0; j < roundManager.hand.Count; j++)
@@ -84,7 +81,7 @@ public class MainPhase : GameState
                                 playedActionCardStep++;
                                 selectingTarget = true;
                             }
-                        } else {
+                        } else if (!(cardView.card is ActionCard)){
                             cardView.HandleMouseDown();
                         }
                         
@@ -283,6 +280,27 @@ public class MainPhase : GameState
                 {
                     int heal = int.Parse(effectParts[1]);
                     selectedTile.monster.Health += heal;
+                    playedActionCardStep++;
+                } else if (effectParts[0] == "Buff")
+                {
+                    int buffValue = 0;
+                    string buffType = effectParts[1];
+                    string buffDescription = "";
+                    int duration = 0;
+                    if (effectParts[2] == "Plus")
+                    {
+                        buffValue = int.Parse(effectParts[3]);
+                    } else if (effectParts[2] == "Minus")
+                    {
+                        buffValue = -int.Parse(effectParts[3]);
+                    }
+                    if (effectParts[4] == "Duration")
+                    {
+                        duration = int.Parse(effectParts[5]);
+                    }
+                    buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
+                    
+                    selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                     playedActionCardStep++;
                 }
             }

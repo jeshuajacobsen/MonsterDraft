@@ -34,6 +34,7 @@ public class PlayerBase : MonoBehaviour
     void Start()
     {
         Health = 100;
+        MaxHealth = 100;
     }
 
     void Update()

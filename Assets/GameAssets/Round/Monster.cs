@@ -36,7 +36,24 @@ public class Monster : MonoBehaviour
     }
     public int MaxHealth { get; set; }
     public int Attack { get; set; }
-    public int Defense { get; set; }
+
+    private int _defense;
+    public int Defense { 
+        get {
+            int defense = 0;
+            foreach (MonsterBuff buff in buffs)
+            {
+                if (buff.type == "Defense")
+                {
+                    defense += buff.amount;
+                }
+            }
+            return _defense + defense;
+        } 
+        set {
+            _defense = value;
+        }
+    }
     public int Movement { get; set; }
 
     public Tile tileOn;
@@ -47,6 +64,8 @@ public class Monster : MonoBehaviour
     public SkillData skill2;
 
     public string team;
+
+    public List<MonsterBuff> buffs = new List<MonsterBuff>();
 
     void Start()
     {

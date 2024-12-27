@@ -9,6 +9,7 @@ public class InitialDeck : Deck
         cards.Add(new TreasureCard("Copper"));
         cards.Add(new TreasureCard("Copper"));
         cards.Add(new TreasureCard("Copper"));
+        cards.Add(new TreasureCard("Copper"));
         cards.Add(new TreasureCard("Mana Vial"));
         cards.Add(new TreasureCard("Mana Vial"));
         cards.Add(new TreasureCard("Mana Vial"));
@@ -16,5 +17,7 @@ public class InitialDeck : Deck
         cards.Add(new MonsterCard("Zaple"));
         cards.Add(new MonsterCard("Zaple"));
         cards.Add(new ActionCard("Fireball"));
+        cards.Add(new ActionCard("Shield"));
+        cards.Add(new ActionCard("Heal"));
     }
 }

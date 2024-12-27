@@ -12,42 +12,42 @@ public class SkillData
         {
             case "Zap":
                 ManaCost = 1;
-                Damage = 2;
+                Damage = 3;
                 Range = 2;
                 break;
             case "Bubble":
                 ManaCost = 1;
-                Damage = 3;
+                Damage = 4;
                 Range = 1;
                 break;
             case "Leaf":
                 ManaCost = 2;
-                Damage = 5;
+                Damage = 6;
                 Range = 1;
                 break;
             case "Spark":
-                ManaCost = 2;
+                ManaCost = 1;
                 Damage = 3;
-                Range = 2;
+                Range = 1;
                 break;
             case "Shock":
-                ManaCost = 3;
-                Damage = 4;
-                Range = 2;
-                break;
-            case "Burn":
-                ManaCost = 3;
+                ManaCost = 2;
                 Damage = 5;
                 Range = 1;
                 break;
-            case "Growth":
-                ManaCost = 4;
+            case "Burn":
+                ManaCost = 3;
                 Damage = 6;
+                Range = 1;
+                break;
+            case "Growth":
+                ManaCost = 3;
+                Damage = 8;
                 Range = 1;
                 break;
             case "Wave":
                 ManaCost = 4;
-                Damage = 7;
+                Damage = 10;
                 Range = 1;
                 break;
         }

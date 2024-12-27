@@ -23,7 +23,7 @@ public class BaseStatsData
             case "Zaple":
                 Attack = 3;
                 Health = 10;
-                Defense = 1;
+                Defense = 0;
                 Movement = 1;
                 ManaCost = 1;
                 Cost = 2;
@@ -46,7 +46,7 @@ public class BaseStatsData
                 Defense = 3;
                 Movement = 2;
                 ManaCost = 2;
-                Cost = 2;
+                Cost = 3;
                 skill1Name = "Leaf";
                 skill2Name = "Growth";
                 break;
@@ -56,7 +56,7 @@ public class BaseStatsData
                 Defense = 2;
                 Movement = 1;
                 ManaCost = 2;
-                Cost = 2;
+                Cost = 4;
                 skill1Name = "Bubble";
                 skill2Name = "Wave";
                 break;

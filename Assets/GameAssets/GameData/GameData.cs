@@ -28,7 +28,9 @@ public class GameData
         _treasureData.Add("Copper", new TreasureData("Copper"));
         _treasureData.Add("Silver", new TreasureData("Silver"));
         _treasureData.Add("Gold", new TreasureData("Gold"));
+        _treasureData.Add("Platinum", new TreasureData("Platinum"));
         _treasureData.Add("Mana Vial", new TreasureData("Mana Vial"));
+        _treasureData.Add("Mana Potion", new TreasureData("Mana Potion"));
         _treasureData.Add("Mana Crystal", new TreasureData("Mana Crystal"));
         _treasureData.Add("Mana Gem", new TreasureData("Mana Gem"));
 

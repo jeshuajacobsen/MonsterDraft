@@ -13,6 +13,26 @@ public class DrawPhase : GameState
         {
             roundManager.AddCardToHand(roundManager.roundDeck.DrawCard());
         }
+        for (int row = 1; row <= 3; row++)
+        {
+            for (int tile = 1; tile <= 7; tile++)
+            {
+                Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                Tile tileComponent = tileTransform.GetComponent<Tile>();
+                if (tileComponent.monster != null)
+                {
+                    var monster = tileComponent.monster;
+                    for (int i = monster.buffs.Count - 1; i >= 0; i--)
+                    {
+                        monster.buffs[i].duration--;
+                        if (monster.buffs[i].duration <= 0)
+                        {
+                            monster.buffs.RemoveAt(i);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public override void UpdateState()

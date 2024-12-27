@@ -84,6 +84,11 @@ public class SmallCardView : MonoBehaviour
     {
         transform.SetParent(originalParent);
         transform.position = originalPosition;
+        if (scrollRect != null)
+        {
+            scrollRect.enabled = true;
+        }
+        isDragging = false;
     }
 
     public void HandleMouseUp()
@@ -92,23 +97,40 @@ public class SmallCardView : MonoBehaviour
         {
             isDragging = false;
             MoveToCanvas(originalCanvas);
+            transform.SetParent(originalParent);
+
+            // Ensure consistent screen space coordinates
+            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, transform.position);
+            RectTransform parentRect = originalParent.GetComponent<RectTransform>();
+
+            if (parentRect == null)
+            {
+                Debug.LogError("OriginalParent RectTransform is missing!");
+                return;
+            }
+
             bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
-                originalParent.GetComponent<RectTransform>(),
-                Input.mousePosition,
+                parentRect,
+                screenPoint,
                 mainCamera
             );
+
+            Debug.Log($"Card dropped. Inside Original Parent: {isInsideOriginalParent}");
+
             if (isInsideOriginalParent)
             {
-                transform.SetParent(originalParent);
-                transform.position = originalPosition;
-            } else {
+                CancelPlay();
+            }
+            else
+            {
                 if (RoundManager.instance.gameState.CanPlayCard(card, transform.position))
                 {
                     RoundManager.instance.gameState.PlayCard(card, transform.position);
                     Destroy(gameObject);
-                } else {
-                    transform.SetParent(originalParent);
-                    transform.position = originalPosition;
+                }
+                else
+                {
+                    CancelPlay();
                 }
             }
 
@@ -116,8 +138,6 @@ public class SmallCardView : MonoBehaviour
             {
                 scrollRect.enabled = true;
             }
-
-            
         }
     }
 

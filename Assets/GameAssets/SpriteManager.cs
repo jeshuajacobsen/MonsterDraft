@@ -12,6 +12,12 @@ public class SpriteManager : MonoBehaviour
     public Sprite copper;
     public Sprite silver;
     public Sprite gold;
+    public Sprite platinum;
+
+    public Sprite manaVial;
+    public Sprite manaPotion;
+    public Sprite manaCrystal;
+    public Sprite manaGem;
 
     public Sprite fireball;
 
@@ -61,6 +67,16 @@ public class SpriteManager : MonoBehaviour
                 return silver;
             case "Gold":
                 return gold;
+            case "Platinum":
+                return platinum;
+            case "Mana Vial":
+                return manaVial;
+            case "Mana Potion":
+                return manaPotion;
+            case "Mana Crystal":
+                return manaCrystal;
+            case "Mana Gem":
+                return manaGem;
             case "Fireball":
                 return fireball;
             case "Zaple":

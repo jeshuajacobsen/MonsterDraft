@@ -40,7 +40,10 @@ public class StockPile : MonoBehaviour
             card = new ActionCard(name);
         }
         this.Name = name;
-        transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = name;
+        if (transform.Find("NameText") != null)
+        {
+            transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = name;
+        }
         this.StockLeft = stockLeft;
         transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = stockLeft.ToString();
         this.Cost = card.Cost;

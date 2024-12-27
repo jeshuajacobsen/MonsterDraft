@@ -81,6 +81,7 @@ public class RoundManager : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e);
         }
     }
 
@@ -220,18 +221,27 @@ public class RoundManager : MonoBehaviour
             for (int i = 1; i <= skill.Range; i++)
             {
                 Monster target = CheckForMonster(monster.tileOn, i);
+                int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
                 if (target != null && target.team == "Enemy")
                 {
-                    target.Health -= skill.Damage;
+                    target.Health -= DamageDealtToMonster(target, monster, skill);
                     monster.actionsUsedThisTurn.Add(skill.name);
                     break;
-                } else if (monster.tileOn.name == "Tile7")
+                } else if (currentTileNumber + i > 7)
                 {
                     EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
+                    monster.actionsUsedThisTurn.Add(skill.name);
                     break;
                 }
             }
         }
+    }
+
+    public int DamageDealtToMonster(Monster defender, Monster attacker, SkillData skill)
+    {
+        float damageMultiplier = (float)attacker.Attack / (attacker.Attack + defender.Defense);
+        int damage = Mathf.RoundToInt(damageMultiplier * skill.Damage);
+        return damage;
     }
 
     public bool EnemyCanUseSkill(Monster monster, SkillData skill)
@@ -256,7 +266,7 @@ public class RoundManager : MonoBehaviour
             Monster target = CheckForMonster(monster.tileOn, -i);
             if (target != null)
             {
-                target.Health -= skill.Damage;
+                target.Health -= DamageDealtToMonster(target, monster, skill);
                 monster.actionsUsedThisTurn.Add(skill.name);
                 break;
             } else if (currentTileNumber - i < 1)

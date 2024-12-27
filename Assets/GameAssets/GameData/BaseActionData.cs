@@ -18,16 +18,23 @@ public class BaseActionData
         switch (name)
         {
             case "Fireball":
-                Requirements.Add("Enemy Target");
+                Requirements.Add("Target Enemy");
                 Effects.Add("Target Enemy");
                 Effects.Add("Damage 3");
-                
+                Cost = 2;
                 break;
             case "Heal":
-                Requirements.Add("Ally Target");
+                Requirements.Add("Target Ally");
                 Effects.Add("Target Ally");
-                Effects.Add("Heal 3");
-                
+                Effects.Add("Heal 4");
+                Cost = 3;
+                break;
+            case "Shield":
+                Requirements.Add("Target Ally");
+                Effects.Add("Target Ally");
+                Effects.Add("Buff Defense Plus 3 Duration 3");
+                Description = "Gives an ally +3 defense for 3 turns";
+                Cost = 3;
                 break;
             default:
                 Effects.Add("No effect");

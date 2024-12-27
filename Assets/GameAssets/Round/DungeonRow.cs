@@ -19,7 +19,7 @@ public class DungeonRow : MonoBehaviour
     public Tile GetNextTile(Tile tile, int distance)
     {
         int tileIndex = int.Parse(tile.name.Replace("Tile", ""));
-        if (tileIndex == 7)
+        if (tileIndex + distance > 7)
         {
             return null;
         }
@@ -30,7 +30,7 @@ public class DungeonRow : MonoBehaviour
     public Tile GetPreviousTile(Tile tile, int distance)
     {
         int tileIndex = int.Parse(tile.name.Replace("Tile", ""));
-        if (tileIndex == 1)
+        if (tileIndex - distance < 1)
         {
             return null;
         }

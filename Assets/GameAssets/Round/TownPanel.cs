@@ -7,7 +7,9 @@ public class TownPanel : MonoBehaviour
 {
 
     public StockPile stockPilePrefab;
+    public StockPile basicStockPilePrefab;
     public List<StockPile> stockPiles;
+    public List<StockPile> basicStockPiles;
 
     void Start()
     {
@@ -21,38 +23,62 @@ public class TownPanel : MonoBehaviour
     public void StartRound()
     {
         stockPiles.Clear();
-        foreach (Transform child in transform)
+        
+        Transform basicGoodsTransform = transform.Find("BasicGoodsPanel");
+        foreach (Transform child in basicGoodsTransform)
         {
             Destroy(child.gameObject);
         }
-        StockPile stockPile = Instantiate(stockPilePrefab, transform);
+        Transform mainGoodsTransform = transform.Find("MainGoodsPanel");
+        foreach (Transform child in mainGoodsTransform)
+        {
+            Destroy(child.gameObject);
+        }
+        StockPile stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
         stockPile.InitValues("Copper", 10, "Treasure");
-        stockPiles.Add(stockPile);
+        basicStockPiles.Add(stockPile);
 
-        stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues("Silver", 10, "Treasure");
-        stockPiles.Add(stockPile);
-
-        stockPile = Instantiate(stockPilePrefab, transform);
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
         stockPile.InitValues("Mana Vial", 10, "Treasure");
-        stockPiles.Add(stockPile);
+        basicStockPiles.Add(stockPile);
 
-        List<string> treasureNames = new List<string> { "Copper", "Silver", "Mana Vial" };
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
+        stockPile.InitValues("Silver", 10, "Treasure");
+        basicStockPiles.Add(stockPile);
 
-        stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, "Treasure");
-        treasureNames.Add(stockPile.Name);
-        stockPiles.Add(stockPile);
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
+        stockPile.InitValues("Mana Potion", 10, "Treasure");
+        basicStockPiles.Add(stockPile);
 
-        stockPile = Instantiate(stockPilePrefab, transform);
-        stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, "Treasure");
-        treasureNames.Add(stockPile.Name);
-        stockPiles.Add(stockPile);
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
+        stockPile.InitValues("Gold", 10, "Treasure");
+        basicStockPiles.Add(stockPile);
+
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
+        stockPile.InitValues("Mana Crystal", 10, "Treasure");
+        basicStockPiles.Add(stockPile);
+
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
+        stockPile.InitValues("Platinum", 10, "Treasure");
+        basicStockPiles.Add(stockPile);
+
+        stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
+        stockPile.InitValues("Mana Gem", 10, "Treasure");
+        basicStockPiles.Add(stockPile);
+
+        
+
+        //List<string> treasureNames = new List<string> { "Copper", "Silver", "Mana Vial" };
+
+        // stockPile = Instantiate(stockPilePrefab, transform);
+        // stockPile.InitValues(GameManager.instance.gameData.GetRandomTreasureName(treasureNames), 10, "Treasure");
+        // treasureNames.Add(stockPile.Name);
+        // stockPiles.Add(stockPile);
 
         List<string> monsterNames = new List<string>();
         for(int i = 0; i <= 3; i++)
         {
-            stockPile = Instantiate(stockPilePrefab, transform);
+            stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
             stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames), 10, "Monster");
             monsterNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
@@ -61,7 +87,7 @@ public class TownPanel : MonoBehaviour
         List<string> actionNames = new List<string>();
         for(int i = 0; i <= 2; i++)
         {
-            stockPile = Instantiate(stockPilePrefab, transform);
+            stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
             stockPile.InitValues(GameManager.instance.gameData.GetRandomActionName(actionNames), 10, "Action");
             actionNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
