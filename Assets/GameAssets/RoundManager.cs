@@ -54,6 +54,8 @@ public class RoundManager : MonoBehaviour
     public GameObject EnemyBase;
     public GameObject PlayerBase;
 
+    public LargeCardView largeCardView;
+
     void Awake()
     {
 

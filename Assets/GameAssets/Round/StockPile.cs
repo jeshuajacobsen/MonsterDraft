@@ -11,7 +11,7 @@ public class StockPile : MonoBehaviour
     public int Cost { get; set; }
 
     private string cardType;
-    private Card card;
+    public Card card;
 
     void Start()
     {

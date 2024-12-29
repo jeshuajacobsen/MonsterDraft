@@ -37,6 +37,7 @@ public class MonsterOptionButton : MonoBehaviour
         {
             transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill1.name;
+            transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = monster.skill1.ManaCost.ToString();
             if (RoundManager.instance.Mana >= monster.skill1.ManaCost)
             {
                 for (int i = 1; i <= monster.skill1.Range; i++)
@@ -54,6 +55,7 @@ public class MonsterOptionButton : MonoBehaviour
         {
             transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill2.name;
+            transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = monster.skill2.ManaCost.ToString();
             if (RoundManager.instance.Mana >= monster.skill2.ManaCost)
             {
                 for (int i = 1; i <= monster.skill2.Range; i++)

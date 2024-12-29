@@ -25,8 +25,8 @@ public class BaseStatsData
                 Health = 10;
                 Defense = 0;
                 Movement = 1;
-                ManaCost = 1;
-                Cost = 2;
+                ManaCost = 2;
+                Cost = 4;
                 skill1Name = "Zap";
                 skill2Name = "Shock";
                 break;
@@ -35,8 +35,8 @@ public class BaseStatsData
                 Health = 10;
                 Defense = 2;
                 Movement = 1;
-                ManaCost = 1;
-                Cost =2;
+                ManaCost = 2;
+                Cost = 4;
                 skill1Name = "Spark";
                 skill2Name = "Burn";
                 break;
@@ -45,18 +45,18 @@ public class BaseStatsData
                 Health = 12;
                 Defense = 3;
                 Movement = 2;
-                ManaCost = 2;
-                Cost = 3;
+                ManaCost = 4;
+                Cost = 5;
                 skill1Name = "Leaf";
                 skill2Name = "Growth";
                 break;
             case "Borble":
-                Attack = 4;
+                Attack = 6;
                 Health = 13;
                 Defense = 2;
                 Movement = 1;
-                ManaCost = 2;
-                Cost = 4;
+                ManaCost = 5;
+                Cost = 6;
                 skill1Name = "Bubble";
                 skill2Name = "Wave";
                 break;

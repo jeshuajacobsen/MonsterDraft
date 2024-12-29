@@ -11,7 +11,7 @@ public class RoundDeck : Deck
     public List<Card> DrawHand()
     {
         List<Card> hand = new List<Card>();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             hand.Add(DrawCard());
         }

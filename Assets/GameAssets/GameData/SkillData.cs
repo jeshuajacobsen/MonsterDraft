@@ -4,10 +4,12 @@ public class SkillData
     public int Damage { get; set; }
     public int Range { get; set; }
     public string name;
+    public string Description { get; set; }
 
     public SkillData(string name)
     {
         this.name = name;
+        this.Description = "";
         switch (name)
         {
             case "Zap":

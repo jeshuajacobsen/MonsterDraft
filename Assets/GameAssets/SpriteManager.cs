@@ -20,6 +20,10 @@ public class SpriteManager : MonoBehaviour
     public Sprite manaGem;
 
     public Sprite fireball;
+    public Sprite preparation;
+    public Sprite research;
+    public Sprite shield;
+    public Sprite heal;
 
     public Sprite zaple;
     public Sprite owisp;
@@ -79,6 +83,14 @@ public class SpriteManager : MonoBehaviour
                 return manaGem;
             case "Fireball":
                 return fireball;
+            case "Preparation":
+                return preparation;
+            case "Research":
+                return research;
+            case "Shield":
+                return shield;
+            case "Heal":
+                return heal;
             case "Zaple":
                 return zaple;
             case "Owisp":

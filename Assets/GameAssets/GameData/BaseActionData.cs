@@ -36,6 +36,21 @@ public class BaseActionData
                 Description = "Gives an ally +3 defense for 3 turns";
                 Cost = 3;
                 break;
+            case "Preparation":
+                Effects.Add("Actions 2");
+                Effects.Add("Draw 1");
+                Cost = 5;
+                break;
+            case "Research":
+                Effects.Add("Draw 3");
+                Cost = 7;
+                break;
+            case "Storage":
+                Effects.Add("Discard x");
+                Effects.Add("Draw x");
+                Effects.Add("Actions 1");
+                Cost = 2;
+                break;
             default:
                 Effects.Add("No effect");
                 break;

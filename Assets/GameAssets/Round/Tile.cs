@@ -24,6 +24,10 @@ public class Tile : MonoBehaviour
 
     public void HandleMouseDown()
     {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
         Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
         Collider2D collider = GetComponent<Collider2D>();
         if (collider != null && collider.OverlapPoint(mousePosition))

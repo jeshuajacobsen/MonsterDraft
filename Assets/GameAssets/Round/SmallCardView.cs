@@ -61,6 +61,11 @@ public class SmallCardView : MonoBehaviour
 
         foreach (RaycastResult result in results)
         {
+            if (result.gameObject.GetComponent<Button>() != null)
+            {
+                return;
+            }
+
             if (result.gameObject == gameObject)
             {
                 isDragging = true;
@@ -103,19 +108,11 @@ public class SmallCardView : MonoBehaviour
             Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, transform.position);
             RectTransform parentRect = originalParent.GetComponent<RectTransform>();
 
-            if (parentRect == null)
-            {
-                Debug.LogError("OriginalParent RectTransform is missing!");
-                return;
-            }
-
             bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
                 parentRect,
                 screenPoint,
                 mainCamera
             );
-
-            Debug.Log($"Card dropped. Inside Original Parent: {isInsideOriginalParent}");
 
             if (isInsideOriginalParent)
             {

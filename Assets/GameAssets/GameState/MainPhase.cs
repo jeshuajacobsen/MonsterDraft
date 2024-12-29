@@ -70,19 +70,18 @@ public class MainPhase : GameState
                 } else {
                     roundManager.monsterOptionPanel.gameObject.SetActive(false);
                     roundManager.hand.ForEach(cardView => {
+
+                        cardView.HandleMouseDown();
                         if (cardView.card is ActionCard && RequirementsMet((ActionCard)cardView.card))
                         {
                             ActionCard actionCard = (ActionCard)cardView.card;
                             
-                            cardView.HandleMouseDown();
                             if (cardView.isDragging && actionCard.StartsWithTarget())
                             {
                                 MarkValidTargets(actionCard);
                                 playedActionCardStep++;
                                 selectingTarget = true;
                             }
-                        } else if (!(cardView.card is ActionCard)){
-                            cardView.HandleMouseDown();
                         }
                         
                     });
@@ -301,6 +300,17 @@ public class MainPhase : GameState
                     buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
                     
                     selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                    playedActionCardStep++;
+                } else if (effectParts[0] == "Actions")
+                {
+                    roundManager.Actions += int.Parse(effectParts[1]);
+                    playedActionCardStep++;
+                } else if (effectParts[0] == "Draw")
+                {
+                    for (int j = 0; j < int.Parse(effectParts[1]); j++)
+                    {
+                        roundManager.AddCardToHand(roundManager.roundDeck.DrawCard());
+                    }
                     playedActionCardStep++;
                 }
             }
