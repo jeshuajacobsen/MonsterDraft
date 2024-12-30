@@ -72,6 +72,7 @@ public class MainPhase : GameState
                     roundManager.hand.ForEach(cardView => {
 
                         cardView.HandleMouseDown();
+                        //TODO move the requirements met check to where the card is played.
                         if (cardView.card is ActionCard && RequirementsMet((ActionCard)cardView.card))
                         {
                             ActionCard actionCard = (ActionCard)cardView.card;

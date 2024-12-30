@@ -69,7 +69,6 @@ public class LargeCardView : MonoBehaviour
 
     void AlignRightWithMouse()
     {
-        // 1) Mouse position in world coordinates
         Vector3 mouseScreenPos = new Vector3(
             Input.mousePosition.x,
             Input.mousePosition.y,
@@ -77,15 +76,11 @@ public class LargeCardView : MonoBehaviour
         );
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
 
-        // 2) Get width in world space
         RectTransform rt = GetComponent<RectTransform>();
         float objectWidth = rt.rect.width * rt.lossyScale.x;
 
-        // 3) Pivot = 0.5 => center
-        //    "Right edge = mouse" means the center is mouse - (objectWidth/2)
         Vector3 offset = transform.right * (objectWidth * 0.5f);
 
-        // 4) Position
         Vector3 newPos = mouseWorldPos - offset;
         transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
 
@@ -93,7 +88,6 @@ public class LargeCardView : MonoBehaviour
 
     void AlignLeftWithMouse()
     {
-        // 1) Convert mouse screen coords to a position in the 3D world
         Vector3 mouseScreenPos = new Vector3(
             Input.mousePosition.x,
             Input.mousePosition.y,
@@ -101,20 +95,10 @@ public class LargeCardView : MonoBehaviour
         );
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
 
-        // 2) Measure the width in world space
-        //    rect.width is in local UI coordinates, so multiply by lossyScale.x
         RectTransform rt = GetComponent<RectTransform>();
         float objectWidth = rt.rect.width * rt.lossyScale.x;
-
-        // 3) Because pivot is at center (0.5), the object's "center"
-        //    is objectWidth/2 from the left edge.
-        //    => "Left edge = mouse" means: Center = mouse + (objectWidth/2)
-        //    We'll use transform.right if your UI can be rotated in 3D.
-        //    If it’s purely axis-aligned, you could just do (mouse.x + objectWidth/2f).
         Vector3 offset = transform.right * (objectWidth * 0.5f);
 
-        // 4) Position
-        //    If you only want to track X, preserve the original Y/Z.
         Vector3 newPos = mouseWorldPos + offset;
         transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
     }

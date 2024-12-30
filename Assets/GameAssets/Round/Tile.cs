@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour
 {
     public Monster monster;
@@ -30,6 +31,22 @@ public class Tile : MonoBehaviour
         }
         Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
         Collider2D collider = GetComponent<Collider2D>();
+        
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.GetComponent<Button>() != null)
+            {
+                return;
+            }
+        }
+        
         if (collider != null && collider.OverlapPoint(mousePosition))
         {
             RoundManager.instance.gameState.SelectTile(this, mousePosition);
