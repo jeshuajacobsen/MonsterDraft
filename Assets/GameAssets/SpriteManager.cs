@@ -24,6 +24,7 @@ public class SpriteManager : MonoBehaviour
     public Sprite research;
     public Sprite shield;
     public Sprite heal;
+    public Sprite storage;
 
     public Sprite zaple;
     public Sprite owisp;
@@ -99,6 +100,8 @@ public class SpriteManager : MonoBehaviour
                 return leafree;
             case "Borble":
                 return borble;
+            case "Storage":
+                return storage;
             default:
                 return copper;
         }

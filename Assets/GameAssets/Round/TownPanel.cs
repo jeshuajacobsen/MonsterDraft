@@ -85,7 +85,7 @@ public class TownPanel : MonoBehaviour
         }
 
         List<string> actionNames = new List<string>();
-        for(int i = 0; i <= 4; i++)
+        for(int i = 0; i <= 5; i++)
         {
             stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
             stockPile.InitValues(GameManager.instance.gameData.GetRandomActionName(actionNames), 10, "Action");

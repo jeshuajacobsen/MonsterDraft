@@ -46,6 +46,7 @@ public class BaseActionData
                 Cost = 7;
                 break;
             case "Storage":
+                Effects.Add("Select Cards x");
                 Effects.Add("Discard x");
                 Effects.Add("Draw x");
                 Effects.Add("Actions 1");

@@ -57,6 +57,9 @@ public class RoundManager : MonoBehaviour
     public LargeCardView largeCardView;
     public LargeMonsterView largeMonsterView;
 
+    public DoneButton doneButton;
+    public CancelButton cancelButton;
+
     void Awake()
     {
 

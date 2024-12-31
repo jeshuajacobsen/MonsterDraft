@@ -14,6 +14,10 @@ public class MainPhase : GameState
     private List<Tile> validTargets = new List<Tile>();
     private int playedActionCardStep = 0;
     private Tile selectedTile;
+    private bool selectingCards = false;
+    private List<SmallCardView> selectedCards = new List<SmallCardView>();
+    private string numberToSelect = "";
+    private Card playedCard;
 
     public override void EnterState()
     {
@@ -24,7 +28,31 @@ public class MainPhase : GameState
 
     public override void UpdateState()
     {
-        if (selectingTarget)
+        if (selectingCards)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                for (int i = 0; i < roundManager.hand.Count; i++)
+                {
+                    if (RectTransformUtility.RectangleContainsScreenPoint(
+                        roundManager.hand[i].GetComponent<RectTransform>(),
+                        Input.mousePosition,
+                        mainCamera
+                    ))
+                    {
+                        if (selectedCards.Contains(roundManager.hand[i]))
+                        {
+                            selectedCards.Remove(roundManager.hand[i]);
+                            roundManager.hand[i].GetComponent<Image>().color = Color.white;
+                        } else {
+                            selectedCards.Add(roundManager.hand[i]);
+                            roundManager.hand[i].GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
+                        }
+                    }
+                }
+            }
+        }
+        else if (selectingTarget)
         {
             if (Input.GetMouseButtonUp(0))
             {
@@ -165,6 +193,7 @@ public class MainPhase : GameState
 
     private void CancelPlay()
     {
+        playedActionCardStep = 0;
         for (int j = 0; j < roundManager.hand.Count; j++)
         {
             if (roundManager.hand[j].isDragging)
@@ -175,7 +204,6 @@ public class MainPhase : GameState
                     tile.GetComponent<Image>().color = Color.white;
                 });
                 validTargets.Clear();
-                playedActionCardStep = 0;
                 return;
             }
         }
@@ -313,8 +341,23 @@ public class MainPhase : GameState
                         roundManager.AddCardToHand(roundManager.roundDeck.DrawCard());
                     }
                     playedActionCardStep++;
+                } else if (effectParts[0] == "Select")
+                {
+                    if (effectParts[1] == "Cards")
+                    {
+                        numberToSelect = effectParts[2];
+                        selectingCards = true;
+                        selectedCards.Clear();
+                        playedCard = card;
+                    }
+                    roundManager.doneButton.gameObject.SetActive(true);
+                    roundManager.cancelButton.gameObject.SetActive(true);
+                    playedActionCardStep++;
+                    roundManager.hand.Remove(roundManager.hand.Find(x => x.card == card));
+                    return;
                 }
             }
+            playedCard = null;
             playedActionCardStep = 0;
             if (selectedTile != null)
             {
@@ -325,6 +368,59 @@ public class MainPhase : GameState
             roundManager.discardPile.AddCard(card);
         }
         roundManager.hand.Remove(roundManager.hand.Find(x => x.card == card));
+    }
+
+    public void ContinuePlayingCard()
+    {
+        int x = 0;
+        if (numberToSelect == "x")
+        {
+          x = selectedCards.Count;
+        }
+
+        if (playedCard is ActionCard)
+        {
+            ActionCard actionCard = (ActionCard)playedCard;
+            for (int i = playedActionCardStep; i < actionCard.effects.Count; i++)
+            {
+                string[] effectParts = actionCard.effects[i].Split(' ');
+                if (effectParts[0] == "Discard")
+                {
+                    if (effectParts[1] == "x")
+                    {
+                        for (int j = 0; j < x; j++)
+                        {
+                            roundManager.discardPile.AddCard(selectedCards[j].card);
+                            roundManager.hand.Remove(selectedCards[j]);
+                            Destroy(selectedCards[j].gameObject);
+                        }
+                    }
+                    
+                    playedActionCardStep++;
+                } else if (effectParts[0] == "Draw")
+                {
+                    if (effectParts[1] == "x")
+                    {
+                        for (int j = 0; j < x; j++)
+                        {
+                            roundManager.AddCardToHand(roundManager.roundDeck.DrawCard());
+                        }
+                    }
+                    playedActionCardStep++;
+                } else if (effectParts[0] == "Actions")
+                {
+                    roundManager.Actions += int.Parse(effectParts[1]);
+                    playedActionCardStep++;
+                }
+            }
+        }
+        playedActionCardStep = 0;
+        numberToSelect = "";
+        selectingCards = false;
+        selectedCards.Clear();
+        roundManager.Actions--;
+        roundManager.discardPile.AddCard(playedCard);
+        playedCard = null;
     }
 
     public void MarkValidTargets(ActionCard actionCard)
@@ -387,5 +483,37 @@ public class MainPhase : GameState
             roundManager.monsterOptionPanel.transform.position += new Vector3(panelSize.x / 2, -panelSize.y / 2, 0);
             roundManager.monsterOptionPanel.transform.GetComponent<MonsterOptionsPanel>().SetActiveTile(tile);
         }
+    }
+
+    public override void DoneButton()
+    {
+        roundManager.doneButton.gameObject.SetActive(false);
+        roundManager.cancelButton.gameObject.SetActive(false);
+        if (selectingCards)
+        {
+            selectingCards = false;
+            selectedCards.ForEach(cardView => {
+                cardView.GetComponent<Image>().color = Color.white;
+            });
+            ContinuePlayingCard();
+            selectedCards.Clear();
+        }
+    }
+
+    public override void CancelButton()
+    {
+        CancelPlay();
+        roundManager.doneButton.gameObject.SetActive(false);
+        roundManager.cancelButton.gameObject.SetActive(false);
+        if (playedCard != null)
+        {
+            roundManager.AddCardToHand(playedCard);
+            playedCard = null;
+        }
+        selectingCards = false;
+        selectedCards.ForEach(cardView => {
+            cardView.GetComponent<Image>().color = Color.white;
+        });
+        selectedCards.Clear();
     }
 }
