@@ -91,14 +91,4 @@ public class EnemyPhase : GameState
     {
         Debug.LogError("Tiles cannot be selected during the Draw Phase!");
     }
-
-    public override void DoneButton()
-    {
-        
-    }
-
-    public override void CancelButton()
-    {
-       //CancelPlay();
-    }
 }

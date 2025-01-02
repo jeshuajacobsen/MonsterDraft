@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public class SmallCardView : MonoBehaviour
 {
@@ -87,6 +88,7 @@ public class SmallCardView : MonoBehaviour
 
     public void CancelPlay()
     {
+        MoveToCanvas(originalCanvas);
         transform.SetParent(originalParent);
         transform.position = originalPosition;
         if (scrollRect != null)
@@ -104,38 +106,49 @@ public class SmallCardView : MonoBehaviour
             MoveToCanvas(originalCanvas);
             transform.SetParent(originalParent);
 
-            // Ensure consistent screen space coordinates
-            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, transform.position);
-            RectTransform parentRect = originalParent.GetComponent<RectTransform>();
-
-            bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
-                parentRect,
-                screenPoint,
-                mainCamera
-            );
-
-            if (isInsideOriginalParent)
-            {
-                CancelPlay();
-            }
-            else
-            {
-                if (RoundManager.instance.gameState.CanPlayCard(card, transform.position))
-                {
-                    RoundManager.instance.gameState.PlayCard(card, transform.position);
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    CancelPlay();
-                }
-            }
-
             if (scrollRect != null)
             {
                 scrollRect.enabled = true;
             }
         }
+        // if (isDragging)
+        // {
+        //     isDragging = false;
+        //     MoveToCanvas(originalCanvas);
+        //     transform.SetParent(originalParent);
+
+        //     // Ensure consistent screen space coordinates
+        //     Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, transform.position);
+        //     RectTransform parentRect = originalParent.GetComponent<RectTransform>();
+
+        //     bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
+        //         parentRect,
+        //         screenPoint,
+        //         mainCamera
+        //     );
+
+        //     if (isInsideOriginalParent)
+        //     {
+        //         CancelPlay();
+        //     }
+        //     else
+        //     {
+        //         if (RoundManager.instance.gameState.CanPlayCard(card, transform.position))
+        //         {
+        //             RoundManager.instance.gameState.PlayCard(card, transform.position);
+        //             Destroy(gameObject);
+        //         }
+        //         else
+        //         {
+        //             CancelPlay();
+        //         }
+        //     }
+
+        //     if (scrollRect != null)
+        //     {
+        //         scrollRect.enabled = true;
+        //     }
+        // }
     }
 
     private void HandleTouchInput()

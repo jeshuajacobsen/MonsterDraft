@@ -5,142 +5,55 @@ using System.Collections.Generic;
 
 public class MainPhase : GameState
 {
-    private Camera mainCamera;
+    public Camera mainCamera;
     public static UnityEvent ExitMainPhase = new UnityEvent();
 
-    public MainPhase(RoundManager roundManager) : base(roundManager) { }
+    public MainPhase(RoundManager roundManager) : base(roundManager) {
+        currentState = new IdleState(this);
+    }
 
-    public bool selectingTarget = false;
     private List<Tile> validTargets = new List<Tile>();
-    private int playedActionCardStep = 0;
-    private Tile selectedTile;
-    private bool selectingCards = false;
-    private List<SmallCardView> selectedCards = new List<SmallCardView>();
-    private string numberToSelect = "";
-    private Card playedCard;
+    public int playedActionCardStep = 0;
+    public List<SmallCardView> selectedCards = new List<SmallCardView>();
+    public Card playedCard;
+    public CardPlayState currentState;
 
     public override void EnterState()
     {
         Debug.Log("Entering Main Phase");
         roundManager.Actions = 1;
         mainCamera = Camera.main;
+        currentState = new IdleState(this);
+        currentState.EnterState();
     }
 
     public override void UpdateState()
     {
-        if (selectingCards)
+
+        currentState.UpdateState();
+    }
+
+    public bool IsInsideOptionPanel(Vector3 position)
+    {
+        bool isInsideOptionPanel = RectTransformUtility.RectangleContainsScreenPoint(
+            roundManager.monsterOptionPanel.GetComponent<RectTransform>(),
+            position,
+            mainCamera
+        );
+        if (roundManager.monsterOptionPanel.gameObject.activeSelf && isInsideOptionPanel)
         {
-            if (Input.GetMouseButtonUp(0))
-            {
-                for (int i = 0; i < roundManager.hand.Count; i++)
-                {
-                    if (RectTransformUtility.RectangleContainsScreenPoint(
-                        roundManager.hand[i].GetComponent<RectTransform>(),
-                        Input.mousePosition,
-                        mainCamera
-                    ))
-                    {
-                        if (selectedCards.Contains(roundManager.hand[i]))
-                        {
-                            selectedCards.Remove(roundManager.hand[i]);
-                            roundManager.hand[i].GetComponent<Image>().color = Color.white;
-                        } else {
-                            selectedCards.Add(roundManager.hand[i]);
-                            roundManager.hand[i].GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
-                        }
-                    }
-                }
-            }
+            return true;
         }
-        else if (selectingTarget)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                for (int i = 0; i < validTargets.Count; i++)
-                {
-                    if (RectTransformUtility.RectangleContainsScreenPoint(
-                        validTargets[i].GetComponent<RectTransform>(),
-                        Input.mousePosition,
-                        mainCamera
-                    ))
-                    {
-                        selectingTarget = false;
-                        selectedTile = validTargets[i];
-                        validTargets.ForEach(tile => {
-                            tile.GetComponent<Image>().color = Color.white;
-                        });
-                        validTargets.Clear();
-                        for (int j = 0; j < roundManager.hand.Count; j++)
-                        {
-                            if (roundManager.hand[j].isDragging)
-                            {
-                                roundManager.hand[j].HandleMouseUp();
-                                return;
-                            }
-                        }
-                        return;
-                    }
-                }
-                CancelPlay();
-            }
-        } else 
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                bool isInsideOptionPanel = RectTransformUtility.RectangleContainsScreenPoint(
-                    roundManager.monsterOptionPanel.GetComponent<RectTransform>(),
-                    Input.mousePosition,
-                    mainCamera
-                );
-                if (roundManager.monsterOptionPanel.gameObject.activeSelf && isInsideOptionPanel)
-                {
-                    return;
-                } else {
-                    roundManager.monsterOptionPanel.gameObject.SetActive(false);
-                    roundManager.hand.ForEach(cardView => {
+        return false;
+    }
 
-                        cardView.HandleMouseDown();
-                        //TODO move the requirements met check to where the card is played.
-                        if (cardView.card is ActionCard && RequirementsMet((ActionCard)cardView.card))
-                        {
-                            ActionCard actionCard = (ActionCard)cardView.card;
-                            
-                            if (cardView.isDragging && actionCard.StartsWithTarget())
-                            {
-                                MarkValidTargets(actionCard);
-                                playedActionCardStep++;
-                                selectingTarget = true;
-                            }
-                        }
-                        
-                    });
-                    for(int i = 1; i <= 7; i++)
-                    {
-                        roundManager.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
-                        roundManager.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
-                        roundManager.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
-                    }
-                }
-
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-                for (int i = 0; i < roundManager.hand.Count; i++)
-                {
-                    if (roundManager.hand[i] == null) continue;
-                    if (roundManager.hand[i].isDragging)
-                    {
-                        roundManager.hand[i].HandleMouseUp();
-                        break;
-                    }
-                }
-                // for(int i = 1; i <= 7; i++)
-                // {
-                //     dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseUp();
-                //     dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseUp();
-                //     dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseUp();
-                // }
-            }
+    public void HandleMouseInDungeon()
+    {
+        for(int i = 1; i <= 7; i++)
+        {
+            roundManager.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
+            roundManager.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
+            roundManager.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
         }
     }
 
@@ -151,6 +64,7 @@ public class MainPhase : GameState
         roundManager.DiscardHand();
         roundManager.Mana = 0;
         roundManager.Coins = 0;
+        currentState.ExitState();
         ExitMainPhase.Invoke();
     }
 
@@ -187,27 +101,40 @@ public class MainPhase : GameState
         {
             return true;
         }
-        CancelPlay();
+        CancelPartialPlay();
         return false;
     }
 
-    private void CancelPlay()
+    public void CancelPartialPlay()
     {
         playedActionCardStep = 0;
+        playedCard = null;
         for (int j = 0; j < roundManager.hand.Count; j++)
         {
             if (roundManager.hand[j].isDragging)
             {
                 roundManager.hand[j].CancelPlay();
-                selectingTarget = false;
-                validTargets.ForEach(tile => {
-                    tile.GetComponent<Image>().color = Color.white;
-                });
-                validTargets.Clear();
-                return;
             }
         }
+        SetState(new IdleState(this));
     }
+
+    public void CancelFullPlay()
+    {
+        playedActionCardStep = 0;
+        roundManager.AddCardToHand(playedCard);
+        playedCard = null;
+        SetState(new IdleState(this));
+    }
+
+    public void FinishPlay()
+    {
+        roundManager.Actions--;
+        playedActionCardStep = 0;
+        playedCard = null;
+        SetState(new IdleState(this));
+    }
+
 
     public bool RequirementsMet(ActionCard actionCard)
     {
@@ -263,35 +190,42 @@ public class MainPhase : GameState
         return true;
     }
 
+    public void RemoveCard(Card card)
+    {
+        roundManager.discardPile.AddCard(card);
+        SmallCardView cardView = roundManager.hand.Find(x => x.card == card);
+        roundManager.hand.Remove(cardView);
+        if (cardView != null)
+        {
+            Destroy(cardView.gameObject);
+        }
+    }
+
+    public void PlayTreasureCard(TreasureCard treasureCard)
+    {
+        roundManager.Coins += treasureCard.GoldGeneration;
+        roundManager.Mana += treasureCard.ManaGeneration;
+        roundManager.discardPile.AddCard(treasureCard);
+        SmallCardView treasureCardView = roundManager.hand.Find(x => x.card == treasureCard);
+        roundManager.hand.Remove(treasureCardView);
+        Destroy(treasureCardView.gameObject);
+        SetState(new IdleState(this));
+    }
+
     public override void PlayCard(Card card, Vector3 position)
     {
-        if (card is TreasureCard)
-        {
-            TreasureCard treasureCard = (TreasureCard)card;
-            roundManager.Coins += treasureCard.GoldGeneration;
-            roundManager.Mana += treasureCard.ManaGeneration;
-            roundManager.discardPile.AddCard(card);
-        }
-        else if (card is MonsterCard && roundManager.DungeonPanel.activeSelf)
+
+    }
+
+    public void PlayCardWithTarget(Card card, Tile target)
+    {
+        if (card is MonsterCard)
         {
             MonsterCard monsterCard = (MonsterCard)card;
-            for (int row = 1; row <= 3; row++)
-            {
-                for (int tile = 1; tile <= 7; tile++)
-                {
-                    Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
-                    if (tileTransform != null && tileTransform.GetComponent<Collider2D>().bounds.Contains(position))
-                    {
-                        Monster newMonster = Instantiate(roundManager.MonsterPrefab, tileTransform);
-                        newMonster.InitValues(monsterCard, tileTransform.GetComponent<Tile>(), "Player");
-                        tileTransform.GetComponent<Tile>().monster = newMonster;
-                        roundManager.discardPile.AddCard(card);
-                        roundManager.hand.Remove(roundManager.hand.Find(x => x.card == card));
-                        roundManager.Mana -= monsterCard.ManaCost;
-                        return;
-                    }
-                }
-            }
+            Monster newMonster = Instantiate(roundManager.MonsterPrefab, target.transform);
+            newMonster.InitValues(monsterCard, target, "Player");
+            target.monster = newMonster;
+            roundManager.Mana -= monsterCard.ManaCost;
         }
         else if (card is ActionCard)
         {
@@ -302,12 +236,12 @@ public class MainPhase : GameState
                 if (effectParts[0] == "Damage")
                 {
                     int damage = int.Parse(effectParts[1]);
-                    selectedTile.monster.Health -= damage;
+                    target.monster.Health -= damage;
                     playedActionCardStep++;
                 } else if (effectParts[0] == "Heal")
                 {
                     int heal = int.Parse(effectParts[1]);
-                    selectedTile.monster.Health += heal;
+                    target.monster.Health += heal;
                     playedActionCardStep++;
                 } else if (effectParts[0] == "Buff")
                 {
@@ -328,150 +262,17 @@ public class MainPhase : GameState
                     }
                     buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
                     
-                    selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
-                    playedActionCardStep++;
-                } else if (effectParts[0] == "Actions")
-                {
-                    roundManager.Actions += int.Parse(effectParts[1]);
-                    playedActionCardStep++;
-                } else if (effectParts[0] == "Draw")
-                {
-                    for (int j = 0; j < int.Parse(effectParts[1]); j++)
-                    {
-                        roundManager.AddCardToHand(roundManager.roundDeck.DrawCard());
-                    }
-                    playedActionCardStep++;
-                } else if (effectParts[0] == "Select")
-                {
-                    if (effectParts[1] == "Cards")
-                    {
-                        numberToSelect = effectParts[2];
-                        selectingCards = true;
-                        selectedCards.Clear();
-                        playedCard = card;
-                    }
-                    roundManager.doneButton.gameObject.SetActive(true);
-                    roundManager.cancelButton.gameObject.SetActive(true);
-                    playedActionCardStep++;
-                    roundManager.hand.Remove(roundManager.hand.Find(x => x.card == card));
-                    return;
-                }
-            }
-            playedCard = null;
-            playedActionCardStep = 0;
-            if (selectedTile != null)
-            {
-                selectedTile.GetComponent<Image>().color = Color.white;
-                selectedTile = null;
-            }
-            roundManager.Actions--;
-            roundManager.discardPile.AddCard(card);
-        }
-        roundManager.hand.Remove(roundManager.hand.Find(x => x.card == card));
-    }
-
-    public void ContinuePlayingCard()
-    {
-        int x = 0;
-        if (numberToSelect == "x")
-        {
-          x = selectedCards.Count;
-        }
-
-        if (playedCard is ActionCard)
-        {
-            ActionCard actionCard = (ActionCard)playedCard;
-            for (int i = playedActionCardStep; i < actionCard.effects.Count; i++)
-            {
-                string[] effectParts = actionCard.effects[i].Split(' ');
-                if (effectParts[0] == "Discard")
-                {
-                    if (effectParts[1] == "x")
-                    {
-                        for (int j = 0; j < x; j++)
-                        {
-                            roundManager.discardPile.AddCard(selectedCards[j].card);
-                            roundManager.hand.Remove(selectedCards[j]);
-                            Destroy(selectedCards[j].gameObject);
-                        }
-                    }
-                    
-                    playedActionCardStep++;
-                } else if (effectParts[0] == "Draw")
-                {
-                    if (effectParts[1] == "x")
-                    {
-                        for (int j = 0; j < x; j++)
-                        {
-                            roundManager.AddCardToHand(roundManager.roundDeck.DrawCard());
-                        }
-                    }
-                    playedActionCardStep++;
-                } else if (effectParts[0] == "Actions")
-                {
-                    roundManager.Actions += int.Parse(effectParts[1]);
+                    target.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                     playedActionCardStep++;
                 }
             }
+            FinishPlay();
+            RemoveCard(card);
+            return;
         }
-        playedActionCardStep = 0;
-        numberToSelect = "";
-        selectingCards = false;
-        selectedCards.Clear();
-        roundManager.Actions--;
-        roundManager.discardPile.AddCard(playedCard);
-        playedCard = null;
+        RemoveCard(card);
+        SetState(new IdleState(this));
     }
-
-    public void MarkValidTargets(ActionCard actionCard)
-    {
-        foreach (string effect in actionCard.effects)
-        {
-            string[] effectParts = effect.Split(' ');
-            if (effectParts[0] == "Target")
-            {
-                selectingTarget = true;
-                if (effectParts[1] == "Enemy")
-                {
-                    for (int row = 1; row <= 3; row++)
-                    {
-                        for (int tile = 1; tile <= 7; tile++)
-                        {
-                            Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
-                            if (tileTransform != null)
-                            {
-                                Tile tileComponent = tileTransform.GetComponent<Tile>();
-                                if (tileComponent.monster != null && tileComponent.monster.team == "Enemy")
-                                {
-                                    validTargets.Add(tileComponent);
-                                    tileComponent.GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
-                                }
-                            }
-                        }
-                    }
-                } else if (effectParts[1] == "Ally")
-                {
-                    for (int row = 1; row <= 3; row++)
-                    {
-                        for (int tile = 1; tile <= 7; tile++)
-                        {
-                            Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
-                            if (tileTransform != null)
-                            {
-                                Tile tileComponent = tileTransform.GetComponent<Tile>();
-                                if (tileComponent.monster != null && tileComponent.monster.team == "Player")
-                                {
-                                    validTargets.Add(tileComponent);
-                                    tileComponent.GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
     public override void SelectTile(Tile tile, Vector3 position)
     {
@@ -485,24 +286,24 @@ public class MainPhase : GameState
         }
     }
 
-    public override void DoneButton()
-    {
-        roundManager.doneButton.gameObject.SetActive(false);
-        roundManager.cancelButton.gameObject.SetActive(false);
-        if (selectingCards)
-        {
-            selectingCards = false;
-            selectedCards.ForEach(cardView => {
-                cardView.GetComponent<Image>().color = Color.white;
-            });
-            ContinuePlayingCard();
-            selectedCards.Clear();
-        }
-    }
+    // public override void DoneButton()
+    // {
+    //     roundManager.doneButton.gameObject.SetActive(false);
+    //     roundManager.cancelButton.gameObject.SetActive(false);
+    //     if (selectingCards)
+    //     {
+    //         selectingCards = false;
+    //         selectedCards.ForEach(cardView => {
+    //             cardView.GetComponent<Image>().color = Color.white;
+    //         });
+    //         ContinuePlayingCard();
+    //         selectedCards.Clear();
+    //     }
+    // }
 
-    public override void CancelButton()
+    public void CancelButton()
     {
-        CancelPlay();
+        CancelFullPlay();
         roundManager.doneButton.gameObject.SetActive(false);
         roundManager.cancelButton.gameObject.SetActive(false);
         if (playedCard != null)
@@ -510,10 +311,12 @@ public class MainPhase : GameState
             roundManager.AddCardToHand(playedCard);
             playedCard = null;
         }
-        selectingCards = false;
-        selectedCards.ForEach(cardView => {
-            cardView.GetComponent<Image>().color = Color.white;
-        });
-        selectedCards.Clear();
+    }
+
+    public void SetState(CardPlayState newState)
+    {
+        currentState.ExitState();
+        currentState = newState;
+        currentState.EnterState();
     }
 }

@@ -2,13 +2,14 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager instance;
-    [SerializeField] private GameObject roundPanel;
+    public GameObject roundPanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
-    [SerializeField] private GameObject HandContent;
+    public GameObject handContent;
     public GameObject DungeonPanel;
     public Monster MonsterPrefab;
 
@@ -57,8 +58,8 @@ public class RoundManager : MonoBehaviour
     public LargeCardView largeCardView;
     public LargeMonsterView largeMonsterView;
 
-    public DoneButton doneButton;
-    public CancelButton cancelButton;
+    public Button doneButton;
+    public Button cancelButton;
 
     void Awake()
     {
@@ -91,6 +92,27 @@ public class RoundManager : MonoBehaviour
         }
     }
 
+    public void SetupDoneButton()
+    {
+        doneButton.gameObject.SetActive(true);
+        cancelButton.gameObject.SetActive(true);
+        doneButton.onClick.AddListener(OnDoneButtonClicked);
+        cancelButton.onClick.AddListener(OnCancelButtonClicked);
+    }
+
+    public void OnDoneButtonClicked()
+    {
+        Debug.Log("OnDoneButtonClicked called");
+        MainPhase mainPhase = (MainPhase)gameState;
+        mainPhase.SetState(new ResolvingEffectState(mainPhase));
+    }
+
+    public void OnCancelButtonClicked()
+    {
+        MainPhase mainPhase = (MainPhase)gameState;
+        mainPhase.CancelFullPlay();
+    }
+
     public void StartRound()
     {
         roundPanel.gameObject.SetActive(true);
@@ -100,7 +122,7 @@ public class RoundManager : MonoBehaviour
         List<Card> newHand = roundDeck.DrawHand();
         foreach (Card card in newHand)
         {
-            SmallCardView newCard = Instantiate(SmallCardViewPrefab, HandContent.transform);
+            SmallCardView newCard = Instantiate(SmallCardViewPrefab, handContent.transform);
             newCard.InitValues(card);
             hand.Add(newCard);
         }
@@ -141,7 +163,7 @@ public class RoundManager : MonoBehaviour
 
     public void AddCardToHand(Card card)
     {
-        SmallCardView newCard = Instantiate(SmallCardViewPrefab, HandContent.transform);
+        SmallCardView newCard = Instantiate(SmallCardViewPrefab, handContent.transform);
         newCard.InitValues(card);
         hand.Add(newCard);
     }

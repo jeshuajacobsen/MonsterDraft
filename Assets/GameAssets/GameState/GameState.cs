@@ -21,6 +21,4 @@ public abstract class GameState : MonoBehaviour
 
     public abstract void SelectTile(Tile tile, Vector3 position);
 
-    public abstract void DoneButton();
-    public abstract void CancelButton();
 }
