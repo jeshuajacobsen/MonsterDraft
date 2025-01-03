@@ -53,6 +53,15 @@ public class StockPile : MonoBehaviour
 
     private void BuyCard()
     {
+        if (RoundManager.instance.isGainingCard)
+        {
+            MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
+            if ((mainPhase.currentState as GainingCardState).MeetsRestrictions(card))
+            {
+                (mainPhase.currentState as GainingCardState).GainCard(card);
+                return;
+            }
+        }
         if (RoundManager.instance.Coins >= Cost)
         {
             RoundManager.instance.Coins -= Cost;
@@ -72,5 +81,6 @@ public class StockPile : MonoBehaviour
             StockLeft--;
             transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = StockLeft.ToString();
         }
+        
     }
 }

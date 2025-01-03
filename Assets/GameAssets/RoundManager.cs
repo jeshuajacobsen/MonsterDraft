@@ -60,6 +60,8 @@ public class RoundManager : MonoBehaviour
 
     public Button doneButton;
     public Button cancelButton;
+    public bool isGainingCard = false;
+    public TextMeshProUGUI messageText;
 
     void Awake()
     {
@@ -98,6 +100,14 @@ public class RoundManager : MonoBehaviour
         cancelButton.gameObject.SetActive(true);
         doneButton.onClick.AddListener(OnDoneButtonClicked);
         cancelButton.onClick.AddListener(OnCancelButtonClicked);
+    }
+
+    public void CleanupDoneButton()
+    {
+        doneButton.onClick.RemoveAllListeners();
+        cancelButton.onClick.RemoveAllListeners();
+        doneButton.gameObject.SetActive(false);
+        cancelButton.gameObject.SetActive(false);
     }
 
     public void OnDoneButtonClicked()

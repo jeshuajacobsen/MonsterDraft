@@ -25,6 +25,9 @@ public class SpriteManager : MonoBehaviour
     public Sprite shield;
     public Sprite heal;
     public Sprite storage;
+    public Sprite alchemist;
+    public Sprite merchant;
+    public Sprite throneRoom;
 
     public Sprite zaple;
     public Sprite owisp;
@@ -102,6 +105,12 @@ public class SpriteManager : MonoBehaviour
                 return borble;
             case "Storage":
                 return storage;
+            case "Alchemist":
+                return alchemist;
+            case "Merchant":
+                return merchant;
+            case "Throne Room":
+                return throneRoom;
             default:
                 return copper;
         }

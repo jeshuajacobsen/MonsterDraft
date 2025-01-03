@@ -57,11 +57,26 @@ public class BaseActionData
                 Description = "Discard any number of cards then draw that many cards\n +1 action";
                 Cost = 2;
                 break;
-            // case "Alchemist":
-            //     Effects.Add("Select Treasure 1")
-            //     Effects.Add("Save Cost")
-            //     Effects.Add("Discard Selected")
-            //     Effects.Add("Gain Treasure Costing SavedValue Plus 3")
+            case "Alchemist":
+                Effects.Add("Select Treasure 1");
+                Effects.Add("Trash Selected");
+                Effects.Add("Gain Treasure Costing Selected Cost Plus 4");
+                Description = "Trash a treasure card to gain a treasure card costing up to 4 more";
+                Cost = 5;
+                break;
+            case "Merchant":
+                Effects.Add("Coins 2");
+                Effects.Add("Actions 1");
+                Effects.Add("Draw 1");
+                Description = "+2 coins\n +1 action\n +1 card";
+                Cost = 4;
+                break;
+            case "Throne Room":
+                Effects.Add("Select Action 1");
+                Effects.Add("Play Selected Twice");
+                Description = "Play an action card twice";
+                Cost = 4;
+                break;
             default:
                 Effects.Add("No effect");
                 break;

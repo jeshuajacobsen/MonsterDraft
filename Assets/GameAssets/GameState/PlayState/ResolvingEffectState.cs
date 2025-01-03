@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ResolvingEffectState : CardPlayState
 {
-    private int currentEffectIndex;
 
     public ResolvingEffectState(MainPhase mainPhase) : base(mainPhase) 
     { 
@@ -12,7 +11,7 @@ public class ResolvingEffectState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Resolving Effect State Entered");
-        ResolveEffects(((ActionCard)mainPhase.playedCard).effects[currentEffectIndex]);
+        ResolveEffects();
     }
 
     public override void HandleInput() { }
@@ -23,7 +22,7 @@ public class ResolvingEffectState : CardPlayState
         
     }
 
-    private void ResolveEffects(string effect)
+    private void ResolveEffects()
     {
         for (int i = mainPhase.playedActionCardStep; i < ((ActionCard)mainPhase.playedCard).effects.Count; i++)
         {
@@ -32,6 +31,11 @@ public class ResolvingEffectState : CardPlayState
             {
                 RoundManager.instance.Actions += int.Parse(effectParts[1]);
                 mainPhase.playedActionCardStep++;
+            } else if (effectParts[0]  == "Coins") 
+            {
+                RoundManager.instance.Coins += int.Parse(effectParts[1]);
+                mainPhase.playedActionCardStep++;
+                
             } else if (effectParts[0] == "Draw")
             {
                 if (effectParts[1] == "x")
@@ -53,7 +57,10 @@ public class ResolvingEffectState : CardPlayState
                 mainPhase.playedActionCardStep++;
                 if (effectParts[1] == "Cards")
                 {
-                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2]));
+                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "None"));
+                } else if (effectParts[1] == "Treasure")
+                {
+                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "Treasure"));
                 }
                 return;
             } else if (effectParts[0] == "Discard")
@@ -67,9 +74,56 @@ public class ResolvingEffectState : CardPlayState
                         RoundManager.instance.hand.Remove(mainPhase.selectedCards[j]);
                         Destroy(mainPhase.selectedCards[j].gameObject);
                     }
+                } else if (effectParts[1] == "Selected") 
+                {
+                    for (int j = 0; j < mainPhase.selectedCards.Count; j++)
+                    {
+                        RoundManager.instance.discardPile.AddCard(mainPhase.selectedCards[j].card);
+                        RoundManager.instance.hand.Remove(mainPhase.selectedCards[j]);
+                        Destroy(mainPhase.selectedCards[j].gameObject);
+                    }
                 }
                 
                 mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Trash")
+            {
+                if (effectParts[1] == "Selected") 
+                {
+                    for (int j = 0; j < mainPhase.selectedCards.Count; j++)
+                    {
+                        RoundManager.instance.hand.Remove(mainPhase.selectedCards[j]);
+                        Destroy(mainPhase.selectedCards[j].gameObject);
+                    }
+                }
+                
+                mainPhase.playedActionCardStep++;
+
+            } else if (effectParts[0] == "Gain")
+            {
+                mainPhase.playedActionCardStep++;
+                if (effectParts[1] == "Treasure")
+                {
+                    string restriction = "Treasure";
+                    if (effectParts[2] == "Costing")
+                    {
+                        if (effectParts[3] == "Selected")
+                        {
+                            if (effectParts[4] == "Cost")
+                            {
+                                
+                                if (effectParts[5] == "Plus")
+                                {
+                                    int cost = 0;
+                                    cost += mainPhase.selectedCards[0].card.Cost;
+                                    cost += int.Parse(effectParts[6]);
+
+                                    mainPhase.SetState(new GainingCardState(mainPhase, restriction, cost));
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         
