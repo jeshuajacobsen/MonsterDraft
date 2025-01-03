@@ -29,7 +29,6 @@ public class ToFieldState : CardPlayState
     {
         if (Input.GetMouseButtonUp(0))
         {
-            cardView.HandleMouseUp();
             HandleCardDrop(cardView, Input.mousePosition);
         }
     }
@@ -41,7 +40,7 @@ public class ToFieldState : CardPlayState
 
     public void HandleCardDrop(SmallCardView cardView, Vector2 dropPosition)
     {
-        RectTransform parentRect = RoundManager.instance.handContent.GetComponent<RectTransform>();
+        RectTransform parentRect = RoundManager.instance.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
 
         bool isInsideHand = RectTransformUtility.RectangleContainsScreenPoint(
             parentRect,

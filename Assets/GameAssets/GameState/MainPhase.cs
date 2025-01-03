@@ -134,6 +134,8 @@ public class MainPhase : GameState
         roundManager.Actions--;
         playedActionCardStep = 0;
         playedCard = null;
+        ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
+        scrollRect.enabled = true;
         SetState(new IdleState(this));
     }
 

@@ -186,22 +186,22 @@ public class RoundManager : MonoBehaviour
         hand.Add(newCard);
         RectTransform newItemRect = newCard.GetComponent<RectTransform>();
 
-        int index = hand.Count - 1;
-        float itemWidth = newItemRect.rect.width;
-        newItemRect.anchoredPosition = new Vector2(index * (itemWidth + 10) + itemWidth/2, newItemRect.rect.height / 2 + 20);
-
-        float totalWidth = hand.Count * SmallCardViewPrefab.GetComponent<RectTransform>().rect.width + 10;
-        handContent.GetComponent<RectTransform>().sizeDelta = new Vector2(totalWidth, handContent.GetComponent<RectTransform>().rect.height);
+        ResizeHand();
     }
 
     public void RemoveCardFromHand(SmallCardView cardView)
     {
         hand.Remove(cardView);
         Destroy(cardView.gameObject);
+        ResizeHand();
+    }
+
+    public void ResizeHand()
+    {
         for (int i = 0; i < hand.Count; i++)
         {
             RectTransform newItemRect = hand[i].GetComponent<RectTransform>();
-            float itemWidth = newItemRect.rect.width + 10;
+            float itemWidth = newItemRect.rect.width;
             newItemRect.anchoredPosition = new Vector2(i * (itemWidth + 10) + itemWidth/2, newItemRect.rect.height / 2 + 20);
         }
         float totalWidth = hand.Count * SmallCardViewPrefab.GetComponent<RectTransform>().rect.width + 10;

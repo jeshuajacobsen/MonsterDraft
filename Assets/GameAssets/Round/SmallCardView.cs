@@ -98,59 +98,6 @@ public class SmallCardView : MonoBehaviour
         isDragging = false;
     }
 
-    public void HandleMouseUp()
-    {
-        if (isDragging)
-        {
-            isDragging = false;
-            MoveToCanvas(originalCanvas);
-            transform.SetParent(originalParent);
-
-            if (scrollRect != null)
-            {
-                scrollRect.enabled = true;
-            }
-        }
-        // if (isDragging)
-        // {
-        //     isDragging = false;
-        //     MoveToCanvas(originalCanvas);
-        //     transform.SetParent(originalParent);
-
-        //     // Ensure consistent screen space coordinates
-        //     Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(mainCamera, transform.position);
-        //     RectTransform parentRect = originalParent.GetComponent<RectTransform>();
-
-        //     bool isInsideOriginalParent = RectTransformUtility.RectangleContainsScreenPoint(
-        //         parentRect,
-        //         screenPoint,
-        //         mainCamera
-        //     );
-
-        //     if (isInsideOriginalParent)
-        //     {
-        //         CancelPlay();
-        //     }
-        //     else
-        //     {
-        //         if (RoundManager.instance.gameState.CanPlayCard(card, transform.position))
-        //         {
-        //             RoundManager.instance.gameState.PlayCard(card, transform.position);
-        //             Destroy(gameObject);
-        //         }
-        //         else
-        //         {
-        //             CancelPlay();
-        //         }
-        //     }
-
-        //     if (scrollRect != null)
-        //     {
-        //         scrollRect.enabled = true;
-        //     }
-        // }
-    }
-
     private void HandleTouchInput()
     {
         if (Input.touchCount > 0)
