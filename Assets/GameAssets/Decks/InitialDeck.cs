@@ -19,5 +19,8 @@ public class InitialDeck : Deck
         cards.Add(new ActionCard("Fireball"));
         cards.Add(new ActionCard("Shield"));
         cards.Add(new ActionCard("Heal"));
+        cards.Add(new ActionCard("Preparation"));
+        cards.Add(new ActionCard("Research"));
+        cards.Add(new ActionCard("Throne Room"));
     }
 }

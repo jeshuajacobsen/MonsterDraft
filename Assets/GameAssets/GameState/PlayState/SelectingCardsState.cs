@@ -78,6 +78,13 @@ public class SelectingCardsState : CardPlayState
                 return true;
             }
         }
+        else if (restriction == "Action")
+        {
+            if (cardView.card is ActionCard)
+            {
+                return true;
+            }
+        }
         return false;
     }
 

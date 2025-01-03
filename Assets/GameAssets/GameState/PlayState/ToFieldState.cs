@@ -63,7 +63,7 @@ public class ToFieldState : CardPlayState
         else if (cardView.card is ActionCard)
         {   
             mainPhase.playedCard = cardView.card;
-            mainPhase.RemoveCard(cardView.card);
+            mainPhase.RemoveCard(cardView);
             mainPhase.SetState(new ResolvingEffectState(mainPhase));
             return;
         }

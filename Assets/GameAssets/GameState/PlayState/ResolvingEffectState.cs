@@ -61,6 +61,9 @@ public class ResolvingEffectState : CardPlayState
                 } else if (effectParts[1] == "Treasure")
                 {
                     mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "Treasure"));
+                } else if (effectParts[1] == "Action")
+                {
+                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "Action"));
                 }
                 return;
             } else if (effectParts[0] == "Discard")
@@ -71,7 +74,7 @@ public class ResolvingEffectState : CardPlayState
                     for (int j = 0; j < x; j++)
                     {
                         RoundManager.instance.discardPile.AddCard(mainPhase.selectedCards[j].card);
-                        RoundManager.instance.hand.Remove(mainPhase.selectedCards[j]);
+                        RoundManager.instance.RemoveCardFromHand(mainPhase.selectedCards[j]);
                         Destroy(mainPhase.selectedCards[j].gameObject);
                     }
                 } else if (effectParts[1] == "Selected") 
@@ -79,7 +82,7 @@ public class ResolvingEffectState : CardPlayState
                     for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                     {
                         RoundManager.instance.discardPile.AddCard(mainPhase.selectedCards[j].card);
-                        RoundManager.instance.hand.Remove(mainPhase.selectedCards[j]);
+                        RoundManager.instance.RemoveCardFromHand(mainPhase.selectedCards[j]);
                         Destroy(mainPhase.selectedCards[j].gameObject);
                     }
                 }
@@ -91,7 +94,7 @@ public class ResolvingEffectState : CardPlayState
                 {
                     for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                     {
-                        RoundManager.instance.hand.Remove(mainPhase.selectedCards[j]);
+                        RoundManager.instance.RemoveCardFromHand(mainPhase.selectedCards[j]);
                         Destroy(mainPhase.selectedCards[j].gameObject);
                     }
                 }
@@ -123,6 +126,17 @@ public class ResolvingEffectState : CardPlayState
                             }
                         }
                     }
+                }
+            } else if (effectParts[0] == "Play")
+            {
+                mainPhase.playedActionCardStep++;
+                if (effectParts[1] == "Selected")
+                {
+                    for (int j = 0; j < int.Parse(effectParts[2]); j++)
+                    {
+                        mainPhase.cardsToAutoPlay.Add(mainPhase.selectedCards[0].card);
+                    }
+                    mainPhase.RemoveCard(mainPhase.selectedCards[0]);
                 }
             }
         }

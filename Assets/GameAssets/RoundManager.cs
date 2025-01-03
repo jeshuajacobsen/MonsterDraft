@@ -97,8 +97,13 @@ public class RoundManager : MonoBehaviour
     public void SetupDoneButton()
     {
         doneButton.gameObject.SetActive(true);
-        cancelButton.gameObject.SetActive(true);
         doneButton.onClick.AddListener(OnDoneButtonClicked);
+        if (gameState is MainPhase && ((MainPhase)gameState).autoPlaying)
+        {
+            return;
+        }
+        
+        cancelButton.gameObject.SetActive(true);
         cancelButton.onClick.AddListener(OnCancelButtonClicked);
     }
 
@@ -132,9 +137,7 @@ public class RoundManager : MonoBehaviour
         List<Card> newHand = roundDeck.DrawHand();
         foreach (Card card in newHand)
         {
-            SmallCardView newCard = Instantiate(SmallCardViewPrefab, handContent.transform);
-            newCard.InitValues(card);
-            hand.Add(newCard);
+            AddCardToHand(card);
         }
         currentDungeon = new Dungeon("Dungeon1");
         gameState = new MainPhase(this);
@@ -169,6 +172,11 @@ public class RoundManager : MonoBehaviour
             }
         }
         hand.Clear();
+
+        foreach (Transform child in handContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public void AddCardToHand(Card card)
@@ -176,6 +184,28 @@ public class RoundManager : MonoBehaviour
         SmallCardView newCard = Instantiate(SmallCardViewPrefab, handContent.transform);
         newCard.InitValues(card);
         hand.Add(newCard);
+        RectTransform newItemRect = newCard.GetComponent<RectTransform>();
+
+        int index = hand.Count - 1;
+        float itemWidth = newItemRect.rect.width;
+        newItemRect.anchoredPosition = new Vector2(index * (itemWidth + 10) + itemWidth/2, newItemRect.rect.height / 2 + 20);
+
+        float totalWidth = hand.Count * SmallCardViewPrefab.GetComponent<RectTransform>().rect.width + 10;
+        handContent.GetComponent<RectTransform>().sizeDelta = new Vector2(totalWidth, handContent.GetComponent<RectTransform>().rect.height);
+    }
+
+    public void RemoveCardFromHand(SmallCardView cardView)
+    {
+        hand.Remove(cardView);
+        Destroy(cardView.gameObject);
+        for (int i = 0; i < hand.Count; i++)
+        {
+            RectTransform newItemRect = hand[i].GetComponent<RectTransform>();
+            float itemWidth = newItemRect.rect.width + 10;
+            newItemRect.anchoredPosition = new Vector2(i * (itemWidth + 10) + itemWidth/2, newItemRect.rect.height / 2 + 20);
+        }
+        float totalWidth = hand.Count * SmallCardViewPrefab.GetComponent<RectTransform>().rect.width + 10;
+        handContent.GetComponent<RectTransform>().sizeDelta = new Vector2(totalWidth, handContent.GetComponent<RectTransform>().rect.height);
     }
 
     public void MoveMonster(Monster monster)

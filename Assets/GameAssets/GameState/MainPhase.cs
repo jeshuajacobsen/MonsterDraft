@@ -17,6 +17,8 @@ public class MainPhase : GameState
     public List<SmallCardView> selectedCards = new List<SmallCardView>();
     public Card playedCard;
     public CardPlayState currentState;
+    public List<Card> cardsToAutoPlay = new List<Card>();
+    public bool autoPlaying = false;
 
     public override void EnterState()
     {
@@ -190,11 +192,10 @@ public class MainPhase : GameState
         return true;
     }
 
-    public void RemoveCard(Card card)
+    public void RemoveCard(SmallCardView cardView)
     {
-        roundManager.discardPile.AddCard(card);
-        SmallCardView cardView = roundManager.hand.Find(x => x.card == card);
-        roundManager.hand.Remove(cardView);
+        roundManager.discardPile.AddCard(cardView.card);
+        roundManager.RemoveCardFromHand(cardView);
         if (cardView != null)
         {
             Destroy(cardView.gameObject);
@@ -207,7 +208,7 @@ public class MainPhase : GameState
         roundManager.Mana += treasureCard.ManaGeneration;
         roundManager.discardPile.AddCard(treasureCard);
         SmallCardView treasureCardView = roundManager.hand.Find(x => x.card == treasureCard);
-        roundManager.hand.Remove(treasureCardView);
+        roundManager.RemoveCardFromHand(treasureCardView);
         Destroy(treasureCardView.gameObject);
         SetState(new IdleState(this));
     }
@@ -217,19 +218,19 @@ public class MainPhase : GameState
 
     }
 
-    public void PlayCardWithTarget(Card card, Tile target)
+    public void PlayCardWithTarget(SmallCardView cardView, Tile target)
     {
-        if (card is MonsterCard)
+        if (cardView.card is MonsterCard)
         {
-            MonsterCard monsterCard = (MonsterCard)card;
+            MonsterCard monsterCard = (MonsterCard)cardView.card;
             Monster newMonster = Instantiate(roundManager.MonsterPrefab, target.transform);
             newMonster.InitValues(monsterCard, target, "Player");
             target.monster = newMonster;
             roundManager.Mana -= monsterCard.ManaCost;
         }
-        else if (card is ActionCard)
+        else if (cardView.card is ActionCard)
         {
-            ActionCard actionCard = (ActionCard)card;
+            ActionCard actionCard = (ActionCard)cardView.card;
             for (int i = playedActionCardStep; i < actionCard.effects.Count; i++)
             {
                 string[] effectParts = actionCard.effects[i].Split(' ');
@@ -267,10 +268,10 @@ public class MainPhase : GameState
                 }
             }
             FinishPlay();
-            RemoveCard(card);
+            RemoveCard(cardView);
             return;
         }
-        RemoveCard(card);
+        RemoveCard(cardView);
         SetState(new IdleState(this));
     }
 

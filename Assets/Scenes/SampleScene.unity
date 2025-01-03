@@ -4468,7 +4468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &794702215
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7556,6 +7556,8 @@ MonoBehaviour:
   heal: {fileID: 21300000, guid: 47430303783aa90459716d181bc79404, type: 3}
   storage: {fileID: 21300000, guid: ff67c9b4b0258cf47b35bef02d46ff06, type: 3}
   alchemist: {fileID: 21300000, guid: 15b4f0d1d5f7a3546a6df9ad240a637a, type: 3}
+  merchant: {fileID: 21300000, guid: 6a5eb61f123a752419a10121c7658087, type: 3}
+  throneRoom: {fileID: 21300000, guid: c502bf700ba03cc40b333d1c0bea6c41, type: 3}
   zaple: {fileID: 21300000, guid: 630b029cac45527438da344f3f6b2c9e, type: 3}
   owisp: {fileID: 21300000, guid: 32bace7fd26d6e749ae5b7446d43bc19, type: 3}
   leafree: {fileID: 21300000, guid: 9045d116c2c23d5409a8b4a619a57482, type: 3}
@@ -9833,7 +9835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1543829575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10693,7 +10695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1603265255
 RectTransform:
   m_ObjectHideFlags: 0

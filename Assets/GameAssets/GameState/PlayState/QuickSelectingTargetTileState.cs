@@ -3,13 +3,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectingMonsterTileState : CardPlayState
+public class QuickSelectingMonsterTileState : CardPlayState
 {
     private List<Tile> validTargets;
     private SmallCardView cardView;
     
 
-    public SelectingMonsterTileState(MainPhase mainPhase, SmallCardView cardView) : base(mainPhase)
+    public QuickSelectingMonsterTileState(MainPhase mainPhase, SmallCardView cardView) : base(mainPhase)
     {
         this.cardView = cardView;
         validTargets = new List<Tile>();
@@ -17,7 +17,7 @@ public class SelectingMonsterTileState : CardPlayState
 
     public override void EnterState()
     {
-        Debug.Log("Selecting target Tile State Entered");
+        Debug.Log("Quick Selecting target Tile State Entered");
         MarkValidTargets(cardView.card as ActionCard);
         //mainPhase.playedActionCardStep++;
     }
@@ -37,7 +37,7 @@ public class SelectingMonsterTileState : CardPlayState
 
     public override void ExitState()
     {
-        Debug.Log("Exiting Selecting target Tile State");
+        Debug.Log("Exiting Quick Selecting target Tile State");
         validTargets.ForEach(tile => tile.GetComponent<Image>().color = Color.white);
         validTargets.Clear();
     }
@@ -90,7 +90,7 @@ public class SelectingMonsterTileState : CardPlayState
 
                 if (mainPhase.CanPlayCard(cardView.card, cardView.transform.position))
                 {
-                    mainPhase.PlayCardWithTarget(cardView.card, validTargets[i]);
+                    mainPhase.PlayCardWithTarget(cardView, validTargets[i]);
                     return;
                 }
                 

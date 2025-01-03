@@ -10,6 +10,15 @@ public class IdleState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Idle State Entered");
+        if (mainPhase.cardsToAutoPlay.Count > 0)
+        {
+            mainPhase.autoPlaying = true;
+            mainPhase.playedCard = mainPhase.cardsToAutoPlay[0];
+            mainPhase.cardsToAutoPlay.RemoveAt(0);
+            mainPhase.SetState(new ResolvingEffectState(mainPhase));
+        } else {
+            mainPhase.autoPlaying = false;
+        }
     }
 
     public override void HandleInput()
@@ -39,7 +48,7 @@ public class IdleState : CardPlayState
                             if (actionCard.StartsWithTarget())
                             {
                                 mainPhase.playedActionCardStep++;
-                                mainPhase.SetState(new SelectingTargetMonsterState(mainPhase, cardView));
+                                mainPhase.SetState(new QuickSelectingTargetMonsterState(mainPhase, cardView));
                             }
                             else
                             {
@@ -49,7 +58,7 @@ public class IdleState : CardPlayState
                         }
                         if (cardView.card is MonsterCard)
                         {
-                            mainPhase.SetState(new SelectingMonsterTileState(mainPhase, cardView));
+                            mainPhase.SetState(new QuickSelectingMonsterTileState(mainPhase, cardView));
                         }
                         else if (cardView.card is TreasureCard)
                         {

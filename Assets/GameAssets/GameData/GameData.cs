@@ -28,6 +28,7 @@ public class GameData
         _actionData.Add("Storage", new BaseActionData("Storage"));
         _actionData.Add("Alchemist", new BaseActionData("Alchemist"));
         _actionData.Add("Merchant", new BaseActionData("Merchant"));
+        _actionData.Add("Throne Room", new BaseActionData("Throne Room"));
 
         _treasureData = new Dictionary<string, TreasureData>();
         _treasureData.Add("Copper", new TreasureData("Copper"));
@@ -90,7 +91,8 @@ public class GameData
     public string GetRandomActionName(List<string> exclude)
     {
         List<string> actionNames = new List<string> { "Fireball", "Heal", "Shield", "Preparation", 
-                                                      "Research", "Storage", "Alchemist", "Merchant" };
+                                                      "Research", "Storage", "Alchemist", "Merchant", 
+                                                      "Throne Room" };
         actionNames.RemoveAll(exclude.Contains);
         if (actionNames.Count == 0)
         {

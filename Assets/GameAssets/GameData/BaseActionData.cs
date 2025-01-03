@@ -73,7 +73,7 @@ public class BaseActionData
                 break;
             case "Throne Room":
                 Effects.Add("Select Action 1");
-                Effects.Add("Play Selected Twice");
+                Effects.Add("Play Selected 2");
                 Description = "Play an action card twice";
                 Cost = 4;
                 break;
