@@ -20,6 +20,8 @@ public class MainPhase : GameState
     public List<Card> cardsToAutoPlay = new List<Card>();
     public bool autoPlaying = false;
 
+    public Tile selectedTile;
+
     public override void EnterState()
     {
         Debug.Log("Entering Main Phase");
@@ -111,11 +113,14 @@ public class MainPhase : GameState
     {
         playedActionCardStep = 0;
         playedCard = null;
-        for (int j = 0; j < roundManager.hand.Count; j++)
+        if (!autoPlaying)
         {
-            if (roundManager.hand[j].isDragging)
+            for (int j = 0; j < roundManager.hand.Count; j++)
             {
-                roundManager.hand[j].CancelPlay();
+                if (roundManager.hand[j].isDragging)
+                {
+                    roundManager.hand[j].CancelPlay();
+                }
             }
         }
         SetState(new IdleState(this));
@@ -124,14 +129,20 @@ public class MainPhase : GameState
     public void CancelFullPlay()
     {
         playedActionCardStep = 0;
-        roundManager.AddCardToHand(playedCard);
+        if (!autoPlaying)
+        {
+            roundManager.AddCardToHand(playedCard);
+        }
         playedCard = null;
         SetState(new IdleState(this));
     }
 
     public void FinishPlay()
     {
-        roundManager.Actions--;
+        if (!autoPlaying)
+        {
+            roundManager.Actions--;
+        }
         playedActionCardStep = 0;
         playedCard = null;
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();

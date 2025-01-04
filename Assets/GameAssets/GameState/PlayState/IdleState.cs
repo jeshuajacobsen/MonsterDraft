@@ -10,6 +10,7 @@ public class IdleState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Idle State Entered");
+        mainPhase.selectedTile = null;
         if (mainPhase.cardsToAutoPlay.Count > 0)
         {
             mainPhase.autoPlaying = true;

@@ -48,7 +48,7 @@ public class ToFieldState : CardPlayState
             mainPhase.mainCamera
         );
 
-        if (isInsideHand)
+        if (isInsideHand || !mainPhase.CanPlayCard(cardView.card, dropPosition))
         {
             mainPhase.CancelPartialPlay();
             return;

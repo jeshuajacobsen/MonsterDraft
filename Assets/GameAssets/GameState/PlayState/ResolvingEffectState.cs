@@ -117,11 +117,14 @@ public class ResolvingEffectState : CardPlayState
                                 if (effectParts[5] == "Plus")
                                 {
                                     int cost = 0;
-                                    cost += mainPhase.selectedCards[0].card.Cost;
-                                    cost += int.Parse(effectParts[6]);
+                                    if (mainPhase.selectedCards.Count > 0)
+                                    {
+                                        cost += mainPhase.selectedCards[0].card.Cost;
+                                        cost += int.Parse(effectParts[6]);
 
-                                    mainPhase.SetState(new GainingCardState(mainPhase, restriction, cost));
-                                    return;
+                                        mainPhase.SetState(new GainingCardState(mainPhase, restriction, cost));
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -138,6 +141,41 @@ public class ResolvingEffectState : CardPlayState
                     }
                     mainPhase.RemoveCard(mainPhase.selectedCards[0]);
                 }
+            } else if (effectParts[0] == "Target")
+            {
+                mainPhase.playedActionCardStep++;
+                mainPhase.SetState(new SelectingTargetMonsterState(mainPhase, mainPhase.playedCard));
+            } else if (effectParts[0] == "Damage")
+            {
+                int damage = int.Parse(effectParts[1]);
+                mainPhase.selectedTile.monster.Health -= damage;
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Heal")
+            {
+                int heal = int.Parse(effectParts[1]);
+                mainPhase.selectedTile.monster.Health += heal;
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Buff")
+            {
+                int buffValue = 0;
+                string buffType = effectParts[1];
+                string buffDescription = "";
+                int duration = 0;
+                if (effectParts[2] == "Plus")
+                {
+                    buffValue = int.Parse(effectParts[3]);
+                } else if (effectParts[2] == "Minus")
+                {
+                    buffValue = -int.Parse(effectParts[3]);
+                }
+                if (effectParts[4] == "Duration")
+                {
+                    duration = int.Parse(effectParts[5]);
+                }
+                buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
+                
+                mainPhase.selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                mainPhase.playedActionCardStep++;
             }
         }
         
