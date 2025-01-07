@@ -9,7 +9,7 @@ public class GameData
     private Dictionary<string, TreasureData> _treasureData;
 
     private Dictionary<string, SkillData> _skills;
-    private Dictionary<string, List<string>> DungeonData;
+    private Dictionary<string, DungeonLevelData> _dungeonData;
 
     public GameData()
     {
@@ -50,8 +50,8 @@ public class GameData
         _skills.Add("Wave", new SkillData("Wave"));
         _skills.Add("Growth", new SkillData("Growth"));
 
-        DungeonData = new Dictionary<string, List<string>>();
-        DungeonData.Add("Dungeon1", new List<string> { "Zaple", "Owisp", "Leafree", "Borble" });
+        _dungeonData = new Dictionary<string, DungeonLevelData>();
+        _dungeonData.Add("Forest", new DungeonLevelData("Forest"));
     }
 
     public BaseStatsData GetBaseStatsData(string name)
@@ -72,6 +72,28 @@ public class GameData
     public SkillData GetSkill(string name)
     {
         return _skills[name];
+    }
+
+    public string GetCardType(string name)
+    {
+        if (_baseStatsData.ContainsKey(name))
+        {
+            return "Monster";
+        }
+        else if (_actionData.ContainsKey(name))
+        {
+            return "Action";
+        }
+        else if (_treasureData.ContainsKey(name))
+        {
+            return "Treasure";
+        }
+        return "";
+    }
+
+    public DungeonLevelData DungeonData(string name)
+    {
+        return _dungeonData[name];
     }
 
     public string GetRandomTreasureName(List<string> exclude)
@@ -99,10 +121,5 @@ public class GameData
             return "";
         }
         return actionNames[Random.Range(0, actionNames.Count)];
-    }
-
-    public List<string> GetDungeonMonsters(string name)
-    {
-        return DungeonData[name];
     }
 }

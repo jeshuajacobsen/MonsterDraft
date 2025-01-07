@@ -58,6 +58,83 @@ public class EnemyPhase : GameState
             {
                 PlayMonsterCardOnTile((MonsterCard)card, openTiles[Random.Range(0, openTiles.Count)]);
             }
+        } else if (card != null && card is ActionCard)
+        {
+            ActionCard actionCard = (ActionCard)card;
+            string[] effects = actionCard.effects[0].Split(' ');
+            List<Monster> targets = new List<Monster>();
+
+            if (effects[0] == "Target")
+            {
+                if (effects[1] == "Enemy")
+                {
+                    for (int row = 1; row <= 3; row++)
+                    {
+                        for (int i = 1; i <= 7; i++)
+                        {
+                            Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                            if (tile.monster != null && tile.monster.team == "Ally")
+                            {
+                                targets.Add(tile.monster);
+                            }
+                        }
+                    }
+                }
+                else if (effects[1] == "Ally")
+                {
+                    for (int row = 1; row <= 3; row++)
+                    {
+                        for (int i = 1; i <= 7; i++)
+                        {
+                            Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                            if (tile.monster != null && tile.monster.team == "Enemy")
+                            {
+                                targets.Add(tile.monster);
+                            }
+                        }
+                    }
+                }
+                
+            }
+            if (targets.Count == 0)
+            {
+                roundManager.currentDungeon.PostponeCard(card);
+                return;
+            }
+            Monster target = targets[Random.Range(0, targets.Count)];
+            for (int i = 1; i < actionCard.effects.Count; i++)
+            {
+                string[] effectParts = actionCard.effects[i].Split(' ');
+                if (effectParts[0] == "Damage")
+                {
+                    int damage = int.Parse(effectParts[1]);
+                    target.Health -= damage;
+                } else if (effectParts[0] == "Heal")
+                {
+                    int heal = int.Parse(effectParts[1]);
+                    target.Health += heal;
+                } else if (effectParts[0] == "Buff")
+                {
+                    int buffValue = 0;
+                    string buffType = effectParts[1];
+                    string buffDescription = "";
+                    int duration = 0;
+                    if (effectParts[2] == "Plus")
+                    {
+                        buffValue = int.Parse(effectParts[3]);
+                    } else if (effectParts[2] == "Minus")
+                    {
+                        buffValue = -int.Parse(effectParts[3]);
+                    }
+                    if (effectParts[4] == "Duration")
+                    {
+                        duration = int.Parse(effectParts[5]);
+                    }
+                    buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
+                    
+                    target.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                }
+            }
         }
     }
 

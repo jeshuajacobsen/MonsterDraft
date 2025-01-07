@@ -2,30 +2,47 @@ using System.Collections.Generic;
 
 public class Dungeon
 {
-    public List<MonsterCard> MonsterCards { get; set; }
+    public List<Card> Cards { get; set; }
     private string name;
 
-    public Dungeon(string name)
+    public Dungeon(string name, int roundNumber)
     {
         this.name = name;
-        MonsterCards = new List<MonsterCard>();
-        GameManager.instance.gameData.GetDungeonMonsters(name).ForEach(monsterName =>
+        Cards = new List<Card>();
+        GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).cards.ForEach(cardName =>
         {
-            MonsterCards.Add(new MonsterCard(monsterName));
+            string type = GameManager.instance.gameData.GetCardType(cardName);
+            if (type == "Monster")
+            {
+                Cards.Add(new MonsterCard(cardName));
+            }
+            else if (type == "Action")
+            {
+                Cards.Add(new ActionCard(cardName));
+            }
+            else if (type == "Treasure")
+            {
+                Cards.Add(new TreasureCard(cardName));
+            }
         });
     }
 
     public Card DrawCard()
     {
-        if (MonsterCards.Count == 0)
+        if (Cards.Count == 0)
         {
             return null;
         }
-        var card = MonsterCards[0];
+        var card = Cards[0];
         if (card != null)
         {
-            MonsterCards.Remove(card);
+            Cards.Remove(card);
         }
         return card;
+    }
+
+    public void PostponeCard(Card card)
+    {
+        Cards.Add(card);
     }
 }

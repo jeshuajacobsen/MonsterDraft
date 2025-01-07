@@ -8,6 +8,7 @@ public class LargeCardView : MonoBehaviour
 {
 
     public Camera mainCamera;
+    public Card card;
 
     // Start is called before the first frame update
     void Start()
@@ -21,19 +22,23 @@ public class LargeCardView : MonoBehaviour
     
     }
 
-    public void SetCard(Card card)
+    public void SetCard(Card card, bool move = true)
     {
+        this.card = card;
         transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(card.Name);
         transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = card.Cost.ToString();
         Vector3 mouseScreenPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 
                                             mainCamera.nearClipPlane + 1.0f);
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
-        if (mouseWorldPos.x < -900)
+        if (move)
         {
-            AlignLeftWithMouse();
-        } else {
-            AlignRightWithMouse();
+            if (mouseWorldPos.x < -900)
+            {
+                AlignLeftWithMouse();
+            } else {
+                AlignRightWithMouse();
+            }
         }
 
         if (card is MonsterCard)

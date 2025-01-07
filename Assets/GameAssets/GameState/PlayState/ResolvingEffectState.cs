@@ -135,11 +135,15 @@ public class ResolvingEffectState : CardPlayState
                 mainPhase.playedActionCardStep++;
                 if (effectParts[1] == "Selected")
                 {
-                    for (int j = 0; j < int.Parse(effectParts[2]); j++)
+                    if (mainPhase.selectedCards.Count > 0)
                     {
-                        mainPhase.cardsToAutoPlay.Add(mainPhase.selectedCards[0].card);
+                        for (int j = 0; j < int.Parse(effectParts[2]); j++)
+                        {
+                            mainPhase.cardsToAutoPlay.Add(mainPhase.selectedCards[0].card);
+                        }
+                        mainPhase.RemoveCard(mainPhase.selectedCards[0]);
                     }
-                    mainPhase.RemoveCard(mainPhase.selectedCards[0]);
+                    
                 }
             } else if (effectParts[0] == "Target")
             {

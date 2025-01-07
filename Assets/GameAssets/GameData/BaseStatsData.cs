@@ -41,21 +41,21 @@ public class BaseStatsData
                 skill2Name = "Burn";
                 break;
             case "Leafree":
-                Attack = 2;
-                Health = 12;
-                Defense = 3;
+                Attack = 6;
+                Health = 22;
+                Defense = 7;
                 Movement = 2;
-                ManaCost = 4;
-                Cost = 5;
+                ManaCost = 8;
+                Cost = 8;
                 skill1Name = "Leaf";
                 skill2Name = "Growth";
                 break;
             case "Borble":
-                Attack = 6;
-                Health = 13;
-                Defense = 2;
+                Attack = 8;
+                Health = 23;
+                Defense = 3;
                 Movement = 1;
-                ManaCost = 5;
+                ManaCost = 8;
                 Cost = 6;
                 skill1Name = "Bubble";
                 skill2Name = "Wave";

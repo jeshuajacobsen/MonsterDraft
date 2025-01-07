@@ -6,4 +6,9 @@ public class RunDeck : Deck
     {
         cards = initialDeck.cards;
     }
+
+    public void AddCard(Card card)
+    {
+        cards.Add(card);
+    }
 }

@@ -223,6 +223,8 @@ public class MainPhase : GameState
         SmallCardView treasureCardView = roundManager.hand.Find(x => x.card == treasureCard);
         roundManager.RemoveCardFromHand(treasureCardView);
         Destroy(treasureCardView.gameObject);
+        ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
+        scrollRect.enabled = true;
         SetState(new IdleState(this));
     }
 

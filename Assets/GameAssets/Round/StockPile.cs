@@ -59,6 +59,7 @@ public class StockPile : MonoBehaviour
             if ((mainPhase.currentState as GainingCardState).MeetsRestrictions(card))
             {
                 (mainPhase.currentState as GainingCardState).GainCard(card);
+                RoundManager.instance.cardsGainedThisRound.Add(card);
                 return;
             }
         }
@@ -68,15 +69,21 @@ public class StockPile : MonoBehaviour
 
             if (cardType == "Monster")
             {
-                RoundManager.instance.discardPile.AddCard(new MonsterCard(Name));
+                Card newCard = new MonsterCard(Name);
+                RoundManager.instance.discardPile.AddCard(newCard);
+                RoundManager.instance.cardsGainedThisRound.Add(newCard);
             }
             else if (cardType == "Treasure")
             {
-                RoundManager.instance.discardPile.AddCard(new TreasureCard(Name));
+                Card newCard = new TreasureCard(Name);
+                RoundManager.instance.discardPile.AddCard(newCard);
+                RoundManager.instance.cardsGainedThisRound.Add(newCard);
             }
             else if (cardType == "Action")
             {
-                RoundManager.instance.discardPile.AddCard(new ActionCard(Name));
+                Card newCard = new ActionCard(Name);
+                RoundManager.instance.discardPile.AddCard(newCard);
+                RoundManager.instance.cardsGainedThisRound.Add(newCard);
             }
             StockLeft--;
             transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = StockLeft.ToString();

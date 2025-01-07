@@ -63,6 +63,9 @@ public class RoundManager : MonoBehaviour
     public bool isGainingCard = false;
     public TextMeshProUGUI messageText;
 
+    public List<Card> cardsGainedThisRound = new List<Card>();
+    public string dungeonName;
+
     void Awake()
     {
 
@@ -90,7 +93,7 @@ public class RoundManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            //Debug.Log(e);
         }
     }
 
@@ -128,8 +131,9 @@ public class RoundManager : MonoBehaviour
         mainPhase.CancelFullPlay();
     }
 
-    public void StartRound()
+    public void StartRound(string dungeonName, int roundNumber)
     {
+        this.dungeonName = dungeonName;
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound();
@@ -139,7 +143,7 @@ public class RoundManager : MonoBehaviour
         {
             AddCardToHand(card);
         }
-        currentDungeon = new Dungeon("Dungeon1");
+        currentDungeon = new Dungeon(dungeonName, roundNumber);
         gameState = new MainPhase(this);
         gameState.EnterState();
     }
@@ -299,6 +303,11 @@ public class RoundManager : MonoBehaviour
                 {
                     EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
                     monster.actionsUsedThisTurn.Add(skill.name);
+
+                    if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
+                    {
+                        RunManager.instance.EndRound(cardsGainedThisRound);
+                    }
                     break;
                 }
             }
@@ -340,6 +349,11 @@ public class RoundManager : MonoBehaviour
             } else if (currentTileNumber - i < 1)
             {
                 PlayerBase.GetComponent<PlayerBase>().Health -= skill.Damage;
+                monster.actionsUsedThisTurn.Add(skill.name);
+                if (PlayerBase.GetComponent<PlayerBase>().Health <= 0)
+                {
+                    RunManager.instance.EndRoundLose();
+                }
                 break;
             }
         }

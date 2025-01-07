@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public GameData gameData = new GameData();
     public InitialDeck selectedInitialDeck;
 
-    [SerializeField] private GameObject menuPanel;
+    public GameObject menuPanel;
 
     void Awake()
     {
