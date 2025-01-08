@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+
 public class RunDeck : Deck
 {
     
 
     public RunDeck(InitialDeck initialDeck)
     {
-        cards = initialDeck.cards;
+        cards = new List<Card>(initialDeck.cards);
     }
 
     public void AddCard(Card card)

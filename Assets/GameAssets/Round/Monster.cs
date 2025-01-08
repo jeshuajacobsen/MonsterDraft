@@ -65,6 +65,8 @@ public class Monster : MonoBehaviour
 
     public string team;
 
+    public int ManaCost { get; set; }
+
     public List<MonsterBuff> buffs = new List<MonsterBuff>();
 
     void Start()
@@ -98,6 +100,7 @@ public class Monster : MonoBehaviour
         this.Movement = monsterCard.Movement;
         this.skill1 = monsterCard.skill1;
         this.skill2 = monsterCard.skill2;
+        this.ManaCost = monsterCard.ManaCost;
     }
 
     public void MoveTile(Tile tile)

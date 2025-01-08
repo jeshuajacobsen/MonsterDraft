@@ -20,7 +20,7 @@ public class GainingCardState : CardPlayState
         Debug.Log("Gaining card State Entered");
         RoundManager.instance.isGainingCard = true;
         RoundManager.instance.messageText.text = "Select a " + restriction +" card to gain costing up to " + cost + " coins";
-
+        RoundManager.instance.messageText.gameObject.SetActive(true);
     }
 
     public override void HandleInput()
@@ -64,5 +64,6 @@ public class GainingCardState : CardPlayState
         Debug.Log("Exiting Gaining card State");
         RoundManager.instance.isGainingCard = false;
         RoundManager.instance.messageText.text = "";
+        RoundManager.instance.messageText.gameObject.SetActive(false);
     }
 }

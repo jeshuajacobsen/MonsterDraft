@@ -13,15 +13,15 @@ public class DungeonData
         {
             case "Forest1":
                 cards = new List<string> 
-                    { "Fireball", "Zaple", "Fireball", "Owisp", "Heal", "Leafree", "Borble", "Borble" };
+                    { "Pass", "Fireball", "Pass", "Zaple", "Pass", "Fireball", "Owisp", "Heal", "Pass", "Leafree", "Borble" };
                 break;
             case "Forest2":
                 cards = new List<string> 
-                    { "Fireball", "Zaple", "Owisp", "Fireball", "Leafree", "Borble", "Fireball", "Borble", "Leafree" };
+                    { "Pass", "Fireball", "Zaple", "Pass", "Owisp", "Fireball", "Pass", "Leafree", "Borble", "Pass", "Fireball", "Borble" };
                 break;
             case "Forest3":
                 cards = new List<string>
-                    { "Fireball", "Zaple", "Owisp", "Heal", "Fireball", "Leafree", "Borble", "Fireball", "Borble", "Leafree" };
+                    { "Pass", "Fireball", "Zaple", "Pass", "Owisp", "Heal", "Fireball", "Pass", "Leafree", "Borble", "Pass", "Fireball", "Borble" };
                 break;
         }
     }

@@ -26,17 +26,17 @@ public class MonsterOptionsPanel : MonoBehaviour
             Destroy(child.gameObject);
         }
         
+        // MonsterOptionButton optionButton = Instantiate(monsterOptionButtonPrefab, transform);
+        // optionButton.InitValues(activeTile.monster, "Movement");
+
+
+        // if (activeTile.monster.team == "Enemy" || activeTile.monster.actionsUsedThisTurn.Contains("Movement") || !RoundManager.instance.CanMoveMonster(activeTile.monster))
+        // {
+        //     Debug.Log("Cant move");
+        //     optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        // }
+
         MonsterOptionButton optionButton = Instantiate(monsterOptionButtonPrefab, transform);
-        optionButton.InitValues(activeTile.monster, "Movement");
-
-
-        if (activeTile.monster.team == "Enemy" || activeTile.monster.actionsUsedThisTurn.Contains("Movement") || !RoundManager.instance.CanMoveMonster(activeTile.monster))
-        {
-            Debug.Log("Cant move");
-            optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
-        }
-
-        optionButton = Instantiate(monsterOptionButtonPrefab, transform);
         optionButton.InitValues(activeTile.monster, "Skill1");
         if (activeTile.monster.team == "Enemy" || 
             activeTile.monster.actionsUsedThisTurn.Contains(activeTile.monster.skill1.name) || 

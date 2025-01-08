@@ -33,6 +33,7 @@ public class LargeMonsterView : MonoBehaviour
             AlignRightWithMouse();
         }
 
+        transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = monster.ManaCost.ToString();
         transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = monster.Attack.ToString();
         transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().text = monster.Health.ToString() + "/" + monster.MaxHealth.ToString();
         transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().text = monster.Defense.ToString();

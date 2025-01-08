@@ -11,6 +11,10 @@ public class Dungeon
         Cards = new List<Card>();
         GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).cards.ForEach(cardName =>
         {
+            if (cardName == "Pass")
+            {
+                return;
+            }
             string type = GameManager.instance.gameData.GetCardType(cardName);
             if (type == "Monster")
             {

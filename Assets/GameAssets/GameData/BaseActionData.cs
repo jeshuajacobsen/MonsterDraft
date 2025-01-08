@@ -42,7 +42,7 @@ public class BaseActionData
                 Effects.Add("Actions 2");
                 Effects.Add("Draw 1");
                 Description = "+2 actions\n +1 card";
-                Cost = 6;
+                Cost = 4;
                 break;
             case "Research":
                 Effects.Add("Draw 3");

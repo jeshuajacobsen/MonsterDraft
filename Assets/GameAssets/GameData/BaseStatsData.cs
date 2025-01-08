@@ -45,8 +45,8 @@ public class BaseStatsData
                 Health = 22;
                 Defense = 7;
                 Movement = 2;
-                ManaCost = 8;
-                Cost = 8;
+                ManaCost = 4;
+                Cost = 6;
                 skill1Name = "Leaf";
                 skill2Name = "Growth";
                 break;
@@ -55,7 +55,7 @@ public class BaseStatsData
                 Health = 23;
                 Defense = 3;
                 Movement = 1;
-                ManaCost = 8;
+                ManaCost = 4;
                 Cost = 6;
                 skill1Name = "Bubble";
                 skill2Name = "Wave";

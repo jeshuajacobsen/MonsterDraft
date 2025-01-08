@@ -46,6 +46,8 @@ public class LargeCardView : MonoBehaviour
             transform.Find("CardDescription").gameObject.SetActive(false);
             transform.Find("StatsPanel").gameObject.SetActive(true);
             transform.Find("SkillsPanel").gameObject.SetActive(true);
+            transform.Find("ManaImage").gameObject.SetActive(true);
+            transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).ManaCost.ToString();
             transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Attack.ToString();
             transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Health.ToString();
             transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Defense.ToString();
@@ -69,6 +71,7 @@ public class LargeCardView : MonoBehaviour
             transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = card.Description;
             transform.Find("SkillsPanel").gameObject.SetActive(false);
             transform.Find("StatsPanel").gameObject.SetActive(false);
+            transform.Find("ManaImage").gameObject.SetActive(false);
         }
     }
 

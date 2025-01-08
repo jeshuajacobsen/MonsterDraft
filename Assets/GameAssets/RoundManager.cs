@@ -134,10 +134,28 @@ public class RoundManager : MonoBehaviour
     public void StartRound(string dungeonName, int roundNumber)
     {
         this.dungeonName = dungeonName;
+        foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
+        {
+            foreach (Transform tileTransform in row.transform)
+            {
+                Tile tile = tileTransform.GetComponent<Tile>();
+                if (tile != null && tile.monster != null)
+                {
+                    Destroy(tile.monster.gameObject);
+                    tile.monster = null;
+                }
+            } 
+        }
+        PlayerBase.GetComponent<PlayerBase>().MaxHealth = 20;
+        EnemyBase.GetComponent<EnemyBase>().MaxHealth = 20;
+        PlayerBase.GetComponent<PlayerBase>().Health = PlayerBase.GetComponent<PlayerBase>().MaxHealth;
+        EnemyBase.GetComponent<EnemyBase>().Health = EnemyBase.GetComponent<EnemyBase>().MaxHealth;
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound();
+        discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);
+        DiscardHand();
         List<Card> newHand = roundDeck.DrawHand();
         foreach (Card card in newHand)
         {

@@ -5,7 +5,7 @@ public class RoundDeck : Deck
 
     public RoundDeck(RunDeck runDeck)
     {
-        cards = runDeck.cards;
+        cards = new List<Card>(runDeck.cards);
     }
 
     public List<Card> DrawHand()
@@ -39,6 +39,13 @@ public class RoundDeck : Deck
         foreach (Card card in RoundManager.instance.discardPile.cards)
         {
             cards.Add(card);
+        }
+        for (int i = cards.Count - 1; i > 0; i--)
+        {
+            int j = new System.Random().Next(i + 1);
+            Card temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
         }
         RoundManager.instance.discardPile.cards.Clear();
     }

@@ -29,6 +29,22 @@ public class MainPhase : GameState
         mainCamera = Camera.main;
         currentState = new IdleState(this);
         currentState.EnterState();
+        MoveMonstersForward();
+    }
+
+    public void MoveMonstersForward()
+    {
+        for (int row = 1; row <= 3; row++)
+        {
+            for (int i = 7; i >= 1; i--)
+            {
+                Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                if (tile.monster != null && tile.monster.team == "Player" && RoundManager.instance.CanMoveMonster(tile.monster))
+                {
+                    RoundManager.instance.MoveMonster(tile.monster);
+                }
+            }
+        }
     }
 
     public override void UpdateState()

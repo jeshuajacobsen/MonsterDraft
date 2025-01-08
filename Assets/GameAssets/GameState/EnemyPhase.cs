@@ -73,7 +73,7 @@ public class EnemyPhase : GameState
                         for (int i = 1; i <= 7; i++)
                         {
                             Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
-                            if (tile.monster != null && tile.monster.team == "Ally")
+                            if (tile.monster != null && tile.monster.team == "Player")
                             {
                                 targets.Add(tile.monster);
                             }

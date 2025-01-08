@@ -86,7 +86,7 @@ public class RunManager : MonoBehaviour
         {
             Card selectedCard = SelectedLargeCardView.GetComponent<LargeCardView>().card;
             runDeck.AddCard(selectedCard);
-            SelectedLargeCardView.SetActive(false);
+            betweenRoundPanel.SetActive(false);
             StartRound();
         }
     }
@@ -107,10 +107,23 @@ public class RunManager : MonoBehaviour
 
     public void EndRound(List<Card> gainedCards)
     {
-        roundPanel.gameObject.SetActive(false);
-        betweenRoundPanel.gameObject.SetActive(true);
-        SelectCards(gainedCards);
         currentDungeonIndex++;
+        if (currentDungeonIndex < GameManager.instance.gameData.DungeonData(currentDungeonLevel).dungeons.Count)
+        {
+            roundPanel.gameObject.SetActive(false);
+            betweenRoundPanel.gameObject.SetActive(true);
+            SelectCards(gainedCards);
+        } else {
+            EndRunWin();
+        }
+        
+        
+    }
+
+    public void EndRunWin()
+    {
+        GameManager.instance.menuPanel.SetActive(true);
+        roundPanel.gameObject.SetActive(false);
     }
 
     public void EndRoundLose()
