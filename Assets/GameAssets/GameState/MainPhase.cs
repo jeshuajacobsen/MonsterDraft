@@ -26,6 +26,8 @@ public class MainPhase : GameState
     {
         Debug.Log("Entering Main Phase");
         roundManager.Actions = 1;
+        roundManager.Mana = 0;
+        roundManager.Coins = 0;
         mainCamera = Camera.main;
         currentState = new IdleState(this);
         currentState.EnterState();

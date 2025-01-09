@@ -235,7 +235,7 @@ public class RoundManager : MonoBehaviour
         int maxDistance = monster.Movement;
         for (int i = 1; i <= monster.Movement; i++)
         {
-            Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i);
+            Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i, monster.tileOn.dungeonRow);
             if (nextTile != null && nextTile.GetComponent<Tile>().monster != null)
             {
                 maxDistance = i - 1;
@@ -261,7 +261,7 @@ public class RoundManager : MonoBehaviour
 
     public bool CanMoveMonster(Monster monster)
     {
-        Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, 1);
+        Tile nextTile = monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, 1, monster.tileOn.dungeonRow);
         return nextTile != null && nextTile.GetComponent<Tile>().monster == null;
     }
 
@@ -303,32 +303,31 @@ public class RoundManager : MonoBehaviour
         
     }
 
-    public void UseSkill(Monster monster, SkillData skill)
+    public void UseSkill(Monster monster, SkillData skill, Tile tile)
+    {
+        Mana -= skill.ManaCost;
+        tile.monster.Health -= DamageDealtToMonster(tile.monster, monster, skill);
+        monster.actionsUsedThisTurn.Add(skill.name);
+    }
+
+    public void UseSkillOnBase(Monster monster, SkillData skill)
+    {
+        EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
+        monster.actionsUsedThisTurn.Add(skill.name);
+
+        if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
+        {
+            RunManager.instance.EndRound(cardsGainedThisRound);
+        }
+    }
+    
+
+    public void SelectSkill(Monster monster, SkillData skill)
     {
         if(skill.ManaCost <= Mana)
         {
-            Mana -= skill.ManaCost;
-            for (int i = 1; i <= skill.Range; i++)
-            {
-                Monster target = CheckForMonster(monster.tileOn, i);
-                int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
-                if (target != null && target.team == "Enemy")
-                {
-                    target.Health -= DamageDealtToMonster(target, monster, skill);
-                    monster.actionsUsedThisTurn.Add(skill.name);
-                    break;
-                } else if (currentTileNumber + i > 7)
-                {
-                    EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
-                    monster.actionsUsedThisTurn.Add(skill.name);
-
-                    if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
-                    {
-                        RunManager.instance.EndRound(cardsGainedThisRound);
-                    }
-                    break;
-                }
-            }
+            MainPhase mainPhase = (MainPhase)gameState;
+            mainPhase.SetState(new SelectingSkillTargetState(mainPhase, monster, skill));
         }
     }
 
@@ -341,16 +340,8 @@ public class RoundManager : MonoBehaviour
 
     public bool EnemyCanUseSkill(Monster monster, SkillData skill)
     {
-        for (int i = 1; i <= skill.Range; i++)
-        {
-            Monster target = CheckForMonster(monster.tileOn, -i);
-            int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
-            if ((target != null && target.team == "Player") || currentTileNumber - i < 1)
-            {
-                return true;
-            }
-        }
-        return false;
+        int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
+        return GetValidTargetsForEnemy(monster, skill).Count > 0 || currentTileNumber - skill.Range < 1;
     }
 
     public void EnemyUseSkill(Monster monster, SkillData skill)
@@ -358,13 +349,8 @@ public class RoundManager : MonoBehaviour
         for (int i = 1; i <= skill.Range; i++)
         {
             int currentTileNumber = int.Parse(monster.tileOn.name.Substring(4));
-            Monster target = CheckForMonster(monster.tileOn, -i);
-            if (target != null)
-            {
-                target.Health -= DamageDealtToMonster(target, monster, skill);
-                monster.actionsUsedThisTurn.Add(skill.name);
-                break;
-            } else if (currentTileNumber - i < 1)
+            List<Tile> validTargets = GetValidTargetsForEnemy(monster, skill);
+            if (currentTileNumber - i < 1)
             {
                 PlayerBase.GetComponent<PlayerBase>().Health -= skill.Damage;
                 monster.actionsUsedThisTurn.Add(skill.name);
@@ -374,7 +360,238 @@ public class RoundManager : MonoBehaviour
                 }
                 break;
             }
+            else if (validTargets.Count > 0)
+            {
+                Tile target = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
+                target.monster.Health -= DamageDealtToMonster(target.monster, monster, skill);
+                monster.actionsUsedThisTurn.Add(skill.name);
+                break;
+            }
         }
+    }
+
+    public List<Tile> GetValidTargets(Monster monster, SkillData skill)
+    {
+        List<Tile> validTargets = new List<Tile>();
+        string[] directionArray = skill.directions.Split(' ');
+
+        if (directionArray.Length == 0)
+        {
+            Debug.Log("No directions");
+            return validTargets;
+        }
+
+        int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
+
+        foreach (string direction in directionArray)
+        {
+            List<Tile> targetTiles = new List<Tile>();
+
+            switch (direction)
+            {
+                case "Up":
+                    if (monster.tileOn.dungeonRow.upRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetTile(tileIndex));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.upRow.upRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetTile(tileIndex));
+                        }
+                    }
+                    break;
+
+                case "Down":
+                    if (monster.tileOn.dungeonRow.downRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetTile(tileIndex));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.downRow.downRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetTile(tileIndex));
+                        }
+                    }
+                    break;
+
+                case "Backward":
+                    for (int i = 1; i <= skill.Range; i++)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.GetPreviousTile(monster.tileOn, i, monster.tileOn.dungeonRow));
+                    }
+                    
+
+                    break;
+
+                case "Forward":
+                    for (int i = 1; i <= skill.Range; i++)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i, monster.tileOn.dungeonRow));
+                    }
+                    break;
+
+                case "DiagonalBackward":
+                    if (monster.tileOn.dungeonRow.upRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetPreviousTile(monster.tileOn, 1, monster.tileOn.dungeonRow.upRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.upRow.upRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.upRow.upRow.GetPreviousTile(monster.tileOn, 2, monster.tileOn.dungeonRow.upRow.upRow));
+                        }
+                    }
+                    
+                    if (monster.tileOn.dungeonRow.downRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetPreviousTile(monster.tileOn, 1, monster.tileOn.dungeonRow.downRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.downRow.downRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.downRow.downRow.GetPreviousTile(monster.tileOn, 2, monster.tileOn.dungeonRow.downRow.downRow));
+                        }
+                    }
+                    break;
+
+                case "DiagonalForward":
+                    if (monster.tileOn.dungeonRow.upRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetNextTile(monster.tileOn, 1, monster.tileOn.dungeonRow.upRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.upRow.upRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.upRow.upRow.GetNextTile(monster.tileOn, 2, monster.tileOn.dungeonRow.upRow.upRow));
+                        }
+                    }
+                    if (monster.tileOn.dungeonRow.downRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetNextTile(monster.tileOn, 1, monster.tileOn.dungeonRow.downRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.downRow.downRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.downRow.downRow.GetNextTile(monster.tileOn, 2, monster.tileOn.dungeonRow.downRow.downRow));
+                        }
+                    }
+                    break;
+
+                default:
+                    Debug.Log("Invalid direction");
+                    break;
+            }
+
+            foreach (Tile targetTile in targetTiles)
+            {
+                if (targetTile != null && targetTile.monster != null && targetTile.monster.team == "Enemy")
+                {
+                    validTargets.Add(targetTile);
+                }
+            }
+        }
+
+        return validTargets;
+    }
+
+    public List<Tile> GetValidTargetsForEnemy(Monster monster, SkillData skill)
+    {
+        
+        List<Tile> validTargets = new List<Tile>();
+        string[] directionArray = skill.directions.Split(' ');
+
+        if (directionArray.Length == 0)
+        {
+            Debug.Log("No directions");
+            return validTargets;
+        }
+
+        int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
+
+        foreach (string direction in directionArray)
+        {
+            List<Tile> targetTiles = new List<Tile>();
+
+            switch (direction)
+            {
+                case "Up":
+                    if (monster.tileOn.dungeonRow.upRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetTile(tileIndex));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.upRow.upRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.upRow.upRow.GetTile(tileIndex));
+                        }
+                    }
+                    break;
+
+                case "Down":
+                    if (monster.tileOn.dungeonRow.downRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetTile(tileIndex));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.downRow.downRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.downRow.downRow.GetTile(tileIndex));
+                        }
+                    }
+                    break;
+
+                case "Forward":
+                    for (int i = 1; i <= skill.Range; i++)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.GetPreviousTile(monster.tileOn, i, monster.tileOn.dungeonRow));
+                    }
+                    break;
+
+                case "Backward":
+                    for (int i = 1; i <= skill.Range; i++)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.GetNextTile(monster.tileOn, i, monster.tileOn.dungeonRow));
+                    }
+                    break;
+
+                case "DiagonalForward":
+                    if (monster.tileOn.dungeonRow.upRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetPreviousTile(monster.tileOn, 1, monster.tileOn.dungeonRow.upRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.upRow.upRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.upRow.upRow.GetPreviousTile(monster.tileOn, 2, monster.tileOn.dungeonRow.upRow.upRow));
+                        }
+                    }
+                    
+                    if (monster.tileOn.dungeonRow.downRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetPreviousTile(monster.tileOn, 1, monster.tileOn.dungeonRow.downRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.downRow.downRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.downRow.downRow.GetPreviousTile(monster.tileOn, 2, monster.tileOn.dungeonRow.downRow.downRow));
+                        }
+                    }
+                    break;
+
+                case "DiagonalBackward":
+                    if (monster.tileOn.dungeonRow.upRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.upRow.GetNextTile(monster.tileOn, 1, monster.tileOn.dungeonRow.upRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.upRow.upRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.upRow.upRow.GetNextTile(monster.tileOn, 2, monster.tileOn.dungeonRow.upRow.upRow));
+                        }
+                    }
+                    if (monster.tileOn.dungeonRow.downRow != null)
+                    {
+                        targetTiles.Add(monster.tileOn.dungeonRow.downRow.GetNextTile(monster.tileOn, 1, monster.tileOn.dungeonRow.downRow));
+                        if (skill.Range > 1 && monster.tileOn.dungeonRow.downRow.downRow != null)
+                        {
+                            targetTiles.Add(monster.tileOn.dungeonRow.downRow.downRow.GetNextTile(monster.tileOn, 2, monster.tileOn.dungeonRow.downRow.downRow));
+                        }
+                    }
+                    break;
+
+                default:
+                    Debug.Log("Invalid direction");
+                    break;
+            }
+            foreach (Tile targetTile in targetTiles)
+            {
+                if (targetTile != null && targetTile.monster != null && targetTile.monster.team == "Player")
+                {
+                    validTargets.Add(targetTile);
+                }
+            }
+        }
+
+        return validTargets;
     }
 
     public static Monster CheckForMonster(Tile currentTile, int distance)
@@ -382,14 +599,14 @@ public class RoundManager : MonoBehaviour
         Tile nextTile;
         if (distance < 0)
         {
-            nextTile = currentTile.dungeonRow.GetPreviousTile(currentTile, -distance);
+            nextTile = currentTile.dungeonRow.GetPreviousTile(currentTile, -distance, currentTile.dungeonRow);
             if (nextTile != null && nextTile.monster != null)
             {
                 return nextTile.monster;
             }
             return null;
         }
-        nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance);
+        nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance, currentTile.dungeonRow);
         if (nextTile != null && nextTile.monster != null)
         {
             return nextTile.monster;

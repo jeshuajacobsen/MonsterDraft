@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class DungeonRow : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public DungeonRow upRow;
+    public DungeonRow downRow;
+
     void Start()
     {
         
@@ -16,7 +18,12 @@ public class DungeonRow : MonoBehaviour
         
     }
 
-    public Tile GetNextTile(Tile tile, int distance)
+    public Tile GetTile(int index)
+    {
+        return transform.Find("Tile" + index)?.GetComponent<Tile>();
+    }
+
+    public Tile GetNextTile(Tile tile, int distance, DungeonRow rowToUse)
     {
         int tileIndex = int.Parse(tile.name.Replace("Tile", ""));
         if (tileIndex + distance > 7)
@@ -24,10 +31,10 @@ public class DungeonRow : MonoBehaviour
             return null;
         }
         string nextTileName = "Tile" + (tileIndex + distance);
-        return tile.dungeonRow.transform.Find(nextTileName)?.GetComponent<Tile>();
+        return rowToUse.transform.Find(nextTileName)?.GetComponent<Tile>();
     }
 
-    public Tile GetPreviousTile(Tile tile, int distance)
+    public Tile GetPreviousTile(Tile tile, int distance, DungeonRow rowToUse)
     {
         int tileIndex = int.Parse(tile.name.Replace("Tile", ""));
         if (tileIndex - distance < 1)

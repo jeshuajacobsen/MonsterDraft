@@ -54,5 +54,10 @@ public class MonsterOptionsPanel : MonoBehaviour
         {
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
         }
+
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        float buttonHeight = monsterOptionButtonPrefab.GetComponent<RectTransform>().rect.height;
+        float buttonWidth = monsterOptionButtonPrefab.GetComponent<RectTransform>().rect.width;
+        rectTransform.sizeDelta = new Vector2(buttonWidth, buttonHeight * 2);
     }
 }

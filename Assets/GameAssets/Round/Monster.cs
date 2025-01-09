@@ -110,7 +110,7 @@ public class Monster : MonoBehaviour
         tile.monster = this;
         transform.SetParent(tile.transform);
         transform.position = tile.transform.position;
-        actionsUsedThisTurn.Add("Movement");
+        //.Add("Movement");
     }
 
 }

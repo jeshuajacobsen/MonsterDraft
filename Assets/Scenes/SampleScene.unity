@@ -2490,8 +2490,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1423, y: 624}
-  m_SizeDelta: {x: 550, y: 600}
+  m_AnchoredPosition: {x: -1213.6, y: 624}
+  m_SizeDelta: {x: 968.72, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &619538270
 MonoBehaviour:
@@ -6337,6 +6337,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8883846246004910427, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
+      propertyPath: upRow
+      value: 
+      objectReference: {fileID: 912628886}
+    - target: {fileID: 8883846246004910427, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
+      propertyPath: downRow
+      value: 
+      objectReference: {fileID: 1331802458}
     - target: {fileID: 9041599368931250745, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
       propertyPath: dungeonRow
       value: 
@@ -6699,6 +6707,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8883846246004910427, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
+      propertyPath: upRow
+      value: 
+      objectReference: {fileID: 1283951561}
     - target: {fileID: 9041599368931250745, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
       propertyPath: dungeonRow
       value: 
@@ -10324,6 +10336,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8883846246004910427, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
+      propertyPath: downRow
+      value: 
+      objectReference: {fileID: 1283951561}
     - target: {fileID: 9041599368931250745, guid: 6cfa8c0665f650749b33547d18c5c2d4, type: 3}
       propertyPath: dungeonRow
       value: 

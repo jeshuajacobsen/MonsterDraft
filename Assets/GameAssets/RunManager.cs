@@ -108,7 +108,7 @@ public class RunManager : MonoBehaviour
     public void EndRound(List<Card> gainedCards)
     {
         currentDungeonIndex++;
-        if (currentDungeonIndex < GameManager.instance.gameData.DungeonData(currentDungeonLevel).dungeons.Count)
+        if (currentDungeonIndex <= GameManager.instance.gameData.DungeonData(currentDungeonLevel).dungeons.Count)
         {
             roundPanel.gameObject.SetActive(false);
             betweenRoundPanel.gameObject.SetActive(true);

@@ -38,17 +38,16 @@ public class MonsterOptionButton : MonoBehaviour
             transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill1.name;
             transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = monster.skill1.ManaCost.ToString();
-            if (RoundManager.instance.Mana >= monster.skill1.ManaCost)
+            SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
+            skillDirections.SetDirections(monster.skill1.directions);
+            int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
+            if (RoundManager.instance.Mana >= monster.skill1.ManaCost && monster.actionsUsedThisTurn.Count == 0)
             {
-                for (int i = 1; i <= monster.skill1.Range; i++)
+                if (RoundManager.instance.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7)
                 {
-                    int tileNumber = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-                    Monster monsterOnTile = RoundManager.CheckForMonster(monster.tileOn, i);
-                    if ((monsterOnTile != null && monsterOnTile.team == "Enemy") || tileNumber + i > 7)
-                    {
-                        transform.GetComponent<Button>().interactable = true;
-                    }
+                    transform.GetComponent<Button>().interactable = true;
                 }
+                
             }
         }
         else if (option == "Skill2")
@@ -56,17 +55,16 @@ public class MonsterOptionButton : MonoBehaviour
             transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill2.name;
             transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = monster.skill2.ManaCost.ToString();
-            if (RoundManager.instance.Mana >= monster.skill2.ManaCost)
+            SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
+            skillDirections.SetDirections(monster.skill2.directions);
+            int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
+            if (RoundManager.instance.Mana >= monster.skill2.ManaCost && monster.actionsUsedThisTurn.Count == 0)
             {
-                for (int i = 1; i <= monster.skill2.Range; i++)
+                if (RoundManager.instance.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7)
                 {
-                    int tileNumber = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-                    Monster monsterOnTile = RoundManager.CheckForMonster(monster.tileOn, i);
-                    if ((monsterOnTile != null && monsterOnTile.team == "Enemy") || tileNumber + i > 7)
-                    {
-                        transform.GetComponent<Button>().interactable = true;
-                    }
+                    transform.GetComponent<Button>().interactable = true;
                 }
+                
             }
         }
 
@@ -85,12 +83,12 @@ public class MonsterOptionButton : MonoBehaviour
         else if (option == "Skill1")
         {
 
-            RoundManager.instance.UseSkill(monster, monster.skill1);
+            RoundManager.instance.SelectSkill(monster, monster.skill1);
             RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
         }
         else if (option == "Skill2")
         {
-            RoundManager.instance.UseSkill(monster, monster.skill2);
+            RoundManager.instance.SelectSkill(monster, monster.skill2);
             RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
         }
     }
