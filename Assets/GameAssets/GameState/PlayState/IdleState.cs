@@ -29,23 +29,39 @@ public class IdleState : CardPlayState
 
     public override void UpdateState() 
     {
+        bool pointerDown = false;
+        Vector2 pointerPosition = Vector2.zero;
+
         if (Input.GetMouseButtonDown(0))
         {
-            if (mainPhase.IsInsideOptionPanel(Input.mousePosition))
+            pointerDown = true;
+            pointerPosition = Input.mousePosition;
+        }
+        
+        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            pointerDown = true;
+            pointerPosition = Input.GetTouch(0).position;
+        }
+
+        if (pointerDown)
+        {
+            if (mainPhase.IsInsideOptionPanel(pointerPosition))
             {
                 return;
-            } else {
+            }
+            else
+            {
                 RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
+
                 foreach (var cardView in RoundManager.instance.hand)
                 {
-                    cardView.HandleMouseDown();
+                    cardView.HandleMouseDown(pointerPosition);
 
                     if (cardView.isDragging)
                     {
-                        if (cardView.card is ActionCard)
+                        if (cardView.card is ActionCard actionCard)
                         {
-                            ActionCard actionCard = (ActionCard)cardView.card;
-
                             if (actionCard.StartsWithTarget())
                             {
                                 mainPhase.playedActionCardStep++;
@@ -55,9 +71,8 @@ public class IdleState : CardPlayState
                             {
                                 mainPhase.SetState(new ToFieldState(mainPhase, cardView));
                             }
-                            
                         }
-                        if (cardView.card is MonsterCard)
+                        else if (cardView.card is MonsterCard)
                         {
                             mainPhase.SetState(new QuickSelectingMonsterTileState(mainPhase, cardView));
                         }
@@ -65,13 +80,12 @@ public class IdleState : CardPlayState
                         {
                             mainPhase.SetState(new ToFieldState(mainPhase, cardView));
                         }
-
                         break;
                     }
                 }
-                mainPhase.HandleMouseInDungeon();
+                
+                mainPhase.HandleMouseInDungeon(Input.mousePosition);
             }
-
         }
     }
 

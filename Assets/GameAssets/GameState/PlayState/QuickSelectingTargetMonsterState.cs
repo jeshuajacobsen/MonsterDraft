@@ -29,9 +29,27 @@ public class QuickSelectingTargetMonsterState : CardPlayState
 
     public override void UpdateState()
     {
+        bool pointerUp = false;
+        Vector2 pointerPosition = Vector2.zero;
+
         if (Input.GetMouseButtonUp(0))
         {
-            HandleCardDrop(cardView, Input.mousePosition);
+            pointerUp = true;
+            pointerPosition = Input.mousePosition;
+        }
+        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            pointerUp = true;
+            pointerPosition = Input.GetTouch(0).position;
+        } else {
+            pointerPosition = Input.mousePosition;
+        }
+
+        if (pointerUp)
+        {
+            HandleCardDrop(cardView, pointerPosition);
+        } else {
+            cardView.HandleDrag(pointerPosition);
         }
     }
 

@@ -22,92 +22,107 @@ public class LargeCardView : MonoBehaviour
     
     }
 
-    public void SetCard(Card card, bool move = true)
+    public void SetCard(Card card, Vector2 pointerPosition, bool move = true)
     {
         this.card = card;
         transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(card.Name);
         transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = card.Cost.ToString();
-        Vector3 mouseScreenPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 
-                                            mainCamera.nearClipPlane + 1.0f);
-        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
-        if (move)
+
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        if (rectTransform == null)
         {
-            if (mouseWorldPos.x < -900)
-            {
-                AlignLeftWithMouse();
-            } else {
-                AlignRightWithMouse();
-            }
+            Debug.LogWarning("No RectTransform found on this GameObject. " +
+                            "For 2D screen positioning without Vector3, you need a RectTransform.");
+            return;
         }
 
-        if (card is MonsterCard)
+        if (move)
+        {
+            if (pointerPosition.x < -900f)
+            {
+                AlignLeft(pointerPosition);
+            }
+            else
+            {
+                AlignRight(pointerPosition);
+            }
+            rectTransform.anchoredPosition = pointerPosition;
+        }
+
+        if (card is MonsterCard monsterCard)
         {
             transform.Find("CardDescription").gameObject.SetActive(false);
             transform.Find("StatsPanel").gameObject.SetActive(true);
             transform.Find("SkillsPanel").gameObject.SetActive(true);
             transform.Find("ManaImage").gameObject.SetActive(true);
-            transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).ManaCost.ToString();
-            transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Attack.ToString();
-            transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Health.ToString();
-            transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Defense.ToString();
-            transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).Movement.ToString();
-            transform.Find("SkillsPanel/Skill1NameText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill1.name;
-            transform.Find("SkillsPanel/Skill1Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill1.Description;
-            transform.Find("SkillsPanel/Skill1ManaCost/Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill1.ManaCost.ToString();
-            transform.Find("SkillsPanel/Skill1RangeText").GetComponent<TextMeshProUGUI>().text = "Range: " + ((MonsterCard)card).skill1.Range.ToString();
-            transform.Find("SkillsPanel/Skill1DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + ((MonsterCard)card).skill1.Damage.ToString();
-            transform.Find("SkillsPanel/Skill1Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill2.Description;
-            transform.Find("SkillsPanel/Skill2NameText").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill2.name;
-            transform.Find("SkillsPanel/Skill2Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill2.Description;
-            transform.Find("SkillsPanel/Skill2ManaCost/Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill2.ManaCost.ToString();
-            transform.Find("SkillsPanel/Skill2RangeText").GetComponent<TextMeshProUGUI>().text = "Range: " + ((MonsterCard)card).skill2.Range.ToString();
-            transform.Find("SkillsPanel/Skill2DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + ((MonsterCard)card).skill2.Damage.ToString();
-            transform.Find("SkillsPanel/Skill2Text").GetComponent<TextMeshProUGUI>().text = ((MonsterCard)card).skill2.Description;
+
+            transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = monsterCard.ManaCost.ToString();
+            transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = monsterCard.Attack.ToString();
+            transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().text = monsterCard.Health.ToString();
+            transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().text = monsterCard.Defense.ToString();
+            transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().text = monsterCard.Movement.ToString();
+
+            // Skill 1
+            transform.Find("SkillsPanel/Skill1NameText").GetComponent<TextMeshProUGUI>().text = monsterCard.skill1.name;
+            transform.Find("SkillsPanel/Skill1Text").GetComponent<TextMeshProUGUI>().text = monsterCard.skill1.Description;
+            transform.Find("SkillsPanel/Skill1ManaCost/Text").GetComponent<TextMeshProUGUI>().text = monsterCard.skill1.ManaCost.ToString();
+            transform.Find("SkillsPanel/Skill1RangeText").GetComponent<TextMeshProUGUI>().text = "Range: " + monsterCard.skill1.Range;
+            transform.Find("SkillsPanel/Skill1DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + monsterCard.skill1.Damage;
+
+            // Skill 2
+            transform.Find("SkillsPanel/Skill2NameText").GetComponent<TextMeshProUGUI>().text = monsterCard.skill2.name;
+            transform.Find("SkillsPanel/Skill2Text").GetComponent<TextMeshProUGUI>().text = monsterCard.skill2.Description;
+            transform.Find("SkillsPanel/Skill2ManaCost/Text").GetComponent<TextMeshProUGUI>().text = monsterCard.skill2.ManaCost.ToString();
+            transform.Find("SkillsPanel/Skill2RangeText").GetComponent<TextMeshProUGUI>().text = "Range: " + monsterCard.skill2.Range;
+            transform.Find("SkillsPanel/Skill2DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + monsterCard.skill2.Damage;
         }
         else
         {
+            // Non-monster card
             transform.Find("CardDescription").gameObject.SetActive(true);
             transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = card.Description;
-            transform.Find("SkillsPanel").gameObject.SetActive(false);
             transform.Find("StatsPanel").gameObject.SetActive(false);
+            transform.Find("SkillsPanel").gameObject.SetActive(false);
             transform.Find("ManaImage").gameObject.SetActive(false);
         }
     }
 
-    void AlignRightWithMouse()
+
+    public void AlignRight(Vector2 pointerPosition)
     {
-        Vector3 mouseScreenPos = new Vector3(
-            Input.mousePosition.x,
-            Input.mousePosition.y,
-            mainCamera.nearClipPlane + 1.0f
-        );
-        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
-
         RectTransform rt = GetComponent<RectTransform>();
-        float objectWidth = rt.rect.width * rt.lossyScale.x;
+        if (rt == null)
+        {
+            Debug.LogWarning("AlignRight2D: No RectTransform found on this GameObject.");
+            return;
+        }
 
-        Vector3 offset = transform.right * (objectWidth * 0.5f);
+        float objectWidth = rt.rect.width * rt.localScale.x;
 
-        Vector3 newPos = mouseWorldPos - offset;
-        transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
+        Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
 
+        Vector2 newPos = pointerPosition - offset;
+
+        rt.anchoredPosition = newPos;
     }
 
-    void AlignLeftWithMouse()
+
+    public void AlignLeft(Vector2 pointerPosition)
     {
-        Vector3 mouseScreenPos = new Vector3(
-            Input.mousePosition.x,
-            Input.mousePosition.y,
-            mainCamera.nearClipPlane + 1.0f
-        );
-        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(mouseScreenPos);
-
         RectTransform rt = GetComponent<RectTransform>();
-        float objectWidth = rt.rect.width * rt.lossyScale.x;
-        Vector3 offset = transform.right * (objectWidth * 0.5f);
+        if (rt == null)
+        {
+            Debug.LogWarning("AlignLeft2D: No RectTransform found on this GameObject.");
+            return;
+        }
 
-        Vector3 newPos = mouseWorldPos + offset;
-        transform.position = new Vector3(newPos.x, transform.position.y, transform.position.z);
+        float objectWidth = rt.rect.width * rt.localScale.x;
+
+        Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
+        Vector2 newPos = pointerPosition + offset;
+
+        rt.anchoredPosition = newPos;
     }
+
 }

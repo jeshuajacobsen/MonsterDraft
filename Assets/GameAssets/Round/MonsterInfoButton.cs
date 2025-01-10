@@ -23,7 +23,7 @@ public class MonsterInfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
         {
             Monster monster = GetComponentInParent<Monster>();
 
-            RoundManager.instance.largeMonsterView.SetMonster(monster);
+            RoundManager.instance.largeMonsterView.SetMonster(monster, eventData.position);
             RoundManager.instance.largeMonsterView.gameObject.SetActive(true);
             
         }

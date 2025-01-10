@@ -69,13 +69,13 @@ public class MainPhase : GameState
         return false;
     }
 
-    public void HandleMouseInDungeon()
+    public void HandleMouseInDungeon(Vector2 mousePosition)
     {
         for(int i = 1; i <= 7; i++)
         {
-            roundManager.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
-            roundManager.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
-            roundManager.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandleMouseDown();
+            roundManager.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
+            roundManager.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
+            roundManager.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
         }
     }
 
@@ -308,17 +308,24 @@ public class MainPhase : GameState
         SetState(new IdleState(this));
     }
 
-    public override void SelectTile(Tile tile, Vector3 position)
+    public override void SelectTile(Tile tile, Vector2 pointerPosition)
+{
+    if (tile.monster != null)
     {
-        if (tile.monster != null)
-        {
-            roundManager.monsterOptionPanel.gameObject.SetActive(true);
-            roundManager.monsterOptionPanel.transform.position = position;
-            Vector3 panelSize = roundManager.monsterOptionPanel.GetComponent<RectTransform>().sizeDelta;
-            roundManager.monsterOptionPanel.transform.position += new Vector3(panelSize.x / 2, -panelSize.y / 2, 0);
-            roundManager.monsterOptionPanel.transform.GetComponent<MonsterOptionsPanel>().SetActiveTile(tile);
-        }
+        roundManager.monsterOptionPanel.gameObject.SetActive(true);
+
+        RectTransform panelRect = roundManager.monsterOptionPanel.GetComponent<RectTransform>();
+        Vector2 panelSize = panelRect.sizeDelta;
+
+        Vector2 finalPosition = pointerPosition + new Vector2(panelSize.x / 10, -panelSize.y / 10);
+
+        roundManager.monsterOptionPanel.transform.position = new Vector3(finalPosition.x, finalPosition.y, 0f);
+
+        roundManager.monsterOptionPanel
+            .GetComponent<MonsterOptionsPanel>()
+            .SetActiveTile(tile);
     }
+}
 
     // public override void DoneButton()
     // {

@@ -29,18 +29,32 @@ public class SelectingTargetTileState : CardPlayState
 
     public override void UpdateState()
     {
+        bool pointerDown = false;
+        Vector2 pointerPosition = Vector2.zero;
+
         if (Input.GetMouseButtonDown(0))
+        {
+            pointerDown = true;
+            pointerPosition = Input.mousePosition;
+        }
+
+        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            pointerDown = true;
+            pointerPosition = Input.GetTouch(0).position;
+        }
+
+        if (pointerDown)
         {
             for (int i = 0; i < validTargets.Count; i++)
             {
-                if (RectTransformUtility.RectangleContainsScreenPoint(
-                    validTargets[i].GetComponent<RectTransform>(),
-                    Input.mousePosition,
-                    mainPhase.mainCamera
-                ))
+                RectTransform targetRect = validTargets[i].GetComponent<RectTransform>();
+
+                if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
                 {
                     mainPhase.selectedTile = validTargets[i];
                     mainPhase.SetState(new ResolvingEffectState(mainPhase));
+                    break;
                 }
             }
         }

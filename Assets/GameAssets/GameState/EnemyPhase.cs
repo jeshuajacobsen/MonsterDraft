@@ -164,7 +164,7 @@ public class EnemyPhase : GameState
         tile.monster = newMonster;
     }
 
-    public override void SelectTile(Tile tile, Vector3 position)
+    public override void SelectTile(Tile tile, Vector2 position)
     {
         Debug.LogError("Tiles cannot be selected during the Draw Phase!");
     }

@@ -26,12 +26,12 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
             if (smallCard != null)
             {
-                RoundManager.instance.largeCardView.SetCard(smallCard.card);
+                RoundManager.instance.largeCardView.SetCard(smallCard.card, eventData.position);
                 RoundManager.instance.largeCardView.gameObject.SetActive(true);
             }
             else if (stockPile != null)
             {
-                RoundManager.instance.largeCardView.SetCard(stockPile.card);
+                RoundManager.instance.largeCardView.SetCard(stockPile.card, eventData.position);
                 RoundManager.instance.largeCardView.gameObject.SetActive(true);
             }
         }

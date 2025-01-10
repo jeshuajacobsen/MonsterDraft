@@ -29,35 +29,59 @@ public class SelectingCardsState : CardPlayState
     public override void UpdateState()
     {
         RoundManager roundManager = RoundManager.instance;
+
+        bool pointerUp = false;
+        Vector2 pointerPosition = Vector2.zero;
+
         if (Input.GetMouseButtonUp(0))
+        {
+            pointerUp = true;
+            pointerPosition = Input.mousePosition;
+        }
+        
+        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            pointerUp = true;
+            pointerPosition = Input.GetTouch(0).position;
+        }
+
+        if (pointerUp)
         {
             for (int i = 0; i < roundManager.hand.Count; i++)
             {
+                SmallCardView cardView = roundManager.hand[i];
+                RectTransform cardRect = cardView.GetComponent<RectTransform>();
+
                 if (RectTransformUtility.RectangleContainsScreenPoint(
-                    roundManager.hand[i].GetComponent<RectTransform>(),
-                    Input.mousePosition,
+                    cardRect,
+                    pointerPosition,
                     mainPhase.mainCamera
                 ))
                 {
-                    if (numberToSelect == "x" && meetsRestrictions(roundManager.hand[i]))
+                    if (numberToSelect == "x" && meetsRestrictions(cardView))
                     {
-                        if (selectedCards.Contains(roundManager.hand[i]))
+                        if (selectedCards.Contains(cardView))
                         {
-                            selectedCards.Remove(roundManager.hand[i]);
-                            roundManager.hand[i].GetComponent<Image>().color = Color.white;
-                        } else {
-                            selectedCards.Add(roundManager.hand[i]);
-                            roundManager.hand[i].GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
+                            selectedCards.Remove(cardView);
+                            cardView.GetComponent<Image>().color = Color.white;
                         }
-                    } else
-                    {
-                        if (selectedCards.Contains(roundManager.hand[i]))
+                        else
                         {
-                            selectedCards.Remove(roundManager.hand[i]);
-                            roundManager.hand[i].GetComponent<Image>().color = Color.white;
-                        } else if (selectedCards.Count < int.Parse(numberToSelect) && meetsRestrictions(roundManager.hand[i])) {
-                            selectedCards.Add(roundManager.hand[i]);
-                            roundManager.hand[i].GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
+                            selectedCards.Add(cardView);
+                            cardView.GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
+                        }
+                    }
+                    else
+                    {
+                        if (selectedCards.Contains(cardView))
+                        {
+                            selectedCards.Remove(cardView);
+                            cardView.GetComponent<Image>().color = Color.white;
+                        }
+                        else if (selectedCards.Count < int.Parse(numberToSelect) && meetsRestrictions(cardView))
+                        {
+                            selectedCards.Add(cardView);
+                            cardView.GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);
                         }
                     }
                 }

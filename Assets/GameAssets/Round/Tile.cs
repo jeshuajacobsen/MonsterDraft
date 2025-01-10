@@ -16,40 +16,34 @@ public class Tile : MonoBehaviour
 
     void Update()
     {
-        #if UNITY_EDITOR || UNITY_STANDALONE
-        
-        #else
-        HandleTouchInput();
-        #endif
     }
 
-    public void HandleMouseDown()
+    public void HandlePointerDown(Vector2 pointerPosition)
     {
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
-        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
-        Collider2D collider = GetComponent<Collider2D>();
-        
-        PointerEventData pointerData = new PointerEventData(EventSystem.current)
-        {
-            position = Input.mousePosition
-        };
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
 
-        foreach (RaycastResult result in results)
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        if (rectTransform == null)
         {
-            if (result.gameObject.GetComponent<Button>() != null)
-            {
-                return;
-            }
+            Debug.LogWarning("No RectTransform found on this GameObject. " +
+                            "RectangleContainsScreenPoint requires a RectTransform.");
+            return;
         }
-        
-        if (collider != null && collider.OverlapPoint(mousePosition))
+
+        if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, pointerPosition, mainCamera))
         {
-            RoundManager.instance.gameState.SelectTile(this, mousePosition);
+            Vector3 worldPosition3D = mainCamera.ScreenToWorldPoint(new Vector3(
+                pointerPosition.x,
+                pointerPosition.y,
+                0f
+            ));
+
+            Vector2 worldPosition2D = new Vector2(worldPosition3D.x, worldPosition3D.y);
+
+            RoundManager.instance.gameState.SelectTile(this, worldPosition2D);
         }
     }
 

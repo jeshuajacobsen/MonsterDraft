@@ -39,22 +39,14 @@ public class SmallCardView : MonoBehaviour
 
     void Update()
     {
-        #if UNITY_EDITOR || UNITY_STANDALONE
-            if (isDragging)
-            {
-                Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane + 1.0f));
-                transform.position = new Vector3(mousePosition.x, mousePosition.y, transform.position.z);
-            }
-        #else
-        HandleTouchInput();
-        #endif
+
     }
 
-    public void HandleMouseDown()
+    public void HandleMouseDown(Vector2 mousePosition)
     {
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
         {
-            position = Input.mousePosition
+            position = mousePosition
         };
 
         List<RaycastResult> results = new List<RaycastResult>();
@@ -86,6 +78,21 @@ public class SmallCardView : MonoBehaviour
         }
     }
 
+    public void HandleDrag(Vector2 mousePosition)
+    {
+        if (isDragging)
+        {
+            Vector3 worldPosition3D = mainCamera.ScreenToWorldPoint(new Vector3(
+                mousePosition.x,
+                mousePosition.y,
+                0f
+            ));
+
+            Vector2 worldPosition2D = new Vector2(worldPosition3D.x, worldPosition3D.y);
+            transform.position = worldPosition2D;
+        }
+    }
+
     public void CancelPlay()
     {
         MoveToCanvas(originalCanvas);
@@ -96,63 +103,6 @@ public class SmallCardView : MonoBehaviour
             scrollRect.enabled = true;
         }
         isDragging = false;
-    }
-
-    private void HandleTouchInput()
-    {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            if (isDragging && (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary))
-            {
-                Vector3 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, mainCamera.nearClipPlane + 1.0f));
-                transform.position = new Vector3(touchPosition.x, touchPosition.y, transform.position.z);
-            }
-
-            if (touch.phase == TouchPhase.Began)
-            {
-                PointerEventData pointerData = new PointerEventData(EventSystem.current)
-                {
-                    position = touch.position
-                };
-
-                List<RaycastResult> results = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(pointerData, results);
-
-                foreach (RaycastResult result in results)
-                {
-                    if (result.gameObject == gameObject)
-                    {
-                        isDragging = true;
-                        originalPosition = transform.position;
-                        
-                        if (dragCanvas != null)
-                        {
-                            MoveToCanvas(dragCanvas);
-                        }
-
-                        // Disable the ScrollRect
-                        if (scrollRect != null)
-                        {
-                            scrollRect.enabled = false;
-                        }
-                        return;
-                    }
-                }
-            }
-            else if ((touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) && isDragging)
-            {
-                isDragging = false;
-                MoveToCanvas(originalCanvas);
-                transform.SetParent(originalParent);
-                transform.position = originalPosition;
-
-                if (scrollRect != null)
-                {
-                    scrollRect.enabled = true;
-                }
-            }
-        }
     }
 
     private void MoveToCanvas(Canvas targetCanvas)

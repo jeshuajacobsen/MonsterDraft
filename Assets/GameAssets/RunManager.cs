@@ -40,7 +40,24 @@ public class RunManager : MonoBehaviour
 
     public void Update()
     {
-        if (betweenRoundPanel.activeSelf && Input.GetMouseButtonDown(0))
+        if (!betweenRoundPanel.activeSelf) return;
+
+        bool pointerDown = false;
+        Vector2 pointerPosition = Vector2.zero;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            pointerDown = true;
+            pointerPosition = Input.mousePosition;
+        }
+        
+        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            pointerDown = true;
+            pointerPosition = Input.GetTouch(0).position;
+        }
+
+        if (pointerDown)
         {
             RectTransform[] largeCardViews = new RectTransform[]
             {
@@ -52,7 +69,7 @@ public class RunManager : MonoBehaviour
             for (int i = 0; i < largeCardViews.Length; i++)
             {
                 var cardView = largeCardViews[i];
-                if (RectTransformUtility.RectangleContainsScreenPoint(cardView, Input.mousePosition, Camera.main))
+                if (RectTransformUtility.RectangleContainsScreenPoint(cardView, pointerPosition, Camera.main))
                 {
                     if (SelectedLargeCardView == cardView.gameObject)
                     {
@@ -61,7 +78,9 @@ public class RunManager : MonoBehaviour
                         betweenRoundPanel.transform.Find("PromptText").gameObject.SetActive(true);
                         betweenRoundPanel.transform.Find("DoneButton").gameObject.SetActive(false);
                         break;
-                    } else {
+                    }
+                    else
+                    {
                         SelectedLargeCardView = cardView.gameObject;
                         betweenRoundPanel.transform.Find("CardViewSelectedBackground" + (i + 1)).gameObject.SetActive(true);
                         betweenRoundPanel.transform.Find("PromptText").gameObject.SetActive(false);
@@ -70,6 +89,7 @@ public class RunManager : MonoBehaviour
                     }
                 }
             }
+
             for (int i = 0; i < largeCardViews.Length; i++)
             {
                 if (SelectedLargeCardView != largeCardViews[i].gameObject)
@@ -147,14 +167,14 @@ public class RunManager : MonoBehaviour
             int randomIndex = Random.Range(0, gainedCards.Count);
             Card selectedCard = gainedCards[randomIndex];
             gainedCards.RemoveAt(randomIndex);
-            largeCardViews[i].GetComponent<LargeCardView>().SetCard(selectedCard, false);
+            largeCardViews[i].GetComponent<LargeCardView>().SetCard(selectedCard, new Vector2(0, 0), false);
 
             while (i == 1 && gainedCards.Count > 0 && largeCardViews[i].card.Name == largeCardViews[0].card.Name)
             {
                 randomIndex = Random.Range(0, gainedCards.Count);
                 selectedCard = gainedCards[randomIndex];
                 gainedCards.RemoveAt(randomIndex);
-                largeCardViews[i].GetComponent<LargeCardView>().SetCard(selectedCard, false);
+                largeCardViews[i].GetComponent<LargeCardView>().SetCard(selectedCard, new Vector2(0, 0), false);
             }
 
             while (i == 2 && gainedCards.Count > 0 && 
@@ -164,12 +184,12 @@ public class RunManager : MonoBehaviour
                 randomIndex = Random.Range(0, gainedCards.Count);
                 selectedCard = gainedCards[randomIndex];
                 gainedCards.RemoveAt(randomIndex);
-                largeCardViews[i].GetComponent<LargeCardView>().SetCard(selectedCard, false);
+                largeCardViews[i].GetComponent<LargeCardView>().SetCard(selectedCard, new Vector2(0, 0), false);
             }
 
             if (gainedCards.Count == 0)
             {
-                largeCardViews[i].GetComponent<LargeCardView>().SetCard(new TreasureCard("Copper"), false);
+                largeCardViews[i].GetComponent<LargeCardView>().SetCard(new TreasureCard("Copper"), new Vector2(0, 0), false);
             }
             
         }
