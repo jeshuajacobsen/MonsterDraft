@@ -126,7 +126,7 @@ public class SmallCardView : MonoBehaviour
     {
         this.card = card;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
-        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(card.Name);
+        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
         //transform.Find("CardCost").GetComponent<TextMesh>().text = card.cost.ToString();
         //transform.Find("CardDescription").GetComponent<TextMesh>().text = card.Description;
     }

@@ -17,7 +17,7 @@ public class MonsterOptionsPanel : MonoBehaviour
         
     }
 
-    public void SetActiveTile(Tile tile)
+    public void SetActiveTile(Tile tile, Vector2 pointerPosition)
     {
         this.activeTile = tile;
 
@@ -55,9 +55,20 @@ public class MonsterOptionsPanel : MonoBehaviour
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
         }
 
-        RectTransform rectTransform = GetComponent<RectTransform>();
         float buttonHeight = monsterOptionButtonPrefab.GetComponent<RectTransform>().rect.height;
         float buttonWidth = monsterOptionButtonPrefab.GetComponent<RectTransform>().rect.width;
+        RectTransform rectTransform = GetComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(buttonWidth, buttonHeight * 2);
+        RectTransform parentRect = rectTransform.parent as RectTransform;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parentRect,
+            pointerPosition,
+            Camera.main, 
+            out Vector2 localPoint))
+        {
+            localPoint.x += buttonWidth / 2;
+            localPoint.y -= buttonHeight;
+            rectTransform.anchoredPosition = localPoint;
+        }
     }
 }

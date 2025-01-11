@@ -26,7 +26,7 @@ public class LargeCardView : MonoBehaviour
     {
         this.card = card;
         transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.Name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(card.Name);
+        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
         transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = card.Cost.ToString();
 
         RectTransform rectTransform = GetComponent<RectTransform>();
@@ -39,7 +39,7 @@ public class LargeCardView : MonoBehaviour
 
         if (move)
         {
-            if (pointerPosition.x < -900f)
+            if (pointerPosition.x < 150f)
             {
                 AlignLeft(pointerPosition);
             }
@@ -47,7 +47,6 @@ public class LargeCardView : MonoBehaviour
             {
                 AlignRight(pointerPosition);
             }
-            rectTransform.anchoredPosition = pointerPosition;
         }
 
         if (card is MonsterCard monsterCard)
@@ -92,37 +91,40 @@ public class LargeCardView : MonoBehaviour
     public void AlignRight(Vector2 pointerPosition)
     {
         RectTransform rt = GetComponent<RectTransform>();
-        if (rt == null)
+        RectTransform parentRect = rt.parent as RectTransform;
+
+        // Convert screen coords to local coords
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parentRect,
+            pointerPosition,
+            mainCamera,
+            out Vector2 localPoint))
         {
-            Debug.LogWarning("AlignRight2D: No RectTransform found on this GameObject.");
-            return;
+            float objectWidth = rt.rect.width * rt.localScale.x;
+            Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
+
+            rt.anchoredPosition = new Vector2(localPoint.x - offset.x, rt.anchoredPosition.y);
         }
-
-        float objectWidth = rt.rect.width * rt.localScale.x;
-
-        Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
-
-        Vector2 newPos = pointerPosition - offset;
-
-        rt.anchoredPosition = newPos;
     }
 
 
     public void AlignLeft(Vector2 pointerPosition)
     {
         RectTransform rt = GetComponent<RectTransform>();
-        if (rt == null)
+        RectTransform parentRect = rt.parent as RectTransform;
+
+        // Convert screen coords to local coords
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parentRect,
+            pointerPosition,
+            mainCamera,
+            out Vector2 localPoint))
         {
-            Debug.LogWarning("AlignLeft2D: No RectTransform found on this GameObject.");
-            return;
+            float objectWidth = rt.rect.width * rt.localScale.x;
+            Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
+
+            rt.anchoredPosition = new Vector2(localPoint.x + offset.x, rt.anchoredPosition.y);
         }
-
-        float objectWidth = rt.rect.width * rt.localScale.x;
-
-        Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
-        Vector2 newPos = pointerPosition + offset;
-
-        rt.anchoredPosition = newPos;
     }
 
 }

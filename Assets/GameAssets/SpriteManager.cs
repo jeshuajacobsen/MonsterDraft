@@ -1,49 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
-using System.Globalization;
 
 public class SpriteManager : MonoBehaviour
 {
     public static SpriteManager instance;
 
-    //card sprites
-    public Sprite copper;
-    public Sprite silver;
-    public Sprite gold;
-    public Sprite platinum;
+    [System.Serializable]
+    public class SpriteEntry
+    {
+        public string name;
+        public Sprite sprite;
+    }
 
-    public Sprite manaVial;
-    public Sprite manaPotion;
-    public Sprite manaCrystal;
-    public Sprite manaGem;
+    public List<SpriteEntry> spriteEntries;
 
-    public Sprite fireball;
-    public Sprite preparation;
-    public Sprite research;
-    public Sprite shield;
-    public Sprite heal;
-    public Sprite storage;
-    public Sprite alchemist;
-    public Sprite merchant;
-    public Sprite throneRoom;
+    private Dictionary<string, Sprite> spriteDictionary;
 
-    public Sprite zaple;
-    public Sprite owisp;
-    public Sprite leafree;
-    public Sprite borble;
-
-
-    public Sprite enemyBackground;
-    public Sprite playerBackground;
-
-    void Awake() 
+    void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeSpriteDictionary();
         }
         else
         {
@@ -51,69 +30,32 @@ public class SpriteManager : MonoBehaviour
         }
     }
 
-    public Sprite GetUISprite(string spriteName)
+    private void InitializeSpriteDictionary()
     {
-        switch (spriteName)
+        spriteDictionary = new Dictionary<string, Sprite>();
+        foreach (var entry in spriteEntries)
         {
-            case "EnemyBackground":
-                return enemyBackground;
-            case "PlayerBackground":
-                return playerBackground;
-            default:
-                return enemyBackground;
-            
+            if (!spriteDictionary.ContainsKey(entry.name))
+            {
+                spriteDictionary.Add(entry.name, entry.sprite);
+            }
+            else
+            {
+                Debug.LogWarning($"Duplicate sprite name: {entry.name}");
+            }
         }
     }
 
-    public Sprite GetCardSprite(string spriteName)
+    public Sprite GetSprite(string spriteName)
     {
-        switch (spriteName)
+        if (spriteDictionary.TryGetValue(spriteName, out Sprite sprite))
         {
-            case "Copper":
-                return copper;
-            case "Silver":
-                return silver;
-            case "Gold":
-                return gold;
-            case "Platinum":
-                return platinum;
-            case "Mana Vial":
-                return manaVial;
-            case "Mana Potion":
-                return manaPotion;
-            case "Mana Crystal":
-                return manaCrystal;
-            case "Mana Gem":
-                return manaGem;
-            case "Fireball":
-                return fireball;
-            case "Preparation":
-                return preparation;
-            case "Research":
-                return research;
-            case "Shield":
-                return shield;
-            case "Heal":
-                return heal;
-            case "Zaple":
-                return zaple;
-            case "Owisp":
-                return owisp;
-            case "Leafree":
-                return leafree;
-            case "Borble":
-                return borble;
-            case "Storage":
-                return storage;
-            case "Alchemist":
-                return alchemist;
-            case "Merchant":
-                return merchant;
-            case "Throne Room":
-                return throneRoom;
-            default:
-                return copper;
+            return sprite;
+        }
+        else
+        {
+            Debug.LogWarning($"Sprite not found: {spriteName}");
+            return null; // or a default/fallback sprite
         }
     }
-
 }

@@ -153,9 +153,9 @@ public class RoundManager : MonoBehaviour
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound();
+        DiscardHand();
         discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);
-        DiscardHand();
         List<Card> newHand = roundDeck.DrawHand();
         foreach (Card card in newHand)
         {

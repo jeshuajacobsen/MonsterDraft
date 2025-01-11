@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class Monster : MonoBehaviour
 {
@@ -84,14 +85,14 @@ public class Monster : MonoBehaviour
         this.team = team;
         if (team == "Enemy")
         {
-            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetUISprite("EnemyBackground");
+            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite("EnemyBackground");
         } else {
-            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetUISprite("PlayerBackground");
+            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite("PlayerBackground");
         }
         this.tileOn = tile;
         this.tileOn.monster = this;
         this.name = monsterCard.Name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(this.name);
+        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(this.name);
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = this.name;
         this.MaxHealth = monsterCard.Health;
         this.Health = monsterCard.Health;
@@ -101,6 +102,26 @@ public class Monster : MonoBehaviour
         this.skill1 = monsterCard.skill1;
         this.skill2 = monsterCard.skill2;
         this.ManaCost = monsterCard.ManaCost;
+    }
+
+    public bool IsOnInfoButton(Vector2 mousePosition)
+    {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.GetComponent<Button>() != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void MoveTile(Tile tile)

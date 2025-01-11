@@ -43,7 +43,7 @@ public class Tile : MonoBehaviour
 
             Vector2 worldPosition2D = new Vector2(worldPosition3D.x, worldPosition3D.y);
 
-            RoundManager.instance.gameState.SelectTile(this, worldPosition2D);
+            RoundManager.instance.gameState.SelectTile(this, pointerPosition);
         }
     }
 

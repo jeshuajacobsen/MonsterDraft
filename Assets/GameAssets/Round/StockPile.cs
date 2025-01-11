@@ -48,7 +48,7 @@ public class StockPile : MonoBehaviour
         transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = stockLeft.ToString();
         this.Cost = card.Cost;
         transform.Find("CostBackgroundImage").Find("CostText").GetComponent<TextMeshProUGUI>().text = this.Cost.ToString();
-        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(name);
+        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(name);
     }
 
     private void BuyCard()

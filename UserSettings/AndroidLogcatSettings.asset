@@ -1,13 +1,26 @@
 {
-    "m_SelectedDeviceId": "",
-    "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+    "m_SelectedDeviceId": "98895a384b57584157",
+    "m_SelectedProcess": {
+        "deviceId": "98895a384b57584157",
+        "name": "com.DefaultCompany.com.unity.template.mobile2D",
+        "processId": 28629,
         "exited": false
     },
     "m_SelectedPriority": 0,
-    "m_KnownPackagesForSerialization": [],
+    "m_KnownProcessesForSerialization": [
+        {
+            "deviceId": "98895a384b57584157",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 20314,
+            "exited": true
+        },
+        {
+            "deviceId": "98895a384b57584157",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 28629,
+            "exited": false
+        }
+    ],
     "m_Tags": {
         "m_Entries": [
             {
@@ -40,12 +53,26 @@
             }
         ]
     },
+    "m_ExtraWindowState": {
+        "Type": 0,
+        "Height": 0.0
+    },
     "m_MemoryViewerState": {
-        "MemoryWindowHeight": 0.0,
-        "MemoryWindowWidth": 0.0,
-        "MemoryTypeEnabled": [],
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
         "MemoryGroup": 2,
-        "Behavior": 0
+        "AutoCapture": true
     },
     "m_FilterOptions": {
         "m_Filter": "",
@@ -63,5 +90,28 @@
         "BitRateK": 20000,
         "DisplayIdEnabled": false,
         "DisplayId": ""
-    }
+    },
+    "m_ScreenCaptureSettings": {
+        "Mode": 0,
+        "m_LastSaveLocation": [
+            "C:\\Users\\jeshu\\DigiDraft",
+            "C:\\Users\\jeshu\\DigiDraft"
+        ]
+    },
+    "m_QueryLayoutSettings": {
+        "LastLayoutSaveLocation": "",
+        "LastScreenshotSaveLocation": ""
+    },
+    "m_InputSettings": {
+        "ShiftModifier": false,
+        "SendText": "",
+        "PosixKillSignal": 0,
+        "TargetProcess": {
+            "deviceId": "",
+            "name": "",
+            "processId": 0,
+            "exited": false
+        }
+    },
+    "m_AutoScroll": 2
 }

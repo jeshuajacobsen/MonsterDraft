@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class MainPhase : GameState
 {
@@ -309,23 +310,15 @@ public class MainPhase : GameState
     }
 
     public override void SelectTile(Tile tile, Vector2 pointerPosition)
-{
-    if (tile.monster != null)
     {
-        roundManager.monsterOptionPanel.gameObject.SetActive(true);
-
-        RectTransform panelRect = roundManager.monsterOptionPanel.GetComponent<RectTransform>();
-        Vector2 panelSize = panelRect.sizeDelta;
-
-        Vector2 finalPosition = pointerPosition + new Vector2(panelSize.x / 10, -panelSize.y / 10);
-
-        roundManager.monsterOptionPanel.transform.position = new Vector3(finalPosition.x, finalPosition.y, 0f);
-
-        roundManager.monsterOptionPanel
-            .GetComponent<MonsterOptionsPanel>()
-            .SetActiveTile(tile);
+        if (tile.monster != null && !tile.monster.IsOnInfoButton(pointerPosition))
+        {
+            roundManager.monsterOptionPanel.SetActive(true);
+            roundManager.monsterOptionPanel
+                .GetComponent<MonsterOptionsPanel>()
+                .SetActiveTile(tile, pointerPosition);
+        }
     }
-}
 
     // public override void DoneButton()
     // {

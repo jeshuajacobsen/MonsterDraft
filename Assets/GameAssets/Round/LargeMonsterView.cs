@@ -23,7 +23,7 @@ public class LargeMonsterView : MonoBehaviour
     {
         // Basic UI updates
         transform.Find("MonsterName").GetComponent<TextMeshProUGUI>().text = monster.name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetCardSprite(monster.name);
+        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(monster.name);
         
         transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = monster.ManaCost.ToString();
         transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = monster.Attack.ToString();
@@ -47,7 +47,7 @@ public class LargeMonsterView : MonoBehaviour
         transform.Find("SkillsPanel/Skill2DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + monster.skill2.Damage;
 
         // Decide left vs. right alignment purely in 2D
-        if (pointerPosition.x < -900f)
+        if (pointerPosition.x < 150f)
         {
             AlignLeft(pointerPosition);
         }
@@ -58,29 +58,43 @@ public class LargeMonsterView : MonoBehaviour
     }
 
 
-    private void AlignRight(Vector2 pointerPosition)
+    public void AlignRight(Vector2 pointerPosition)
     {
         RectTransform rt = GetComponent<RectTransform>();
-        if (rt == null) return;
+        RectTransform parentRect = rt.parent as RectTransform;
 
-        float objectWidth = rt.rect.width * rt.localScale.x;
+        // Convert screen coords to local coords
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parentRect,
+            pointerPosition,
+            mainCamera,
+            out Vector2 localPoint))
+        {
+            float objectWidth = rt.rect.width * rt.localScale.x;
+            Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
 
-        Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
-
-        Vector2 finalPosition = pointerPosition - offset;
-        rt.anchoredPosition = finalPosition;
+            rt.anchoredPosition = new Vector2(localPoint.x - offset.x, rt.anchoredPosition.y);
+        }
     }
 
-    private void AlignLeft(Vector2 pointerPosition)
+
+    public void AlignLeft(Vector2 pointerPosition)
     {
         RectTransform rt = GetComponent<RectTransform>();
-        if (rt == null) return;
+        RectTransform parentRect = rt.parent as RectTransform;
 
-        float objectWidth = rt.rect.width * rt.localScale.x;
-        Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
+        // Convert screen coords to local coords
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            parentRect,
+            pointerPosition,
+            mainCamera,
+            out Vector2 localPoint))
+        {
+            float objectWidth = rt.rect.width * rt.localScale.x;
+            Vector2 offset = new Vector2(objectWidth * 0.5f, 0f);
 
-        Vector2 finalPosition = pointerPosition + offset;
-        rt.anchoredPosition = finalPosition;
+            rt.anchoredPosition = new Vector2(localPoint.x + offset.x, rt.anchoredPosition.y);
+        }
     }
 
 }
