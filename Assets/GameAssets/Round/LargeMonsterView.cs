@@ -57,6 +57,37 @@ public class LargeMonsterView : MonoBehaviour
         }
     }
 
+    public void SetMonsterFromBaseData(BaseMonsterData monster, Vector2 pointerPosition)
+    {
+        transform.Find("MonsterName").GetComponent<TextMeshProUGUI>().text = monster.name;
+        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(monster.name);
+        
+        transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = monster.ManaCost.ToString();
+        transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = monster.Attack.ToString();
+        transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().text = 
+            monster.Health.ToString() + "/" + monster.Health.ToString();
+        transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().text = monster.Defense.ToString();
+        transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().text = monster.Movement.ToString();
+
+        // Skill 1
+        SkillData skill1 = GameManager.instance.gameData.GetSkill(monster.skill1Name);
+        transform.Find("SkillsPanel/Skill1NameText").GetComponent<TextMeshProUGUI>().text = skill1.name;
+        transform.Find("SkillsPanel/Skill1Text").GetComponent<TextMeshProUGUI>().text = skill1.Description;
+        transform.Find("SkillsPanel/Skill1ManaCost/Text").GetComponent<TextMeshProUGUI>().text = skill1.ManaCost.ToString();
+        transform.Find("SkillsPanel/Skill1RangeText").GetComponent<TextMeshProUGUI>().text = "Range: " + skill1.Range;
+        transform.Find("SkillsPanel/Skill1DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + skill1.Damage;
+
+        // Skill 2
+        SkillData skill2 = GameManager.instance.gameData.GetSkill(monster.skill2Name);
+        transform.Find("SkillsPanel/Skill2NameText").GetComponent<TextMeshProUGUI>().text = skill2.name;
+        transform.Find("SkillsPanel/Skill2Text").GetComponent<TextMeshProUGUI>().text = skill2.Description;
+        transform.Find("SkillsPanel/Skill2ManaCost/Text").GetComponent<TextMeshProUGUI>().text = skill2.ManaCost.ToString();
+        transform.Find("SkillsPanel/Skill2RangeText").GetComponent<TextMeshProUGUI>().text = "Range: " + skill2.Range;
+        transform.Find("SkillsPanel/Skill2DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + skill2.Damage;
+
+        RectTransform rt = GetComponent<RectTransform>();
+        rt.anchoredPosition = pointerPosition;
+    }
 
     public void AlignRight(Vector2 pointerPosition)
     {

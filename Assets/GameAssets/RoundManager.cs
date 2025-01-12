@@ -52,11 +52,23 @@ public class RoundManager : MonoBehaviour
         } 
     }
 
+    private int _Experience;
+    public int Experience { get { return _Experience; } 
+        set { 
+            _Experience = value; 
+            DeckDiscardPanel.transform.Find("ExperienceImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
+        } 
+    }
+
     public GameObject EnemyBase;
     public GameObject PlayerBase;
 
-    public LargeCardView largeCardView;
-    public LargeMonsterView largeMonsterView;
+    public LargeCardView largeCardView1;
+    public LargeCardView largeCardView2;
+    public LargeCardView largeCardView3;
+    public LargeMonsterView largeMonsterView1;
+    public LargeMonsterView largeMonsterView2;
+    public LargeMonsterView largeMonsterView3;
 
     public Button doneButton;
     public Button cancelButton;

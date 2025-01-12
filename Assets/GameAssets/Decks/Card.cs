@@ -11,7 +11,7 @@ public class Card
         Type = type;
         if (type == "Monster")
         {
-            BaseStatsData baseStats = GameManager.instance.gameData.GetBaseStatsData(name);
+            BaseMonsterData baseStats = GameManager.instance.gameData.GetBaseMonsterData(name);
             Description = baseStats.Description;
             Cost = baseStats.Cost;
         }

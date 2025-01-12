@@ -76,13 +76,26 @@ public class TownPanel : MonoBehaviour
         // stockPiles.Add(stockPile);
 
         List<string> monsterNames = new List<string>();
-        for(int i = 0; i <= 3; i++)
-        {
-            stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
-            stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames), 10, "Monster");
-            monsterNames.Add(stockPile.Name);
-            stockPiles.Add(stockPile);
-        }
+
+        stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
+        stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames, "Common"), 10, "Monster");
+        monsterNames.Add(stockPile.Name);
+        stockPiles.Add(stockPile);
+
+        stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
+        stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames, "Uncommon"), 10, "Monster");
+        monsterNames.Add(stockPile.Name);
+        stockPiles.Add(stockPile);
+
+        stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
+        stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames, "Rare"), 10, "Monster");
+        monsterNames.Add(stockPile.Name);
+        stockPiles.Add(stockPile);
+
+        stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
+        stockPile.InitValues(GameManager.instance.gameData.GetRandomMonsterName(monsterNames, "Epic"), 10, "Monster");
+        monsterNames.Add(stockPile.Name);
+        stockPiles.Add(stockPile);
 
         List<string> actionNames = new List<string>();
         for(int i = 0; i <= 5; i++)

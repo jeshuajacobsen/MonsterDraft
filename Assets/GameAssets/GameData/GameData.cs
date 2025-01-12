@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using System.Linq;
 
 public class GameData 
 {
-    private Dictionary<string, BaseStatsData> _baseStatsData;
+    private Dictionary<string, BaseMonsterData> _baseMonsterData;
     private Dictionary<string, BaseActionData> _actionData;
     private Dictionary<string, TreasureData> _treasureData;
 
@@ -13,50 +14,76 @@ public class GameData
 
     public GameData()
     {
-        _baseStatsData = new Dictionary<string, BaseStatsData>();
-        _baseStatsData.Add("Borble", new BaseStatsData("Borble"));
-        _baseStatsData.Add("Leafree", new BaseStatsData("Leafree"));
-        _baseStatsData.Add("Owisp", new BaseStatsData("Owisp"));
-        _baseStatsData.Add("Zaple", new BaseStatsData("Zaple"));
+        _baseMonsterData = new Dictionary<string, BaseMonsterData>
+        {
+            { "Borble", new BaseMonsterData("Borble") },
+            { "Pupal", new BaseMonsterData("Pupal") },
+            { "Aquafly", new BaseMonsterData("Aquafly") },
+            { "Leafree", new BaseMonsterData("Leafree") },
+            { "Leafear", new BaseMonsterData("Leafear") },
+            { "Olla", new BaseMonsterData("Olla") },
+            { "Owisp", new BaseMonsterData("Owisp") },
+            { "Wallowisp", new BaseMonsterData("Wallowisp") },
+            { "Slimy", new BaseMonsterData("Slimy") },
+            { "Slimier", new BaseMonsterData("Slimier") },
+            { "Slimiest", new BaseMonsterData("Slimiest") },
+            { "Snowbug", new BaseMonsterData("Snowbug") },
+            { "Snant", new BaseMonsterData("Snant") },
+            { "Snowpede", new BaseMonsterData("Snowpede") },
+            { "Squrl", new BaseMonsterData("Squrl") },
+            { "Squrile", new BaseMonsterData("Squrile") },
+            { "Zaple", new BaseMonsterData("Zaple") },
+            { "Lightna", new BaseMonsterData("Lightna") },
+            { "Thunda", new BaseMonsterData("Thunda") }
+        };
 
-        _actionData = new Dictionary<string, BaseActionData>();
-        _actionData.Add("Fireball", new BaseActionData("Fireball"));
-        _actionData.Add("Heal", new BaseActionData("Heal"));
-        _actionData.Add("Shield", new BaseActionData("Shield"));
-        _actionData.Add("Preparation", new BaseActionData("Preparation"));
-        _actionData.Add("Research", new BaseActionData("Research"));
-        _actionData.Add("Storage", new BaseActionData("Storage"));
-        _actionData.Add("Alchemist", new BaseActionData("Alchemist"));
-        _actionData.Add("Merchant", new BaseActionData("Merchant"));
-        _actionData.Add("Throne Room", new BaseActionData("Throne Room"));
 
-        _treasureData = new Dictionary<string, TreasureData>();
-        _treasureData.Add("Copper", new TreasureData("Copper"));
-        _treasureData.Add("Silver", new TreasureData("Silver"));
-        _treasureData.Add("Gold", new TreasureData("Gold"));
-        _treasureData.Add("Platinum", new TreasureData("Platinum"));
-        _treasureData.Add("Mana Vial", new TreasureData("Mana Vial"));
-        _treasureData.Add("Mana Potion", new TreasureData("Mana Potion"));
-        _treasureData.Add("Mana Crystal", new TreasureData("Mana Crystal"));
-        _treasureData.Add("Mana Gem", new TreasureData("Mana Gem"));
+        _actionData = new Dictionary<string, BaseActionData>
+        {
+            { "Fireball", new BaseActionData("Fireball") },
+            { "Heal", new BaseActionData("Heal") },
+            { "Shield", new BaseActionData("Shield") },
+            { "Preparation", new BaseActionData("Preparation") },
+            { "Research", new BaseActionData("Research") },
+            { "Storage", new BaseActionData("Storage") },
+            { "Alchemist", new BaseActionData("Alchemist") },
+            { "Merchant", new BaseActionData("Merchant") },
+            { "Throne Room", new BaseActionData("Throne Room") }
+        };
 
-        _skills = new Dictionary<string, SkillData>();
-        _skills.Add("Zap", new SkillData("Zap"));
-        _skills.Add("Bubble", new SkillData("Bubble"));
-        _skills.Add("Leaf", new SkillData("Leaf"));
-        _skills.Add("Spark", new SkillData("Spark"));
-        _skills.Add("Shock", new SkillData("Shock"));
-        _skills.Add("Burn", new SkillData("Burn"));
-        _skills.Add("Wave", new SkillData("Wave"));
-        _skills.Add("Growth", new SkillData("Growth"));
+        _treasureData = new Dictionary<string, TreasureData>
+        {
+            { "Copper", new TreasureData("Copper") },
+            { "Silver", new TreasureData("Silver") },
+            { "Gold", new TreasureData("Gold") },
+            { "Platinum", new TreasureData("Platinum") },
+            { "Mana Vial", new TreasureData("Mana Vial") },
+            { "Mana Potion", new TreasureData("Mana Potion") },
+            { "Mana Crystal", new TreasureData("Mana Crystal") },
+            { "Mana Gem", new TreasureData("Mana Gem") }
+        };
 
-        _dungeonData = new Dictionary<string, DungeonLevelData>();
-        _dungeonData.Add("Forest", new DungeonLevelData("Forest"));
+        _skills = new Dictionary<string, SkillData>
+        {
+            { "Zap", new SkillData("Zap") },
+            { "Bubble", new SkillData("Bubble") },
+            { "Leaf", new SkillData("Leaf") },
+            { "Spark", new SkillData("Spark") },
+            { "Shock", new SkillData("Shock") },
+            { "Burn", new SkillData("Burn") },
+            { "Wave", new SkillData("Wave") },
+            { "Growth", new SkillData("Growth") }
+        };
+
+        _dungeonData = new Dictionary<string, DungeonLevelData>
+        {
+            { "Forest", new DungeonLevelData("Forest") }
+        };
     }
 
-    public BaseStatsData GetBaseStatsData(string name)
+    public BaseMonsterData GetBaseMonsterData(string name)
     {
-        return _baseStatsData[name];
+        return _baseMonsterData[name];
     }
 
     public BaseActionData GetActionData(string name)
@@ -76,7 +103,7 @@ public class GameData
 
     public string GetCardType(string name)
     {
-        if (_baseStatsData.ContainsKey(name))
+        if (_baseMonsterData.ContainsKey(name))
         {
             return "Monster";
         }
@@ -98,23 +125,23 @@ public class GameData
 
     public string GetRandomTreasureName(List<string> exclude)
     {
-        List<string> treasureNames = new List<string> { "Copper", "Silver", "Gold", "Mana Vial", "Mana Crystal", "Mana Gem" };
+        List<string> treasureNames = _treasureData.Keys.ToList();
         treasureNames.RemoveAll(exclude.Contains);
         return treasureNames[Random.Range(0, treasureNames.Count)];
     }
 
-    public string GetRandomMonsterName(List<string> exclude)
+    public string GetRandomMonsterName(List<string> exclude, string rarity)
     {
-        List<string> monsterNames = new List<string> { "Borble", "Leafree", "Owisp", "Zaple" };
+        List<string> monsterNames = _baseMonsterData.Keys.ToList();
         monsterNames.RemoveAll(exclude.Contains);
+        monsterNames.RemoveAll(name => !string.IsNullOrEmpty(_baseMonsterData[name].evolvesFrom));
+        monsterNames.RemoveAll(name => _baseMonsterData[name].rarity != rarity);
         return monsterNames[Random.Range(0, monsterNames.Count)];
     }
 
     public string GetRandomActionName(List<string> exclude)
     {
-        List<string> actionNames = new List<string> { "Fireball", "Heal", "Shield", "Preparation", 
-                                                      "Research", "Storage", "Alchemist", "Merchant", 
-                                                      "Throne Room" };
+        List<string> actionNames = _actionData.Keys.ToList();
         actionNames.RemoveAll(exclude.Contains);
         if (actionNames.Count == 0)
         {

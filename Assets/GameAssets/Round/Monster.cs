@@ -70,6 +70,9 @@ public class Monster : MonoBehaviour
 
     public List<MonsterBuff> buffs = new List<MonsterBuff>();
 
+    public string evolvesFrom;
+    public string evolvesTo;
+
     void Start()
     {
         MainPhase.ExitMainPhase.AddListener(() => actionsUsedThisTurn.Clear());
@@ -102,6 +105,8 @@ public class Monster : MonoBehaviour
         this.skill1 = monsterCard.skill1;
         this.skill2 = monsterCard.skill2;
         this.ManaCost = monsterCard.ManaCost;
+        this.evolvesFrom = monsterCard.evolvesFrom;
+        this.evolvesTo = monsterCard.evolvesTo;
     }
 
     public bool IsOnInfoButton(Vector2 mousePosition)

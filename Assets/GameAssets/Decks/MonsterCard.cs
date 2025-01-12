@@ -8,9 +8,12 @@ public class MonsterCard : Card
     public SkillData skill1;
     public SkillData skill2;
 
+    public string evolvesFrom;
+    public string evolvesTo;
+
     public MonsterCard(string name) : base(name, "Monster")
     {
-        BaseStatsData baseStats = GameManager.instance.gameData.GetBaseStatsData(name);
+        BaseMonsterData baseStats = GameManager.instance.gameData.GetBaseMonsterData(name);
         Attack = baseStats.Attack;
         Health = baseStats.Health;
         Defense = baseStats.Defense;
@@ -18,6 +21,8 @@ public class MonsterCard : Card
         ManaCost = baseStats.ManaCost;
         skill1 = GameManager.instance.gameData.GetSkill(baseStats.skill1Name);
         skill2 = GameManager.instance.gameData.GetSkill(baseStats.skill2Name);
+        evolvesFrom = baseStats.evolvesFrom;
+        evolvesTo = baseStats.evolvesTo;
     }
 
 }

@@ -37,7 +37,7 @@ public class LargeCardView : MonoBehaviour
             return;
         }
 
-        if (move)
+        if (move && (!(card is MonsterCard) || (string.IsNullOrEmpty(((MonsterCard)card).evolvesFrom) && string.IsNullOrEmpty(((MonsterCard)card).evolvesTo))))
         {
             if (pointerPosition.x < 150f)
             {
@@ -47,7 +47,10 @@ public class LargeCardView : MonoBehaviour
             {
                 AlignRight(pointerPosition);
             }
-        }
+        } else {
+            RectTransform rt = GetComponent<RectTransform>();
+            rt.anchoredPosition = pointerPosition;
+        } 
 
         if (card is MonsterCard monsterCard)
         {
