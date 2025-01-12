@@ -47,7 +47,7 @@ public class BaseActionData
             case "Research":
                 Effects.Add("Draw 3");
                 Description = "+3 cards";
-                Cost = 8;
+                Cost = 6;
                 break;
             case "Storage":
                 Effects.Add("Select Cards x");
@@ -62,14 +62,14 @@ public class BaseActionData
                 Effects.Add("Trash Selected");
                 Effects.Add("Gain Treasure Costing Selected Cost Plus 4");
                 Description = "Trash a treasure card to gain a treasure card costing up to 4 more";
-                Cost = 6;
+                Cost = 4;
                 break;
             case "Merchant":
                 Effects.Add("Coins 2");
                 Effects.Add("Actions 1");
                 Effects.Add("Draw 1");
                 Description = "+2 coins\n +1 action\n +1 card";
-                Cost = 5;
+                Cost = 6;
                 break;
             case "Throne Room":
                 Effects.Add("Select Action 1");

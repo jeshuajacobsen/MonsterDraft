@@ -10,6 +10,8 @@ public class MonsterCard : Card
 
     public string evolvesFrom;
     public string evolvesTo;
+    public int experienceGiven;
+    public int experienceRequired;
 
     public MonsterCard(string name) : base(name, "Monster")
     {
@@ -23,6 +25,8 @@ public class MonsterCard : Card
         skill2 = GameManager.instance.gameData.GetSkill(baseStats.skill2Name);
         evolvesFrom = baseStats.evolvesFrom;
         evolvesTo = baseStats.evolvesTo;
+        experienceGiven = baseStats.experienceGiven;
+        experienceRequired = baseStats.experienceRequired;
     }
 
 }

@@ -21,6 +21,9 @@ public class BaseMonsterData
     public string evolvesFrom = "";
     public string evolvesTo = "";
 
+    public int experienceGiven = 10;
+    public int experienceRequired = 10;
+
     public BaseMonsterData(string name)
     {
         this.name = name;
@@ -38,6 +41,7 @@ public class BaseMonsterData
                 skill2Name = "Wave";
                 rarity = "Epic";
                 evolvesTo = "Pupal";
+                experienceGiven = 40;
                 break;
             case "Pupal":
                 Attack = 16;
@@ -51,6 +55,7 @@ public class BaseMonsterData
                 rarity = "Epic";
                 evolvesFrom = "Borble";
                 evolvesTo = "Aquafly";
+                experienceGiven = 60;
                 break;
             case "Aquafly":
                 Attack = 10;
@@ -63,6 +68,7 @@ public class BaseMonsterData
                 skill2Name = "Wave";
                 rarity = "Epic";
                 evolvesFrom = "Pupal";
+                experienceGiven = 90;
                 break;
             case "Leafree":
                 Attack = 6;
@@ -75,6 +81,7 @@ public class BaseMonsterData
                 skill2Name = "Growth";
                 rarity = "Rare";
                 evolvesTo = "Leafear";
+                experienceGiven = 30;
                 break;
             case "Leafear":
                 Attack = 12;
@@ -87,6 +94,7 @@ public class BaseMonsterData
                 skill2Name = "Growth";
                 rarity = "Rare";
                 evolvesFrom = "Leafree";
+                experienceGiven = 50;
                 break;
             case "Olla":
                 Attack = 15;
@@ -98,6 +106,7 @@ public class BaseMonsterData
                 skill1Name = "Zap";
                 skill2Name = "Shock";
                 rarity = "Rare";
+                experienceGiven = 50;
                 break;
             case "Owisp":
                 Attack = 5;
@@ -110,6 +119,7 @@ public class BaseMonsterData
                 skill2Name = "Burn";
                 rarity = "Uncommon";
                 evolvesTo = "Wallowisp";
+                experienceGiven = 20;
                 break;
             case "Wallowisp":
                 Attack = 9;
@@ -122,6 +132,7 @@ public class BaseMonsterData
                 skill2Name = "Burn";
                 rarity = "Uncommon";
                 evolvesFrom = "Owisp";
+                experienceGiven = 30;
                 break;
             case "Slimy":
                 Attack = 2;
@@ -134,6 +145,7 @@ public class BaseMonsterData
                 skill2Name = "Burn";
                 rarity = "Common";
                 evolvesTo = "Slimier";
+                experienceGiven = 10;
                 break;
             case "Slimier":
                 Attack = 3;
@@ -147,6 +159,7 @@ public class BaseMonsterData
                 rarity = "Common";
                 evolvesFrom = "Slimy";
                 evolvesTo = "Slimiest";
+                experienceGiven = 20;
                 break;
             case "Slimiest":
                 Attack = 6;
@@ -159,6 +172,7 @@ public class BaseMonsterData
                 skill2Name = "Burn";
                 rarity = "Common";
                 evolvesFrom = "Slimier";
+                experienceGiven = 30;
                 break;
             case "Snowbug":
                 Attack = 8;
@@ -171,6 +185,7 @@ public class BaseMonsterData
                 skill2Name = "Shock";
                 rarity = "Uncommon";
                 evolvesTo = "Snant";
+                experienceGiven = 20;
                 break;
             case "Snant":
                 Attack = 12;
@@ -184,6 +199,7 @@ public class BaseMonsterData
                 rarity = "Uncommon";
                 evolvesFrom = "Snowbug";
                 evolvesTo = "Snowpede";
+                experienceGiven = 30;
                 break;
             case "Snowpede":
                 Attack = 17;
@@ -196,6 +212,7 @@ public class BaseMonsterData
                 skill2Name = "Shock";
                 rarity = "Uncommon";
                 evolvesFrom = "Snant";
+                experienceGiven = 50;
                 break;
             case "Squrl":
                 Attack = 11;
@@ -208,6 +225,7 @@ public class BaseMonsterData
                 skill2Name = "Shock";
                 rarity = "Epic";
                 evolvesTo = "Squrile";
+                experienceGiven = 40;
                 break;
             case "Squrile":
                 Attack = 15;
@@ -220,6 +238,7 @@ public class BaseMonsterData
                 skill2Name = "Shock";
                 rarity = "Epic";
                 evolvesFrom = "Squrl";
+                experienceGiven = 70;
                 break;
             case "Zaple":
                 Attack = 3;
@@ -232,6 +251,7 @@ public class BaseMonsterData
                 skill2Name = "Shock";
                 rarity = "Common";
                 evolvesTo = "Lightna";
+                experienceGiven = 10;
                 break;
             case "Lightna":
                 Attack = 5;
@@ -245,6 +265,7 @@ public class BaseMonsterData
                 rarity = "Common";
                 evolvesFrom = "Zaple";
                 evolvesTo = "Thunda";
+                experienceGiven = 20;
                 break;
             case "Thunda":
                 Attack = 8;
@@ -257,6 +278,7 @@ public class BaseMonsterData
                 skill2Name = "Shock";
                 rarity = "Common";
                 evolvesFrom = "Lightna";
+                experienceGiven = 40;
                 break;
             default:
                 Debug.Log("Invalid name: " + name);

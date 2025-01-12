@@ -30,6 +30,7 @@ public class Monster : MonoBehaviour
             }
             if (_health <= 0)
             {
+                RoundManager.instance.Experience += this.experienceGiven;
                 tileOn.monster = null;
                 Destroy(gameObject);
             }
@@ -73,14 +74,30 @@ public class Monster : MonoBehaviour
     public string evolvesFrom;
     public string evolvesTo;
 
+    private int experienceGiven;
+    private int experienceRequired;
+
     void Start()
     {
         MainPhase.ExitMainPhase.AddListener(() => actionsUsedThisTurn.Clear());
+        transform.Find("EvolveButton").GetComponent<Button>().onClick.AddListener(Evolve);
     }
 
     void Update()
     {
-        
+        if (team == "Player" && !string.IsNullOrEmpty(evolvesTo) && RoundManager.instance.Experience >= experienceRequired)
+        {
+            transform.Find("EvolveButton").gameObject.SetActive(true);
+        } else {
+            transform.Find("EvolveButton").gameObject.SetActive(false);
+        }
+    }
+
+    private void Evolve()
+    {
+        MonsterCard monsterCard = new MonsterCard(evolvesTo);
+        RoundManager.instance.Experience -= experienceRequired;
+        this.InitValues(monsterCard, tileOn, team);
     }
 
     public void InitValues(MonsterCard monsterCard, Tile tile, string team)
@@ -107,6 +124,8 @@ public class Monster : MonoBehaviour
         this.ManaCost = monsterCard.ManaCost;
         this.evolvesFrom = monsterCard.evolvesFrom;
         this.evolvesTo = monsterCard.evolvesTo;
+        this.experienceGiven = monsterCard.experienceGiven;
+        this.experienceRequired = monsterCard.experienceRequired;
     }
 
     public bool IsOnInfoButton(Vector2 mousePosition)

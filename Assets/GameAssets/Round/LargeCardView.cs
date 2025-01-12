@@ -47,7 +47,7 @@ public class LargeCardView : MonoBehaviour
             {
                 AlignRight(pointerPosition);
             }
-        } else {
+        } else if (move) {
             RectTransform rt = GetComponent<RectTransform>();
             rt.anchoredPosition = pointerPosition;
         } 
