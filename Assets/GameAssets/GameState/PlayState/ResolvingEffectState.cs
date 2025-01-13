@@ -209,6 +209,37 @@ public class ResolvingEffectState : CardPlayState
                     }
                 }
                 mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Search")
+            {
+                if (effectParts[1] == "Discard")
+                {
+                    if (effectParts[2] == "Copper")
+                    {
+                        for (int j = RoundManager.instance.discardPile.cards.Count - 1; j >= 0; j--)
+                        {
+                            var card = RoundManager.instance.discardPile.cards[j];
+                            if (card.Name == "Copper")
+                            {
+                                RoundManager.instance.discardPile.RemoveCard(card);
+                                mainPhase.foundCards.Add(card);
+                            }
+                        }
+                    }
+                }
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Found")
+            {
+                if (effectParts[1] == "Into")
+                {
+                    if (effectParts[2] == "Hand")
+                    {
+                        foreach (var card in mainPhase.foundCards)
+                        {
+                            RoundManager.instance.AddCardToHand(card);
+                        }
+                    }
+                }
+                mainPhase.playedActionCardStep++;
             }
         }
         

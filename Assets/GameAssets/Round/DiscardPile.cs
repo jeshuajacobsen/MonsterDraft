@@ -19,4 +19,10 @@ public class DiscardPile : MonoBehaviour
         cards.Add(card);
         gameObject.transform.Find("DiscardSizeText").GetComponent<TextMeshProUGUI>().text = cards.Count.ToString();
     }
+
+    public void RemoveCard(Card card)
+    {
+        cards.Remove(card);
+        gameObject.transform.Find("DiscardSizeText").GetComponent<TextMeshProUGUI>().text = cards.Count.ToString();
+    }
 }

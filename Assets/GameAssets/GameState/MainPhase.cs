@@ -23,6 +23,7 @@ public class MainPhase : GameState
 
     public Tile selectedTile;
     public int savedValue;
+    public List<Card> foundCards = new List<Card>();
 
     public override void EnterState()
     {

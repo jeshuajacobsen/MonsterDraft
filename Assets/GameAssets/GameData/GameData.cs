@@ -50,7 +50,8 @@ public class GameData
             { "Merchant", new BaseActionData("Merchant") },
             { "Throne Room", new BaseActionData("Throne Room") },
             { "Forge", new BaseActionData("Forge") },
-            { "Vault", new BaseActionData("Vault") }
+            { "Vault", new BaseActionData("Vault") },
+            { "Bank", new BaseActionData("Bank") }
         };
 
         _treasureData = new Dictionary<string, TreasureData>

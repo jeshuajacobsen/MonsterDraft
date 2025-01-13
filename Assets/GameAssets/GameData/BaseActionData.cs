@@ -93,6 +93,12 @@ public class BaseActionData
                 Description = "+2 cards\n Discard any number of cards then gain 2 coins per card discarded";
                 Cost = 8;
                 break;
+            case "Bank":
+                Effects.Add("Search Discard Copper");
+                Effects.Add("Found Into Hand");
+                Description = "Put all copper cards from your discard pile into your hand";
+                Cost = 4;
+                break;
             default:
                 Effects.Add("No effect");
                 break;

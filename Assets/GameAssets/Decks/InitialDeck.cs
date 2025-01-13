@@ -27,5 +27,6 @@ public class InitialDeck : Deck
         //cards.Add(new ActionCard("Throne Room"));
         cards.Add(new ActionCard("Forge"));
         cards.Add(new ActionCard("Vault"));
+        cards.Add(new ActionCard("Bank"));
     }
 }
