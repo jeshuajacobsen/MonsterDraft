@@ -77,6 +77,14 @@ public class BaseActionData
                 Description = "Play an action card twice";
                 Cost = 4;
                 break;
+            case "Forge":
+                Effects.Add("Select Cards x");
+                Effects.Add("Save x Sum Costs");
+                Effects.Add("Trash Selected");
+                Effects.Add("Gain Card Costing Saved");
+                Description = "Trash any number of cards. Gain a card costing up to the sum of the costs of the trashed cards";
+                Cost = 10;
+                break;
             default:
                 Effects.Add("No effect");
                 break;

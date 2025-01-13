@@ -25,5 +25,6 @@ public class InitialDeck : Deck
         //cards.Add(new ActionCard("Preparation"));
         //cards.Add(new ActionCard("Research"));
         //cards.Add(new ActionCard("Throne Room"));
+        cards.Add(new ActionCard("Forge"));
     }
 }

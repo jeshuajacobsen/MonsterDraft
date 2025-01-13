@@ -109,11 +109,15 @@ public class RoundManager : MonoBehaviour
         }
     }
 
-    public void SetupDoneButton()
+    public void SetupDoneButton(bool showCancel = true)
     {
         doneButton.gameObject.SetActive(true);
-        doneButton.onClick.AddListener(OnDoneButtonClicked);
-        if (gameState is MainPhase && ((MainPhase)gameState).autoPlaying)
+        if (doneButton.onClick.GetPersistentEventCount() == 0)
+        {
+            doneButton.onClick.AddListener(OnDoneButtonClicked);
+        }
+        
+        if ((gameState is MainPhase && ((MainPhase)gameState).autoPlaying) || !showCancel)
         {
             return;
         }

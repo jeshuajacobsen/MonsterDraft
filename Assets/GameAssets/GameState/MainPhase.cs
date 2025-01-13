@@ -22,6 +22,7 @@ public class MainPhase : GameState
     public bool autoPlaying = false;
 
     public Tile selectedTile;
+    public int savedValue;
 
     public override void EnterState()
     {

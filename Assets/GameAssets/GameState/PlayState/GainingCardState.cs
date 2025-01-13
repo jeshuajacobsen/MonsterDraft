@@ -8,19 +8,22 @@ public class GainingCardState : CardPlayState
     private int cost;
     private string restriction;
     private List<SmallCardView> selectedCards = new List<SmallCardView>();
+    private bool cancelable;
     
-    public GainingCardState(MainPhase mainPhase, string restriction, int cost) : base(mainPhase)
+    public GainingCardState(MainPhase mainPhase, string restriction, int cost, bool cancelable = true) : base(mainPhase)
     {
         this.restriction = restriction;
         this.cost = cost;
+        this.cancelable = cancelable;
     }
 
     public override void EnterState()
     {
         Debug.Log("Gaining card State Entered");
         RoundManager.instance.isGainingCard = true;
-        RoundManager.instance.messageText.text = "Select a " + restriction +" card to gain costing up to " + cost + " coins";
+        RoundManager.instance.messageText.text = "Select a " + (restriction == "None" ? "" : restriction) +" card to gain costing up to " + cost + " coins";
         RoundManager.instance.messageText.gameObject.SetActive(true);
+        RoundManager.instance.SetupDoneButton(cancelable);
     }
 
     public override void HandleInput()
@@ -65,5 +68,6 @@ public class GainingCardState : CardPlayState
         RoundManager.instance.isGainingCard = false;
         RoundManager.instance.messageText.text = "";
         RoundManager.instance.messageText.gameObject.SetActive(false);
+        RoundManager.instance.CleanupDoneButton();
     }
 }

@@ -103,31 +103,37 @@ public class ResolvingEffectState : CardPlayState
 
             } else if (effectParts[0] == "Gain")
             {
+                string restriction = "None";
                 mainPhase.playedActionCardStep++;
                 if (effectParts[1] == "Treasure")
                 {
-                    string restriction = "Treasure";
-                    if (effectParts[2] == "Costing")
+                    restriction = "Treasure";
+                }
+                if (effectParts[2] == "Costing")
+                {
+                    if (effectParts[3] == "Selected")
                     {
-                        if (effectParts[3] == "Selected")
+                        if (effectParts[4] == "Cost")
                         {
-                            if (effectParts[4] == "Cost")
+                            
+                            if (effectParts[5] == "Plus")
                             {
-                                
-                                if (effectParts[5] == "Plus")
+                                int cost = 0;
+                                if (mainPhase.selectedCards.Count > 0)
                                 {
-                                    int cost = 0;
-                                    if (mainPhase.selectedCards.Count > 0)
-                                    {
-                                        cost += mainPhase.selectedCards[0].card.Cost;
-                                        cost += int.Parse(effectParts[6]);
-
-                                        mainPhase.SetState(new GainingCardState(mainPhase, restriction, cost));
-                                        return;
-                                    }
+                                    cost += mainPhase.selectedCards[0].card.Cost;
+                                    cost += int.Parse(effectParts[6]);
+                                    bool cancelable = mainPhase.playedActionCardStep == 1;
+                                    mainPhase.SetState(new GainingCardState(mainPhase, restriction, cost, cancelable));
+                                    return;
                                 }
                             }
                         }
+                    } else if (effectParts[3] == "Saved")
+                    {
+                        bool cancelable = mainPhase.playedActionCardStep == 1;
+                        mainPhase.SetState(new GainingCardState(mainPhase, restriction, mainPhase.savedValue, cancelable));
+                        return;
                     }
                 }
             } else if (effectParts[0] == "Play")
@@ -179,6 +185,21 @@ public class ResolvingEffectState : CardPlayState
                 buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
                 
                 mainPhase.selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Save")
+            {
+                if (effectParts[1] == "x")
+                {
+                    if (effectParts[2] == "Sum" && effectParts[3] == "Costs")
+                    {
+                        int sum = 0;
+                        for (int j = 0; j < mainPhase.selectedCards.Count; j++)
+                        {
+                            sum += mainPhase.selectedCards[j].card.Cost;
+                        }
+                        mainPhase.savedValue = sum;
+                    }
+                }
                 mainPhase.playedActionCardStep++;
             }
         }
