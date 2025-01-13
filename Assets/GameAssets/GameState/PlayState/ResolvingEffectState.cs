@@ -33,7 +33,15 @@ public class ResolvingEffectState : CardPlayState
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0]  == "Coins") 
             {
-                RoundManager.instance.Coins += int.Parse(effectParts[1]);
+                if (effectParts[1] == "x")
+                {
+                    if (effectParts[2] == "Times")
+                    {
+                        RoundManager.instance.Coins += mainPhase.selectedCards.Count * int.Parse(effectParts[3]);
+                    }
+                } else {
+                    RoundManager.instance.Coins += int.Parse(effectParts[1]);
+                }
                 mainPhase.playedActionCardStep++;
                 
             } else if (effectParts[0] == "Draw")

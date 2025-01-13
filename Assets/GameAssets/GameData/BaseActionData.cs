@@ -85,6 +85,14 @@ public class BaseActionData
                 Description = "Trash any number of cards. Gain a card costing up to the sum of the costs of the trashed cards";
                 Cost = 10;
                 break;
+            case "Vault":
+                Effects.Add("Draw 2");
+                Effects.Add("Select Cards x");
+                Effects.Add("Discard x");
+                Effects.Add("Coins x Times 2");
+                Description = "+2 cards\n Discard any number of cards then gain 2 coins per card discarded";
+                Cost = 8;
+                break;
             default:
                 Effects.Add("No effect");
                 break;

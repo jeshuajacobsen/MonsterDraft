@@ -4741,6 +4741,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 1a0a71cfdfcdca241aa6051d3d0d653b, type: 3}
   - name: Fireball
     sprite: {fileID: 21300000, guid: 7e2796d82f81a3c419731588bb39e626, type: 3}
+  - name: Forge
+    sprite: {fileID: -3534647325576296009, guid: 01851ef40f9d9184cb4870c815ff3e79, type: 3}
   - name: Forest
     sprite: {fileID: 21300000, guid: 60af0bfb993682c4bb87cc2e82415bd1, type: 3}
   - name: Gold
@@ -4811,6 +4813,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: c502bf700ba03cc40b333d1c0bea6c41, type: 3}
   - name: Thunda
     sprite: {fileID: -6398287112813761913, guid: 17c98fb256daff543814c285e09e4d0d, type: 3}
+  - name: Vault
+    sprite: {fileID: -1974042178797025698, guid: 0de21c0b9a948044bab1f3a2194ab009, type: 3}
   - name: Wallowisp
     sprite: {fileID: -5070116007335442539, guid: 73b0b65934d8adb4aa7a5f5d4c29b521, type: 3}
   - name: Zaple

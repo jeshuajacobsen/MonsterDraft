@@ -11,6 +11,7 @@ public class IdleState : CardPlayState
     {
         Debug.Log("Idle State Entered");
         mainPhase.selectedTile = null;
+        mainPhase.selectedCards.Clear();
         if (mainPhase.cardsToAutoPlay.Count > 0)
         {
             mainPhase.autoPlaying = true;
