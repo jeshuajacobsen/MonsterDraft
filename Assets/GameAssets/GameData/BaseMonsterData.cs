@@ -22,7 +22,7 @@ public class BaseMonsterData
     public string evolvesTo = "";
 
     public int experienceGiven = 10;
-    public int experienceRequired = 10;
+    public int experienceRequired = 40;
 
     public BaseMonsterData(string name)
     {

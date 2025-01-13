@@ -1,52 +1,61 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Dungeon
 {
-    public List<Card> Cards { get; set; }
     private string name;
+    private Dictionary<string, float> cardProbabilities = new Dictionary<string, float>();
 
     public Dungeon(string name, int roundNumber)
     {
         this.name = name;
-        Cards = new List<Card>();
-        GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).cards.ForEach(cardName =>
-        {
-            if (cardName == "Pass")
-            {
-                return;
-            }
-            string type = GameManager.instance.gameData.GetCardType(cardName);
-            if (type == "Monster")
-            {
-                Cards.Add(new MonsterCard(cardName));
-            }
-            else if (type == "Action")
-            {
-                Cards.Add(new ActionCard(cardName));
-            }
-            else if (type == "Treasure")
-            {
-                Cards.Add(new TreasureCard(cardName));
-            }
-        });
+        cardProbabilities = GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).cardProbabilities;
     }
 
     public Card DrawCard()
     {
-        if (Cards.Count == 0)
-        {
-            return null;
-        }
-        var card = Cards[0];
-        if (card != null)
-        {
-            Cards.Remove(card);
-        }
-        return card;
-    }
+        float totalProbability = 0f;
 
-    public void PostponeCard(Card card)
-    {
-        Cards.Add(card);
+        foreach (var probability in cardProbabilities.Values)
+        {
+            totalProbability += probability;
+        }
+
+        float randomPoint = Random.value * totalProbability;
+
+        foreach (var kvp in cardProbabilities)
+        {
+            randomPoint -= kvp.Value;
+
+            if (randomPoint <= 0f)
+            {
+                string cardName = kvp.Key;
+                string type = GameManager.instance.gameData.GetCardType(cardName);
+                Card card = null;
+
+                switch (type)
+                {
+                    case "Monster":
+                        card = new MonsterCard(cardName);
+                        break;
+                    case "Action":
+                        card = new ActionCard(cardName);
+                        break;
+                    case "Treasure":
+                        card = new TreasureCard(cardName);
+                        break;
+                    case "Pass":
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown card type: {type}");
+                        break;
+                }
+
+                return card;
+            }
+        }
+
+        Debug.LogWarning("No card drawn. Check your card probabilities.");
+        return null;
     }
 }

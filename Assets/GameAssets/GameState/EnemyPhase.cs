@@ -98,7 +98,6 @@ public class EnemyPhase : GameState
             }
             if (targets.Count == 0)
             {
-                roundManager.currentDungeon.PostponeCard(card);
                 return;
             }
             Monster target = targets[Random.Range(0, targets.Count)];

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class DungeonData
 {
     public string name;
-    public List<string> cards;
+    public Dictionary<string, float> cardProbabilities = new Dictionary<string, float>();
 
     public DungeonData(string name)
     {
@@ -12,16 +12,28 @@ public class DungeonData
         switch (name)
         {
             case "Forest1":
-                cards = new List<string> 
-                    { "Pass", "Pass", "Pass", "Fireball", "Pass", "Zaple", "Pass", "Fireball", "Owisp", "Heal", "Pass", "Leafree", "Borble" };
+                cardProbabilities.Add("Pass", 50f);
+                cardProbabilities.Add("Fireball", 5f);
+                cardProbabilities.Add("Zaple", 10f);
+                cardProbabilities.Add("Owisp", 10f);
+                cardProbabilities.Add("Heal", 5f);
+                cardProbabilities.Add("Slimy", 10f);
                 break;
             case "Forest2":
-                cards = new List<string> 
-                    { "Pass", "Pass", "Pass", "Fireball", "Zaple", "Pass", "Owisp", "Fireball", "Pass", "Leafree", "Borble", "Pass", "Fireball", "Borble" };
+                cardProbabilities.Add("Pass", 50f);
+                cardProbabilities.Add("Fireball", 5f);
+                cardProbabilities.Add("Zaple", 10f);
+                cardProbabilities.Add("Owisp", 5f);
+                cardProbabilities.Add("Heal", 10f);
+                cardProbabilities.Add("Slimy", 10f);
                 break;
             case "Forest3":
-                cards = new List<string>
-                    { "Pass", "Pass", "Pass", "Fireball", "Zaple", "Pass", "Owisp", "Heal", "Fireball", "Pass", "Leafree", "Borble", "Pass", "Fireball", "Borble" };
+                cardProbabilities.Add("Pass", 40f);
+                cardProbabilities.Add("Fireball", 10f);
+                cardProbabilities.Add("Zaple", 10f);
+                cardProbabilities.Add("Owisp", 10f);
+                cardProbabilities.Add("Heal", 10f);
+                cardProbabilities.Add("Slimy", 10f);
                 break;
         }
     }
