@@ -4,7 +4,7 @@ using UnityEngine;
 public class Dungeon
 {
     private string name;
-    private Dictionary<string, float> cardProbabilities = new Dictionary<string, float>();
+    private Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
 
     public Dungeon(string name, int roundNumber)
     {
@@ -14,7 +14,7 @@ public class Dungeon
 
     public Card DrawCard()
     {
-        float totalProbability = 0f;
+        int totalProbability = 0;
 
         foreach (var probability in cardProbabilities.Values)
         {

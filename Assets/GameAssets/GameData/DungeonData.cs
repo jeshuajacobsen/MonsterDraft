@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class DungeonData
 {
     public string name;
-    public Dictionary<string, float> cardProbabilities = new Dictionary<string, float>();
+    public Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
 
     public DungeonData(string name)
     {
@@ -12,28 +12,44 @@ public class DungeonData
         switch (name)
         {
             case "Forest1":
-                cardProbabilities.Add("Pass", 50f);
-                cardProbabilities.Add("Fireball", 5f);
-                cardProbabilities.Add("Zaple", 10f);
-                cardProbabilities.Add("Owisp", 10f);
-                cardProbabilities.Add("Heal", 5f);
-                cardProbabilities.Add("Slimy", 10f);
+                cardProbabilities.Add("Pass", 50);
+                cardProbabilities.Add("Fireball", 5);
+                cardProbabilities.Add("Zaple", 20);
+                cardProbabilities.Add("Owisp", 5);
+                cardProbabilities.Add("Heal", 5);
+                cardProbabilities.Add("Slimy", 20);
                 break;
             case "Forest2":
-                cardProbabilities.Add("Pass", 50f);
-                cardProbabilities.Add("Fireball", 5f);
-                cardProbabilities.Add("Zaple", 10f);
-                cardProbabilities.Add("Owisp", 5f);
-                cardProbabilities.Add("Heal", 10f);
-                cardProbabilities.Add("Slimy", 10f);
+                cardProbabilities.Add("Pass", 50);
+                cardProbabilities.Add("Fireball", 5);
+                cardProbabilities.Add("Zaple", 20);
+                cardProbabilities.Add("Owisp", 10);
+                cardProbabilities.Add("Heal", 10);
+                cardProbabilities.Add("Slimy", 20);
                 break;
             case "Forest3":
-                cardProbabilities.Add("Pass", 40f);
-                cardProbabilities.Add("Fireball", 10f);
-                cardProbabilities.Add("Zaple", 10f);
-                cardProbabilities.Add("Owisp", 10f);
-                cardProbabilities.Add("Heal", 10f);
-                cardProbabilities.Add("Slimy", 10f);
+                cardProbabilities.Add("Pass", 50);
+                cardProbabilities.Add("Fireball", 10);
+                cardProbabilities.Add("Zaple", 20);
+                cardProbabilities.Add("Owisp", 20);
+                cardProbabilities.Add("Heal", 10);
+                cardProbabilities.Add("Slimy", 20);
+                break;
+            case "Forest4":
+                cardProbabilities.Add("Pass", 40);
+                cardProbabilities.Add("Fireball", 10);
+                cardProbabilities.Add("Zaple", 20);
+                cardProbabilities.Add("Owisp", 20);
+                cardProbabilities.Add("Heal", 10);
+                cardProbabilities.Add("Slimy", 20);
+                break;
+            case "Forest5":
+                cardProbabilities.Add("Pass", 30);
+                cardProbabilities.Add("Fireball", 10);
+                cardProbabilities.Add("Zaple", 20);
+                cardProbabilities.Add("Owisp", 20);
+                cardProbabilities.Add("Heal", 10);
+                cardProbabilities.Add("Slimy", 20);
                 break;
         }
     }

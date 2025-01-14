@@ -32,6 +32,12 @@ public class Monster : MonoBehaviour
             {
                 RoundManager.instance.Experience += this.experienceGiven;
                 tileOn.monster = null;
+                if (IsOnInfoButton)
+                {
+                    RoundManager.instance.largeMonsterView1.gameObject.SetActive(false);
+                    RoundManager.instance.largeMonsterView2.gameObject.SetActive(false);
+                    RoundManager.instance.largeMonsterView3.gameObject.SetActive(false);
+                }
                 Destroy(gameObject);
             }
         }

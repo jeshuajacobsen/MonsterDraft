@@ -5,6 +5,8 @@ public class EnemyPhase : GameState
 {
     public EnemyPhase(RoundManager roundManager) : base(roundManager) { }
 
+    static int StartPadding = 2;
+
     public override void EnterState()
     {
         Debug.Log("Entering Enemy Phase");
@@ -38,6 +40,11 @@ public class EnemyPhase : GameState
             }
         }
 
+        if (StartPadding > 0)
+        {
+            StartPadding--;
+            return;
+        }
         Card card = roundManager.currentDungeon.DrawCard();
         if (card != null && card is MonsterCard)
         {

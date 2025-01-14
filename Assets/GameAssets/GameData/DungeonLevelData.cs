@@ -11,7 +11,7 @@ public class DungeonLevelData
         switch (name)
         {
             case "Forest":
-                dungeons = new List<string> { "Forest1", "Forest2", "Forest3" };
+                dungeons = new List<string> { "Forest1", "Forest2", "Forest3", "Forest4", "Forest5" };
                 break;
             case "Cave":
                 dungeons = new List<string> { "Cave1", "Cave2", "Cave3" };
