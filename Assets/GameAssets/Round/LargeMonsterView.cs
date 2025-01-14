@@ -8,6 +8,7 @@ public class LargeMonsterView : MonoBehaviour
 {
     public Camera mainCamera;
 
+    public Monster monster; 
     void Start()
     {
         
@@ -19,8 +20,9 @@ public class LargeMonsterView : MonoBehaviour
         
     }
 
-    public void SetMonster(Monster monster, Vector2 pointerPosition)
+    public void SetMonster(Monster monster, Vector2 pointerPosition, bool move = true)
     {
+        this.monster = monster;
         // Basic UI updates
         transform.Find("MonsterName").GetComponent<TextMeshProUGUI>().text = monster.name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(monster.name);
@@ -47,13 +49,18 @@ public class LargeMonsterView : MonoBehaviour
         transform.Find("SkillsPanel/Skill2DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + monster.skill2.Damage;
 
         // Decide left vs. right alignment purely in 2D
-        if (pointerPosition.x < 150f)
-        {
-            AlignLeft(pointerPosition);
-        }
-        else
-        {
-            AlignRight(pointerPosition);
+        if (move){
+            if (pointerPosition.x < 150f)
+            {
+                AlignLeft(pointerPosition);
+            }
+            else
+            {
+                AlignRight(pointerPosition);
+            }
+        } else {
+            RectTransform rt = GetComponent<RectTransform>();
+            rt.anchoredPosition = pointerPosition;
         }
     }
 

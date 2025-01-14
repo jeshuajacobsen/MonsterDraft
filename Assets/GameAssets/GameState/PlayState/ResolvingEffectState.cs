@@ -44,6 +44,17 @@ public class ResolvingEffectState : CardPlayState
                 }
                 mainPhase.playedActionCardStep++;
                 
+            } else if (effectParts[0] == "Mana")
+            {
+                int amount = int.Parse(effectParts[1]);
+                if (effectParts[2] == "Per")
+                {
+                    if (effectParts[3] == "Ally")
+                    {
+                        amount *= RoundManager.instance.GetAllAllies().Count;
+                        RoundManager.instance.Mana += amount;
+                    }
+                }
             } else if (effectParts[0] == "Draw")
             {
                 if (effectParts[1] == "x")
@@ -190,9 +201,27 @@ public class ResolvingEffectState : CardPlayState
                 {
                     duration = int.Parse(effectParts[5]);
                 }
-                buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
                 
-                mainPhase.selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
+                if (effectParts[6] == "All")
+                {
+                    if (effectParts[7] == "Ally")
+                    {
+                        foreach (var ally in RoundManager.instance.GetAllAllies())
+                        {
+                            ally.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                        }
+                    } else if (effectParts[7] == "Enemy")
+                    {
+                        foreach (var enemy in RoundManager.instance.GetAllEnemies())
+                        {
+                            enemy.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                        }
+                    }
+                } else {
+                    mainPhase.selectedTile.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                }
+                
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Save")
             {

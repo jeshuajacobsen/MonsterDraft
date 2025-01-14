@@ -34,8 +34,8 @@ public class BaseActionData
             case "Shield":
                 Requirements.Add("Target Ally");
                 Effects.Add("Target Ally");
-                Effects.Add("Buff Defense Plus 3 Duration 3");
-                Description = "Gives an ally +3 defense for 3 turns.";
+                Effects.Add("Buff Defense Plus 6 Duration 3");
+                Description = "Gives an ally +6 defense for 3 turns.";
                 Cost = 3;
                 break;
             case "Preparation":
@@ -105,6 +105,12 @@ public class BaseActionData
                 Effects.Add("Gain Card Costing Selected Cost Plus 4");
                 Description = "Trash a card. Gain a card costing up to 4 more.";
                 Cost = 5;
+                break;
+            case "Inspiration":
+                Effects.Add("Mana 2 Per Ally Monster");
+                Effects.Add("Buff Attack Plus 3 Duration 1 All Ally");
+                Description = "Gain 2 mana for each Ally monster in play. All Ally monsters gain +3 attack this turn.";
+                Cost = 12;
                 break;
             default:
                 Effects.Add("No effect");

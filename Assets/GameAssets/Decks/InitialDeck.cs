@@ -29,5 +29,6 @@ public class InitialDeck : Deck
         //cards.Add(new ActionCard("Vault"));
         //cards.Add(new ActionCard("Bank"));
         //cards.Add(new ActionCard("Development"));
+        cards.Add(new ActionCard("Inspiration"));
     }
 }

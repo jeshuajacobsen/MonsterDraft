@@ -35,6 +35,34 @@ public class MainPhase : GameState
         currentState = new IdleState(this);
         currentState.EnterState();
         MoveMonstersForward();
+        DecrementBuffDurations();
+    }
+
+    public void DecrementBuffDurations()
+    {
+        for (int row = 1; row <= 3; row++)
+        {
+            for (int tile = 1; tile <= 7; tile++)
+            {
+                Tile tileComponent = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}").GetComponent<Tile>();
+                if (tileComponent.monster != null)
+                {
+                    List<MonsterBuff> buffsToRemove = new List<MonsterBuff>();
+                    foreach (var buff in tileComponent.monster.buffs)
+                    {
+                        buff.duration--;
+                        if (buff.duration <= 0)
+                        {
+                            buffsToRemove.Add(buff);
+                        }
+                    }
+                    foreach (var buff in buffsToRemove)
+                    {
+                        tileComponent.monster.buffs.Remove(buff);
+                    }
+                }
+            }
+        }
     }
 
     public void MoveMonstersForward()

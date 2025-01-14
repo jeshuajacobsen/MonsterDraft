@@ -4739,6 +4739,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 4646615e0dba5774592d21a98afe7f54, type: 3}
   - name: Copper
     sprite: {fileID: 21300000, guid: cf08bad84caa11c47a3a6b0bb0f75ace, type: 3}
+  - name: Development
+    sprite: {fileID: -6715298244629837518, guid: 7cb8f08325ceea34bb1435a32efc56b3, type: 3}
   - name: EnemyBackground
     sprite: {fileID: 21300000, guid: 1a0a71cfdfcdca241aa6051d3d0d653b, type: 3}
   - name: Fireball
@@ -4755,6 +4757,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 47430303783aa90459716d181bc79404, type: 3}
   - name: InfoButton
     sprite: {fileID: 21300000, guid: f5b5669d6b704ae41bc0d59145579afc, type: 3}
+  - name: Inspiration
+    sprite: {fileID: 3284758457489151648, guid: 09ca6c086d4a1d840bace3941b721119, type: 3}
   - name: Leafear
     sprite: {fileID: 5594525134645161022, guid: e66d314aed6d6984e88696081c9ab334, type: 3}
   - name: Leafree
@@ -4821,8 +4825,6 @@ MonoBehaviour:
     sprite: {fileID: -5070116007335442539, guid: 73b0b65934d8adb4aa7a5f5d4c29b521, type: 3}
   - name: Zaple
     sprite: {fileID: 21300000, guid: 630b029cac45527438da344f3f6b2c9e, type: 3}
-  - name: Development
-    sprite: {fileID: -6715298244629837518, guid: 7cb8f08325ceea34bb1435a32efc56b3, type: 3}
 --- !u!4 &1184803088
 Transform:
   m_ObjectHideFlags: 0

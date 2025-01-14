@@ -629,4 +629,38 @@ public class RoundManager : MonoBehaviour
         }
         return null;
     }
+
+    public List<Monster> GetAllAllies()
+    {
+        List<Monster> allies = new List<Monster>();
+        foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
+        {
+            foreach (Transform tileTransform in row.transform)
+            {
+                Tile tile = tileTransform.GetComponent<Tile>();
+                if (tile != null && tile.monster != null && tile.monster.team == "Player")
+                {
+                    allies.Add(tile.monster);
+                }
+            }
+        }
+        return allies;
+    }
+
+    public List<Monster> GetAllEnemies()
+    {
+        List<Monster> enemies = new List<Monster>();
+        foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
+        {
+            foreach (Transform tileTransform in row.transform)
+            {
+                Tile tile = tileTransform.GetComponent<Tile>();
+                if (tile != null && tile.monster != null && tile.monster.team == "Enemy")
+                {
+                    enemies.Add(tile.monster);
+                }
+            }
+        }
+        return enemies;
+    }
 }

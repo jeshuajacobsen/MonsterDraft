@@ -32,7 +32,7 @@ public class Monster : MonoBehaviour
             {
                 RoundManager.instance.Experience += this.experienceGiven;
                 tileOn.monster = null;
-                if (IsOnInfoButton)
+                if (RoundManager.instance.largeMonsterView1.monster == this)
                 {
                     RoundManager.instance.largeMonsterView1.gameObject.SetActive(false);
                     RoundManager.instance.largeMonsterView2.gameObject.SetActive(false);
@@ -43,7 +43,24 @@ public class Monster : MonoBehaviour
         }
     }
     public int MaxHealth { get; set; }
-    public int Attack { get; set; }
+    private int _attack;
+    public int Attack { 
+        get{
+            int attack = 0;
+            foreach (MonsterBuff buff in buffs)
+            {
+                if (buff.type == "Attack")
+                {
+                    attack += buff.amount;
+                }
+            }
+            return _attack + attack;
+        } 
+        set
+        {
+            _attack = value;
+        }
+    }
 
     private int _defense;
     public int Defense { 
