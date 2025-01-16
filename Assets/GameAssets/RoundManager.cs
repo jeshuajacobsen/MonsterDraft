@@ -12,6 +12,7 @@ public class RoundManager : MonoBehaviour
     public GameObject handContent;
     public GameObject DungeonPanel;
     public Monster MonsterPrefab;
+    public FloatyNumber floatyNumberPrefab;
 
     public GameState gameState;
 
@@ -331,7 +332,9 @@ public class RoundManager : MonoBehaviour
     public void UseSkill(Monster monster, SkillData skill, Tile tile)
     {
         Mana -= skill.ManaCost;
-        tile.monster.Health -= DamageDealtToMonster(tile.monster, monster, skill);
+        int damage = DamageDealtToMonster(tile.monster, monster, skill);
+        tile.monster.Health -= damage;
+        AddFloatyNumber(damage, tile, true);
         monster.actionsUsedThisTurn.Add(skill.name);
     }
 
@@ -704,5 +707,11 @@ public class RoundManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void AddFloatyNumber(int number, Tile target, bool isDamage)
+    {
+        FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, target.transform);
+        floatyNumber.InitValues(number, target.transform.position, isDamage);
     }
 }

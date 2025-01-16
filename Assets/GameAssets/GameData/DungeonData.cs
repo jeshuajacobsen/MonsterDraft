@@ -5,6 +5,7 @@ public class DungeonData
 {
     public string name;
     public Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
+    public string guaranteedMonster;
 
     public DungeonData(string name)
     {
@@ -18,6 +19,7 @@ public class DungeonData
                 cardProbabilities.Add("Owisp", 5);
                 cardProbabilities.Add("Heal", 5);
                 cardProbabilities.Add("Slimy", 20);
+                guaranteedMonster = "Slimy";
                 break;
             case "Forest2":
                 cardProbabilities.Add("Pass", 50);
@@ -26,6 +28,7 @@ public class DungeonData
                 cardProbabilities.Add("Owisp", 10);
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
+                guaranteedMonster = "Slimy";
                 break;
             case "Forest3":
                 cardProbabilities.Add("Pass", 50);
@@ -34,6 +37,7 @@ public class DungeonData
                 cardProbabilities.Add("Owisp", 20);
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
+                guaranteedMonster = "Slimy";
                 break;
             case "Forest4":
                 cardProbabilities.Add("Pass", 40);
@@ -42,6 +46,7 @@ public class DungeonData
                 cardProbabilities.Add("Owisp", 20);
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
+                guaranteedMonster = "Slimy";
                 break;
             case "Forest5":
                 cardProbabilities.Add("Pass", 30);
@@ -50,6 +55,7 @@ public class DungeonData
                 cardProbabilities.Add("Owisp", 20);
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
+                guaranteedMonster = "Slimy";
                 break;
         }
     }

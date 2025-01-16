@@ -120,6 +120,7 @@ public class EnemyPhase : GameState
                     {
                         visualEffect.reachedTarget.AddListener(() => {
                             target.Health -= int.Parse(effectParts[1]);
+                            roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                         });
                     } else {
                         target.Health -= int.Parse(effectParts[1]);

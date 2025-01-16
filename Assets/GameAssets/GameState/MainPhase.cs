@@ -304,6 +304,7 @@ public class MainPhase : GameState
                     {
                         visualEffect.reachedTarget.AddListener(() => {
                             target.monster.Health -= int.Parse(effectParts[1]);
+                            roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target, true);
                         });
                     } else {
                         target.monster.Health -= int.Parse(effectParts[1]);

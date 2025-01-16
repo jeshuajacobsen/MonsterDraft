@@ -5,11 +5,14 @@ public class Dungeon
 {
     private string name;
     private Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
+    private int guaranteedMonsterTimer = 4;
+    private string guaranteedMonster;
 
     public Dungeon(string name, int roundNumber)
     {
         this.name = name;
         cardProbabilities = GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).cardProbabilities;
+        guaranteedMonster = GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).guaranteedMonster;
     }
 
     public Card DrawCard()
@@ -32,6 +35,15 @@ public class Dungeon
                 string cardName = kvp.Key;
                 string type = GameManager.instance.gameData.GetCardType(cardName);
                 Card card = null;
+                guaranteedMonsterTimer--;
+                if (guaranteedMonsterTimer == 0)
+                {
+                    guaranteedMonsterTimer = 4;
+                    if (type != "Monster")
+                    {
+                        return new MonsterCard(guaranteedMonster);
+                    }
+                }
 
                 switch (type)
                 {
