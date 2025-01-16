@@ -108,7 +108,7 @@ public class Monster : MonoBehaviour
 
     void Update()
     {
-        if (team == "Player" && !string.IsNullOrEmpty(evolvesTo) && RoundManager.instance.Experience >= experienceRequired)
+        if (team == "Ally" && !string.IsNullOrEmpty(evolvesTo) && RoundManager.instance.Experience >= experienceRequired)
         {
             transform.Find("EvolveButton").gameObject.SetActive(true);
         } else {

@@ -12,7 +12,7 @@ public class DungeonData
         switch (name)
         {
             case "Forest1":
-                cardProbabilities.Add("Pass", 50);
+                cardProbabilities.Add("Pass", 45);
                 cardProbabilities.Add("Fireball", 5);
                 cardProbabilities.Add("Zaple", 20);
                 cardProbabilities.Add("Owisp", 5);

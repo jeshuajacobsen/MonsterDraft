@@ -78,6 +78,10 @@ public class RoundManager : MonoBehaviour
     public List<Card> cardsGainedThisRound = new List<Card>();
     public string dungeonName;
 
+    public List<VisualEffect> effects;
+    public GameObject fireballPanel;
+    public List<VisualEffect> visualEffects = new List<VisualEffect>();
+
     void Awake()
     {
 
@@ -99,6 +103,11 @@ public class RoundManager : MonoBehaviour
 
     public void Update()
     {
+        foreach (var visualEffect in visualEffects)
+        {
+            visualEffect.Update();
+        }
+        visualEffects.RemoveAll(effect => effect.done);
         try
         {
             gameState.UpdateState();
@@ -600,7 +609,7 @@ public class RoundManager : MonoBehaviour
             }
             foreach (Tile targetTile in targetTiles)
             {
-                if (targetTile != null && targetTile.monster != null && targetTile.monster.team == "Player")
+                if (targetTile != null && targetTile.monster != null && targetTile.monster.team == "Ally")
                 {
                     validTargets.Add(targetTile);
                 }
@@ -638,7 +647,7 @@ public class RoundManager : MonoBehaviour
             foreach (Transform tileTransform in row.transform)
             {
                 Tile tile = tileTransform.GetComponent<Tile>();
-                if (tile != null && tile.monster != null && tile.monster.team == "Player")
+                if (tile != null && tile.monster != null && tile.monster.team == "Ally")
                 {
                     allies.Add(tile.monster);
                 }
@@ -662,5 +671,38 @@ public class RoundManager : MonoBehaviour
             }
         }
         return enemies;
+    }
+
+    public VisualEffect AddVisualEffect(string effectName, Tile target)
+    {
+        if (effectName == "Fireball")
+        {
+            if (target.monster.team == "Enemy")
+            {
+                VisualEffect effect = new VisualEffect();
+                effect.InitValues(RoundManager.instance.fireballPanel, 
+                                  new Vector2(-1700, Screen.height / 2 + 600), 
+                                  target);
+                RoundManager.instance.fireballPanel.transform.rotation = Quaternion.Euler(0, 0, 90f);
+                visualEffects.Add(effect);
+                effect.reachedTarget.AddListener(() => {
+                    effect.reachedTarget.RemoveAllListeners();
+                });
+                return effect;
+            } else
+            {
+                VisualEffect effect = new VisualEffect();
+                effect.InitValues(RoundManager.instance.fireballPanel, 
+                                  new Vector2(1700, Screen.height / 2  + 600), 
+                                  target);
+                RoundManager.instance.fireballPanel.transform.rotation = Quaternion.Euler(0, 180f, 90f);
+                visualEffects.Add(effect);
+                effect.reachedTarget.AddListener(() => {
+                    effect.reachedTarget.RemoveAllListeners();
+                });
+                return effect;
+            }
+        }
+        return null;
     }
 }

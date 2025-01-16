@@ -20,6 +20,7 @@ public class BaseActionData
             case "Fireball":
                 Requirements.Add("Target Enemy");
                 Effects.Add("Target Enemy");
+                Effects.Add("Animate Fireball");
                 Effects.Add("Damage 3");
                 Description = "Deals 3 damage to an enemy.";
                 Cost = 2;

@@ -72,7 +72,7 @@ public class MainPhase : GameState
             for (int i = 7; i >= 1; i--)
             {
                 Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
-                if (tile.monster != null && tile.monster.team == "Player" && RoundManager.instance.CanMoveMonster(tile.monster))
+                if (tile.monster != null && tile.monster.team == "Ally" && RoundManager.instance.CanMoveMonster(tile.monster))
                 {
                     RoundManager.instance.MoveMonster(tile.monster);
                 }
@@ -82,7 +82,6 @@ public class MainPhase : GameState
 
     public override void UpdateState()
     {
-
         currentState.UpdateState();
     }
 
@@ -240,7 +239,7 @@ public class MainPhase : GameState
                             if (tileTransform != null)
                             {
                                 Tile tileComponent = tileTransform.GetComponent<Tile>();
-                                if (tileComponent.monster != null && tileComponent.monster.team == "Player")
+                                if (tileComponent.monster != null && tileComponent.monster.team == "Ally")
                                 {
                                     return true;
                                 }
@@ -284,11 +283,12 @@ public class MainPhase : GameState
 
     public void PlayCardWithTarget(SmallCardView cardView, Tile target)
     {
+        VisualEffect visualEffect = null;
         if (cardView.card is MonsterCard)
         {
             MonsterCard monsterCard = (MonsterCard)cardView.card;
             Monster newMonster = Instantiate(roundManager.MonsterPrefab, target.transform);
-            newMonster.InitValues(monsterCard, target, "Player");
+            newMonster.InitValues(monsterCard, target, "Ally");
             target.monster = newMonster;
             roundManager.Mana -= monsterCard.ManaCost;
         }
@@ -300,8 +300,14 @@ public class MainPhase : GameState
                 string[] effectParts = actionCard.effects[i].Split(' ');
                 if (effectParts[0] == "Damage")
                 {
-                    int damage = int.Parse(effectParts[1]);
-                    target.monster.Health -= damage;
+                    if (visualEffect != null)
+                    {
+                        visualEffect.reachedTarget.AddListener(() => {
+                            target.monster.Health -= int.Parse(effectParts[1]);
+                        });
+                    } else {
+                        target.monster.Health -= int.Parse(effectParts[1]);
+                    }
                     playedActionCardStep++;
                 } else if (effectParts[0] == "Heal")
                 {
@@ -329,6 +335,13 @@ public class MainPhase : GameState
                     
                     target.monster.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                     playedActionCardStep++;
+                } else if (effectParts[0] == "Animate")
+                {
+                    if (effectParts[1] == "Fireball")
+                    {
+                        visualEffect = RoundManager.instance.AddVisualEffect("Fireball", target);
+                        playedActionCardStep++;
+                    }
                 }
             }
             FinishPlay();

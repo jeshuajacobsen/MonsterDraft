@@ -95,7 +95,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
                             if (tileTransform != null)
                             {
                                 Tile tileComponent = tileTransform.GetComponent<Tile>();
-                                if (tileComponent.monster != null && tileComponent.monster.team == "Player")
+                                if (tileComponent.monster != null && tileComponent.monster.team == "Ally")
                                 {
                                     validTargets.Add(tileComponent);
                                     tileComponent.GetComponent<Image>().color = new Color32(0x3C, 0xFF, 0x00, 0xFF);

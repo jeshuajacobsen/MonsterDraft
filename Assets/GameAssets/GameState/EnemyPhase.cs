@@ -80,7 +80,7 @@ public class EnemyPhase : GameState
                         for (int i = 1; i <= 7; i++)
                         {
                             Tile tile = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
-                            if (tile.monster != null && tile.monster.team == "Player")
+                            if (tile.monster != null && tile.monster.team == "Ally")
                             {
                                 targets.Add(tile.monster);
                             }
@@ -107,14 +107,23 @@ public class EnemyPhase : GameState
             {
                 return;
             }
+
+            int damageDealt = 0;
             Monster target = targets[Random.Range(0, targets.Count)];
+            VisualEffect visualEffect = null;
             for (int i = 1; i < actionCard.effects.Count; i++)
             {
                 string[] effectParts = actionCard.effects[i].Split(' ');
                 if (effectParts[0] == "Damage")
                 {
-                    int damage = int.Parse(effectParts[1]);
-                    target.Health -= damage;
+                    if (visualEffect != null)
+                    {
+                        visualEffect.reachedTarget.AddListener(() => {
+                            target.Health -= int.Parse(effectParts[1]);
+                        });
+                    } else {
+                        target.Health -= int.Parse(effectParts[1]);
+                    }
                 } else if (effectParts[0] == "Heal")
                 {
                     int heal = int.Parse(effectParts[1]);
@@ -139,6 +148,12 @@ public class EnemyPhase : GameState
                     buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
                     
                     target.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
+                } else if (effectParts[0] == "Animate")
+                {
+                    if (effectParts[1] == "Fireball")
+                    {
+                        visualEffect = RoundManager.instance.AddVisualEffect("Fireball", target.tileOn);
+                    }
                 }
             }
         }
