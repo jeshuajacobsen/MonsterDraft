@@ -5,7 +5,7 @@ public class Dungeon
 {
     private string name;
     private Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
-    private int guaranteedMonsterTimer = 4;
+    private int guaranteedMonsterTimer = 5;
     private string guaranteedMonster;
 
     public Dungeon(string name, int roundNumber)

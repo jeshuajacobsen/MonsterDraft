@@ -203,7 +203,7 @@ public class ResolvingEffectState : CardPlayState
                 }
                 
                 buffDescription = buffValue > 0 ? "+" : "-" + buffValue + " " + buffType;
-                if (effectParts[6] == "All")
+                if (effectParts.Length > 6 && effectParts[6] == "All")
                 {
                     if (effectParts[7] == "Ally")
                     {

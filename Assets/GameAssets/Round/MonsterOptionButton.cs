@@ -43,7 +43,7 @@ public class MonsterOptionButton : MonoBehaviour
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
             if (RoundManager.instance.Mana >= monster.skill1.ManaCost && monster.actionsUsedThisTurn.Count == 0)
             {
-                if (RoundManager.instance.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7)
+                if (RoundManager.instance.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
                 {
                     transform.GetComponent<Button>().interactable = true;
                 }
@@ -60,7 +60,7 @@ public class MonsterOptionButton : MonoBehaviour
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
             if (RoundManager.instance.Mana >= monster.skill2.ManaCost && monster.actionsUsedThisTurn.Count == 0)
             {
-                if (RoundManager.instance.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7)
+                if (RoundManager.instance.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
                 {
                     transform.GetComponent<Button>().interactable = true;
                 }

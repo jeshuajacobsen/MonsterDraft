@@ -59,7 +59,28 @@ public class SelectingSkillTargetState : CardPlayState
             if (tileIndex + skill.Range > 7 && isInEnemyBase)
             {
                 RoundManager.instance.UseSkillOnBase(monster, skill);
-                mainPhase.SetState(new IdleState(mainPhase));
+                if (skill.effects.Count > 0)
+                {
+                    mainPhase.SetState(new ResolvingSkillEffectState(mainPhase, skill, monster, null));
+                }
+                else
+                {
+                    mainPhase.SetState(new IdleState(mainPhase));
+                }
+                return;
+            }
+
+            if (skill.attacksAllInRange)
+            {
+                RoundManager.instance.UseAreaSkill(monster, skill, validTargets);
+                if (skill.effects.Count > 0)
+                {
+                    mainPhase.SetState(new ResolvingSkillEffectState(mainPhase, skill, monster, validTargets));
+                }
+                else
+                {
+                    mainPhase.SetState(new IdleState(mainPhase));
+                }
                 return;
             }
 
@@ -74,7 +95,14 @@ public class SelectingSkillTargetState : CardPlayState
                 if (isInTile)
                 {
                     RoundManager.instance.UseSkill(monster, skill, tile);
-                    mainPhase.SetState(new IdleState(mainPhase));
+                    if (skill.effects.Count > 0)
+                    {
+                        mainPhase.SetState(new ResolvingSkillEffectState(mainPhase, skill, monster, new List<Tile>{tile}));
+                    }
+                    else
+                    {
+                        mainPhase.SetState(new IdleState(mainPhase));
+                    }
                     return;
                 }
             }
@@ -93,6 +121,10 @@ public class SelectingSkillTargetState : CardPlayState
    public void MarkValidTargets()
     {
         validTargets = RoundManager.instance.GetValidTargets(monster, skill);
+        if (skill.directions == "")
+        {
+            validTargets.Add(monster.tileOn);
+        }
         int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
         if (tileIndex + skill.Range > 7) 
         {

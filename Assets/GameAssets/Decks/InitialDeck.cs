@@ -15,8 +15,8 @@ public class InitialDeck : Deck
         cards.Add(new TreasureCard("Copper"));
         cards.Add(new TreasureCard("Mana Vial"));
         cards.Add(new TreasureCard("Mana Vial"));
-        cards.Add(new TreasureCard("Mana Vial"));
-        cards.Add(new TreasureCard("Mana Vial"));
+        cards.Add(new TreasureCard("Mana Gem"));
+        cards.Add(new TreasureCard("Mana Gem"));
         cards.Add(new MonsterCard("Zaple"));
         //cards.Add(new MonsterCard("Zaple"));
         cards.Add(new ActionCard("Fireball"));
@@ -29,6 +29,6 @@ public class InitialDeck : Deck
         //cards.Add(new ActionCard("Vault"));
         //cards.Add(new ActionCard("Bank"));
         //cards.Add(new ActionCard("Development"));
-        cards.Add(new ActionCard("Inspiration"));
+        cards.Add(new MonsterCard("Borble"));
     }
 }

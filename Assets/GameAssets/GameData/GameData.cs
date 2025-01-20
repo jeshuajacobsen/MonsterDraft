@@ -70,14 +70,42 @@ public class GameData
 
         _skills = new Dictionary<string, SkillData>
         {
+            //Basic
             { "Zap", new SkillData("Zap") },
             { "Bubble", new SkillData("Bubble") },
             { "Leaf", new SkillData("Leaf") },
             { "Spark", new SkillData("Spark") },
+            { "Wrap", new SkillData("Wrap") },
+            { "Goo", new SkillData("Goo") },
+            { "Chill", new SkillData("Chill") },
+            { "Bite", new SkillData("Bite") },
+
+            //Intermidiate
             { "Shock", new SkillData("Shock") },
             { "Burn", new SkillData("Burn") },
             { "Wave", new SkillData("Wave") },
-            { "Growth", new SkillData("Growth") }
+            { "Growth", new SkillData("Growth") },
+            { "Poison Sting", new SkillData("Poison Sting") },
+            { "Slime Ball", new SkillData("Slime Ball")},
+            { "Ice Shard", new SkillData("Ice Shard") },
+            { "Drain", new SkillData("Drain") },
+
+            //Advanced
+            { "Lightning", new SkillData("Lightning") },
+            { "Heat Wave", new SkillData("Heat Wave") },
+            { "Solar Beam", new SkillData("Solar Beam") },
+            { "Water Jet", new SkillData("Water Jet") },
+            { "Multiply", new SkillData("Multiply") },
+            { "Freeze", new SkillData("Freeze") },
+            { "Nightmare", new SkillData("NightMare") },
+            
+            //Expert
+            { "Thunder Bolt", new SkillData("Thunder Bolt") },
+            { "Inferno", new SkillData("Inferno") },
+            { "Poison Ivy", new SkillData("Poison Ivy") },
+            { "Aqua Blast", new SkillData("Aqua Blast") },
+            { "Slime Storm", new SkillData("Slime Storm") },
+            { "Blizzard", new SkillData("Blizzard") }
         };
 
         _dungeonData = new Dictionary<string, DungeonLevelData>

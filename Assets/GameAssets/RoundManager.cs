@@ -9,6 +9,7 @@ public class RoundManager : MonoBehaviour
     public static RoundManager instance;
     public GameObject roundPanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
+    [SerializeField] private SkillVisualEffect SkillVisualEffectPrefab;
     public GameObject handContent;
     public GameObject DungeonPanel;
     public Monster MonsterPrefab;
@@ -333,14 +334,34 @@ public class RoundManager : MonoBehaviour
     {
         Mana -= skill.ManaCost;
         int damage = DamageDealtToMonster(tile.monster, monster, skill);
-        tile.monster.Health -= damage;
-        AddFloatyNumber(damage, tile, true);
+        SkillVisualEffect skillEffect = Instantiate(SkillVisualEffectPrefab, roundPanel.transform);
+        skillEffect.InitValues(monster.tileOn.transform.position, tile.transform.position, skill.attackVisualEffect);
+ 
+        skillEffect.reachedTarget.AddListener(() => {
+            skillEffect.reachedTarget.RemoveAllListeners();
+            tile.monster.Health -= damage;
+            AddFloatyNumber(damage, tile, true);
+        });
+        
+        monster.actionsUsedThisTurn.Add(skill.name);
+    }
+
+    public void UseAreaSkill(Monster monster, SkillData skill, List<Tile> targets)
+    {
+        Mana -= skill.ManaCost;
+        foreach (Tile target in targets)
+        {
+            int damage = DamageDealtToMonster(target.monster, monster, skill);
+            target.monster.Health -= damage;
+            AddFloatyNumber(damage, target, true);
+        }
         monster.actionsUsedThisTurn.Add(skill.name);
     }
 
     public void UseSkillOnBase(Monster monster, SkillData skill)
     {
         EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
+        AddFloatyNumberOverBase(skill.Damage, true, true);
         monster.actionsUsedThisTurn.Add(skill.name);
 
         if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
@@ -381,6 +402,7 @@ public class RoundManager : MonoBehaviour
             if (currentTileNumber - i < 1)
             {
                 PlayerBase.GetComponent<PlayerBase>().Health -= skill.Damage;
+                AddFloatyNumberOverBase(skill.Damage, false, true);
                 monster.actionsUsedThisTurn.Add(skill.name);
                 if (PlayerBase.GetComponent<PlayerBase>().Health <= 0)
                 {
@@ -391,7 +413,9 @@ public class RoundManager : MonoBehaviour
             else if (validTargets.Count > 0)
             {
                 Tile target = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];
-                target.monster.Health -= DamageDealtToMonster(target.monster, monster, skill);
+                int damage = DamageDealtToMonster(target.monster, monster, skill);
+                target.monster.Health -= damage;
+                AddFloatyNumber(damage, target, true);
                 monster.actionsUsedThisTurn.Add(skill.name);
                 break;
             }
@@ -713,5 +737,11 @@ public class RoundManager : MonoBehaviour
     {
         FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, target.transform);
         floatyNumber.InitValues(number, target.transform.position, isDamage);
+    }
+
+    public void AddFloatyNumberOverBase(int number, bool overEnemyBase, bool isDamage)
+    {
+        FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, overEnemyBase ? EnemyBase.transform : PlayerBase.transform);
+        floatyNumber.InitValues(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
     }
 }

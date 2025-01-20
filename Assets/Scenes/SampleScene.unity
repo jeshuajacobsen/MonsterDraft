@@ -580,6 +580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roundPanel: {fileID: 1603265254}
   SmallCardViewPrefab: {fileID: 7487615780272366053, guid: 5a74fd9e6f218f3438ef5f2888dea81c, type: 3}
+  SkillVisualEffectPrefab: {fileID: 4848713655441817405, guid: 0414cb7bbe543c044ab33cdba18a1c50, type: 3}
   handContent: {fileID: 751029101}
   DungeonPanel: {fileID: 777580240}
   MonsterPrefab: {fileID: 6279707494984726908, guid: 0402c08ef8937b7449d5fd014fea9f3f, type: 3}
@@ -2101,7 +2102,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476651076}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
@@ -2114,7 +2115,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476651076}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
