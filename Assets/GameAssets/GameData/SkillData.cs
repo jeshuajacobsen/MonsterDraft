@@ -46,6 +46,7 @@ public class SkillData
                 Damage = 5;
                 Range = 1;
                 directions = "Forward Backward";
+                attackVisualEffect = "Fire";
                 break;
             case "Wrap":
                 ManaCost = 3;

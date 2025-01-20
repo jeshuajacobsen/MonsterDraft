@@ -116,7 +116,7 @@ public class SkillVisualEffect : MonoBehaviour
             transform.Find("Mask").GetComponent<RectTransform>().anchoredPosition = new Vector2(-distanceToTravel, 0);
 
             transform.Find("Mask/Image").GetComponent<RectTransform>().anchoredPosition = new Vector2(0,0);
-        } else if (attackVisualEffect == "Water")
+        } else
         {
             transform.Find("Animation").gameObject.SetActive(true);
             transform.Find("Mask").gameObject.SetActive(false);
@@ -127,7 +127,19 @@ public class SkillVisualEffect : MonoBehaviour
             animationTransform.localScale = new Vector3(300f / spriteRenderer.bounds.size.x, 300f / spriteRenderer.bounds.size.y, 1f);
 
             Animator animator = transform.Find("Animation").GetComponent<Animator>();
-            animator.Play("wave");
+
+            int extraRotation = 0;
+            if (attackVisualEffect == "Water")
+            {
+                animator.SetTrigger("PlayWave");
+                animator.Play("wave");
+            } else if(attackVisualEffect == "Fire")
+            {
+                animator.SetTrigger("PlayFireball");
+                animator.Play("fireball");
+                extraRotation = 90;
+            }
+
             transform.position = startPosition;
             gameObject.SetActive(true);
 
@@ -136,7 +148,9 @@ public class SkillVisualEffect : MonoBehaviour
             traveledDistance = 0f;
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            transform.rotation = Quaternion.Euler(0f, 0f, angle + extraRotation);
         }
+        spriteRenderer.sortingLayerName = "Foreground"; // Set to an appropriate layer
+        spriteRenderer.sortingOrder = 10;
     }
 }

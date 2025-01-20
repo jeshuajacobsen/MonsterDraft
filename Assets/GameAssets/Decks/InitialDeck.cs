@@ -30,5 +30,6 @@ public class InitialDeck : Deck
         //cards.Add(new ActionCard("Bank"));
         //cards.Add(new ActionCard("Development"));
         cards.Add(new MonsterCard("Borble"));
+        cards.Add(new MonsterCard("Owisp"));
     }
 }
