@@ -28,6 +28,7 @@ public class SkillVisualEffect : MonoBehaviour
     private Vector3 direction;
 
     private string attackVisualEffect;
+    private float timeout = 0;
 
     void Awake()
     {
@@ -42,18 +43,32 @@ public class SkillVisualEffect : MonoBehaviour
         if (attackVisualEffect == "Lightning")
         {
             transform.Find("Mask/Image").GetComponent<RectTransform>().position += (Vector3)(direction * step);
+            if (traveledDistance >= distanceToTravel)
+            {
+                reachedTarget.Invoke();
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            }
+        }
+        else if (attackVisualEffect == "Bite")
+        {
+            timeout -= Time.deltaTime;
+            if (timeout <= 0)
+            {
+                reachedTarget.Invoke();
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            }
         }
         else
         {
             transform.Find("Animation").GetComponent<RectTransform>().position += (Vector3)(direction * step);
-        }
-        
-
-        if (traveledDistance >= distanceToTravel)
-        {
-            reachedTarget.Invoke();
-            gameObject.SetActive(false);
-            Destroy(gameObject);
+            if (traveledDistance >= distanceToTravel)
+            {
+                reachedTarget.Invoke();
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -113,10 +128,32 @@ public class SkillVisualEffect : MonoBehaviour
             if (spriteRenderer != null)
                 spriteRenderer.flipX = true;
 
-            transform.Find("Mask").GetComponent<RectTransform>().anchoredPosition = new Vector2(-distanceToTravel, 0);
+            float halfWidth = transform.Find("Mask").GetComponent<RectTransform>().rect.width / 2;
+            transform.Find("Mask").GetComponent<RectTransform>().anchoredPosition = new Vector2(-halfWidth, 0);
 
             transform.Find("Mask/Image").GetComponent<RectTransform>().anchoredPosition = new Vector2(0,0);
-        } else
+        } 
+        else if (attackVisualEffect == "Bite") 
+        {
+            transform.Find("Animation").gameObject.SetActive(true);
+            transform.Find("Mask").gameObject.SetActive(false);
+
+            spriteRenderer = transform.Find("Animation")?.GetComponent<SpriteRenderer>();
+            RectTransform animationTransform = transform.Find("Animation").GetComponent<RectTransform>();
+            animationTransform.localScale = new Vector3(300f / spriteRenderer.bounds.size.x, 300f / spriteRenderer.bounds.size.y, 1f);
+
+            Animator animator = transform.Find("Animation").GetComponent<Animator>();
+            animator.SetTrigger("PlayBite");
+            animator.Play("bite");
+
+            transform.position = targetPosition;
+            gameObject.SetActive(true);
+
+            timeout = .5f;
+            spriteRenderer.sortingLayerName = "Foreground";
+            spriteRenderer.sortingOrder = 10;
+        } 
+        else
         {
             transform.Find("Animation").gameObject.SetActive(true);
             transform.Find("Mask").gameObject.SetActive(false);
@@ -137,7 +174,11 @@ public class SkillVisualEffect : MonoBehaviour
             {
                 animator.SetTrigger("PlayFireball");
                 animator.Play("fireball");
-                extraRotation = 90;
+                extraRotation = 50;
+            } else if (attackVisualEffect == "Leaf")
+            {
+                animator.SetTrigger("PlayLeaf");
+                animator.Play("leaf");
             }
 
             transform.position = startPosition;
@@ -150,7 +191,7 @@ public class SkillVisualEffect : MonoBehaviour
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle + extraRotation);
         }
-        spriteRenderer.sortingLayerName = "Foreground"; // Set to an appropriate layer
+        spriteRenderer.sortingLayerName = "Foreground"; 
         spriteRenderer.sortingOrder = 10;
     }
 }

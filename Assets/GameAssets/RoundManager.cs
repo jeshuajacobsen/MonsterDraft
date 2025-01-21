@@ -352,8 +352,14 @@ public class RoundManager : MonoBehaviour
         foreach (Tile target in targets)
         {
             int damage = DamageDealtToMonster(target.monster, monster, skill);
-            target.monster.Health -= damage;
-            AddFloatyNumber(damage, target, true);
+            SkillVisualEffect skillEffect = Instantiate(SkillVisualEffectPrefab, roundPanel.transform);
+            skillEffect.InitValues(monster.tileOn.transform.position, target.transform.position, skill.attackVisualEffect);
+    
+            skillEffect.reachedTarget.AddListener(() => {
+                skillEffect.reachedTarget.RemoveAllListeners();
+                target.monster.Health -= damage;
+                AddFloatyNumber(damage, target, true);
+            });
         }
         monster.actionsUsedThisTurn.Add(skill.name);
     }

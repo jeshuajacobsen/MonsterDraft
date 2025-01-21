@@ -12,9 +12,9 @@ public class InitialDeck : Deck
         cards.Add(new TreasureCard("Copper"));
         cards.Add(new TreasureCard("Copper"));
         cards.Add(new TreasureCard("Copper"));
-        cards.Add(new TreasureCard("Copper"));
-        cards.Add(new TreasureCard("Mana Vial"));
-        cards.Add(new TreasureCard("Mana Vial"));
+        cards.Add(new TreasureCard("Mana Gem"));
+        cards.Add(new TreasureCard("Mana Gem"));
+        cards.Add(new TreasureCard("Mana Gem"));
         cards.Add(new TreasureCard("Mana Gem"));
         cards.Add(new TreasureCard("Mana Gem"));
         cards.Add(new MonsterCard("Zaple"));
@@ -31,5 +31,7 @@ public class InitialDeck : Deck
         //cards.Add(new ActionCard("Development"));
         cards.Add(new MonsterCard("Borble"));
         cards.Add(new MonsterCard("Owisp"));
+        cards.Add(new MonsterCard("Leafree"));
+        cards.Add(new MonsterCard("Squrl"));
     }
 }

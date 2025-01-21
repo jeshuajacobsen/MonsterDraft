@@ -1,0 +1,382 @@
+fileFormatVersion: 2
+guid: c1cd1fe42015843428c541f38c02e5bb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5861411977229959086
+    second: biteAttack_0
+  - first:
+      213: -4714165476354043578
+    second: biteAttack_1
+  - first:
+      213: 2162141003177727525
+    second: biteAttack_2
+  - first:
+      213: 7133709250769932812
+    second: biteAttack_3
+  - first:
+      213: -3800993669994264715
+    second: biteAttack_4
+  - first:
+      213: -7138408379178078861
+    second: biteAttack_5
+  - first:
+      213: -1774675673980110788
+    second: biteAttack_6
+  - first:
+      213: 1098015167487131695
+    second: biteAttack_7
+  - first:
+      213: 3365748623335730455
+    second: biteAttack_8
+  - first:
+      213: -6363918401055057567
+    second: biteAttack_9
+  - first:
+      213: -8544830822969966918
+    second: biteAttack_10
+  - first:
+      213: 6679220402901468628
+    second: biteAttack_11
+  - first:
+      213: 9130040357256025755
+    second: biteAttack_12
+  - first:
+      213: -2354263287689005553
+    second: biteAttack_13
+  - first:
+      213: 4565444411722104321
+    second: biteAttack_14
+  - first:
+      213: 6385782928938678472
+    second: biteAttack_15
+  - first:
+      213: 2761557213684543069
+    second: biteAttack_16
+  - first:
+      213: -6210752822940787546
+    second: biteAttack_17
+  - first:
+      213: 7542038681695747525
+    second: biteAttack_18
+  - first:
+      213: -4454001340515489711
+    second: biteAttack_19
+  - first:
+      213: 9172860778582789810
+    second: biteAttack_20
+  - first:
+      213: -819071347555195869
+    second: biteAttack_21
+  - first:
+      213: 6763893709045585470
+    second: biteAttack_22
+  - first:
+      213: -6205222101701186194
+    second: biteAttack_23
+  - first:
+      213: 2640549188356859087
+    second: biteAttack_24
+  - first:
+      213: -5800412590843555945
+    second: biteAttack_25
+  - first:
+      213: -3315001494110195589
+    second: biteAttack_26
+  - first:
+      213: 3428162994970019533
+    second: biteAttack_27
+  - first:
+      213: -1566598551310823270
+    second: biteAttack_28
+  - first:
+      213: 5720574393992782114
+    second: biteAttack_29
+  - first:
+      213: -8834930518892145106
+    second: biteAttack_30
+  - first:
+      213: -8479683692873749711
+    second: biteAttack_31
+  - first:
+      213: 1958439929771017207
+    second: biteAttack_32
+  - first:
+      213: 6825543088519975035
+    second: biteAttack_33
+  - first:
+      213: -5939097836857184992
+    second: biteAttack_34
+  - first:
+      213: 4237717449997903229
+    second: biteAttack_35
+  - first:
+      213: -2191472381248902900
+    second: biteAttack_36
+  - first:
+      213: 3192182479015686375
+    second: biteAttack_37
+  - first:
+      213: 1506946964273099534
+    second: biteAttack_38
+  - first:
+      213: 965506019029708677
+    second: biteAttack_39
+  - first:
+      213: 2365182601030595812
+    second: biteAttack_40
+  - first:
+      213: -1466453436989976247
+    second: biteAttack_41
+  - first:
+      213: -4188049836573404688
+    second: biteAttack_42
+  - first:
+      213: -6182302892054173290
+    second: biteAttack_43
+  - first:
+      213: -7776996714485500767
+    second: biteAttack_44
+  - first:
+      213: -4542576417023231762
+    second: biteAttack_45
+  - first:
+      213: 3402837008583294631
+    second: biteAttack_46
+  - first:
+      213: -4927438344980345769
+    second: biteAttack_47
+  - first:
+      213: -4731118166176876841
+    second: biteAttack_48
+  - first:
+      213: 1410389541920019865
+    second: biteAttack_49
+  - first:
+      213: 3062553326167123459
+    second: biteAttack_50
+  - first:
+      213: 4218867810795989591
+    second: biteAttack_51
+  - first:
+      213: 8695036363133458810
+    second: biteAttack_52
+  - first:
+      213: -4246618801400426972
+    second: biteAttack_53
+  - first:
+      213: 7548528906555551104
+    second: biteAttack_54
+  - first:
+      213: -3133649303115989226
+    second: biteAttack_55
+  - first:
+      213: 5266109854547956675
+    second: biteAttack_56
+  - first:
+      213: 619688886462965913
+    second: biteAttack_57
+  - first:
+      213: -8502592945485161352
+    second: biteAttack_58
+  - first:
+      213: -7933462153971078662
+    second: biteAttack_59
+  - first:
+      213: -2468755099710418861
+    second: biteAttack_60
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: biteAttack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 250
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9839b1d692732864d92a5f16ec9e3f88
+      internalID: -1310848461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: biteAttack_1
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 250
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 685bbef31a459434eae49c5f42475f9f
+      internalID: -666798963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: biteAttack_2
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 250
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de916f1b614440b4a9d34fd3214ac84b
+      internalID: -1714370329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 37c6cbb27a6b99244a1a6eafdb7f3206
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      biteAttack_0: -1310848461
+      biteAttack_1: -666798963
+      biteAttack_2: -1714370329
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

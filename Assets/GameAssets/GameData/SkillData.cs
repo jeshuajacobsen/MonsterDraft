@@ -27,6 +27,7 @@ public class SkillData
                 Damage = 3;
                 Range = 2;
                 directions = "Forward";
+                attackVisualEffect = "Lightning";
                 break;
             case "Bubble":
                 ManaCost = 1;
@@ -40,6 +41,7 @@ public class SkillData
                 Damage = 6;
                 Range = 1;
                 directions = "Forward";
+                attackVisualEffect = "Leaf";
                 break;
             case "Spark":
                 ManaCost = 1;
@@ -71,6 +73,7 @@ public class SkillData
                 Damage = 7;
                 Range = 1;
                 directions = "Forward Backward";
+                attackVisualEffect = "Bite";
                 break;
 
             //Intermidiate
@@ -79,12 +82,14 @@ public class SkillData
                 Damage = 5;
                 Range = 1;
                 directions = "Forward Backward Up Down";
+                attackVisualEffect = "Lightning";
                 break;
             case "Burn":
                 ManaCost = 3;
                 Damage = 8;
                 Range = 1;
                 directions = "Forward Backward Up Down";
+                attackVisualEffect = "Fire";
                 break;
             case "Growth":
                 ManaCost = 3;
@@ -101,6 +106,7 @@ public class SkillData
                 directions = "Forward DiagonalForward";
                 attacksAllInRange = true;
                 Description = "Attacks all enemies in range.";
+                attackVisualEffect = "Water";
                 break;
             case "Poison Sting":
                 ManaCost = 5;
@@ -136,6 +142,7 @@ public class SkillData
                 Damage = 12;
                 Range = 2;
                 directions = "Forward Up Down";
+                attackVisualEffect = "Lightning";
                 break;
             case "Heat Wave":
                 ManaCost = 6;
@@ -144,6 +151,7 @@ public class SkillData
                 attacksAllInRange = true;
                 directions = "Forward Backward Up Down";
                 Description = "Attacks all enemies in range.";
+                attackVisualEffect = "Fire";
                 break;
             case "Solar Beam":
                 ManaCost = 6;
@@ -157,6 +165,7 @@ public class SkillData
                 Range = 2;
                 directions = "Forward Backward";
                 attacksAllInRange = true;
+                attackVisualEffect = "Water";
                 break;
             case "Multiply":
                 ManaCost = 3;
@@ -186,6 +195,7 @@ public class SkillData
                 Damage = 23;
                 Range = 1;
                 directions = "Forward Backward Up Down";
+                attackVisualEffect = "Lightning";
                 break;
             case "Inferno":
                 ManaCost = 13;
@@ -194,6 +204,7 @@ public class SkillData
                 attacksAllInRange = true;
                 directions = "Forward Backward Up Down";
                 Description = "Attacks all enemies in range.";
+                attackVisualEffect = "Fire";
                 break;
             case "Poison Ivy":
                 ManaCost = 6;
@@ -207,6 +218,7 @@ public class SkillData
                 Range = 1;
                 directions = "Forward DiagonalForward";
                 attacksAllInRange = true;
+                attackVisualEffect = "Water";
                 break;
             case "Slime Storm":
                 ManaCost = 8;
