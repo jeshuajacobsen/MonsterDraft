@@ -78,7 +78,7 @@ public class RoundManager : MonoBehaviour
     public TextMeshProUGUI messageText;
 
     public List<Card> cardsGainedThisRound = new List<Card>();
-    public string dungeonName;
+    public DungeonLevelData currentDungeonLevel;
 
     public List<VisualEffect> effects;
     public GameObject fireballPanel;
@@ -158,9 +158,9 @@ public class RoundManager : MonoBehaviour
         mainPhase.CancelFullPlay();
     }
 
-    public void StartRound(string dungeonName, int roundNumber)
+    public void StartRound(DungeonLevelData currentDungeonLevel, int roundNumber)
     {
-        this.dungeonName = dungeonName;
+        this.currentDungeonLevel = currentDungeonLevel;
         foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
         {
             foreach (Transform tileTransform in row.transform)
@@ -188,7 +188,7 @@ public class RoundManager : MonoBehaviour
         {
             AddCardToHand(card);
         }
-        currentDungeon = new Dungeon(dungeonName, roundNumber);
+        currentDungeon = new Dungeon(currentDungeonLevel, roundNumber);
         gameState = new MainPhase(this);
         gameState.EnterState();
     }

@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class Dungeon
 {
-    private string name;
+    private DungeonLevelData currentDungeonLevel;
     private Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
     private int guaranteedMonsterTimer = 5;
     private string guaranteedMonster;
 
-    public Dungeon(string name, int roundNumber)
+    public Dungeon(DungeonLevelData currentDungeonLevel, int roundNumber)
     {
-        this.name = name;
-        cardProbabilities = GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).cardProbabilities;
-        guaranteedMonster = GameManager.instance.gameData.DungeonData(name).GetDungeonData(roundNumber).guaranteedMonster;
+        this.currentDungeonLevel = currentDungeonLevel;
+        cardProbabilities = currentDungeonLevel.GetDungeonData(roundNumber).cardProbabilities;
+        guaranteedMonster = currentDungeonLevel.GetDungeonData(roundNumber).guaranteedMonster;
     }
 
     public Card DrawCard()

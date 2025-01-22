@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public InitialDeck selectedInitialDeck;
 
     public GameObject menuPanel;
+    public List<string> unlockedDungeonLevels;
 
     void Awake()
     {
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         selectedInitialDeck = new InitialDeck();
+        unlockedDungeonLevels = new List<string>();
+        unlockedDungeonLevels.Add("Forest");
     }
 
     void Update()

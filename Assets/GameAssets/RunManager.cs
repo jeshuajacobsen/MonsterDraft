@@ -15,7 +15,7 @@ public class RunManager : MonoBehaviour
 
     public Button doneButton;
 
-    public string currentDungeonLevel;
+    public DungeonLevelData currentDungeonLevel;
     public int currentDungeonIndex = 1;
 
     void Awake()
@@ -35,7 +35,6 @@ public class RunManager : MonoBehaviour
     public void Start()
     {
         doneButton.onClick.AddListener(PickCard);
-        currentDungeonLevel = "Forest";
     }
 
     public void Update()
@@ -122,13 +121,13 @@ public class RunManager : MonoBehaviour
     public void StartRound()
     {
         roundPanel.gameObject.SetActive(true);
-        RoundManager.instance.StartRound("Forest", currentDungeonIndex);
+        RoundManager.instance.StartRound(currentDungeonLevel, currentDungeonIndex);
     }
 
     public void EndRound(List<Card> gainedCards)
     {
         currentDungeonIndex++;
-        if (currentDungeonIndex <= GameManager.instance.gameData.DungeonData(currentDungeonLevel).dungeons.Count)
+        if (currentDungeonIndex <= currentDungeonLevel.dungeons.Count)
         {
             roundPanel.gameObject.SetActive(false);
             betweenRoundPanel.gameObject.SetActive(true);
@@ -144,6 +143,8 @@ public class RunManager : MonoBehaviour
     {
         GameManager.instance.menuPanel.SetActive(true);
         roundPanel.gameObject.SetActive(false);
+        GameManager.instance.unlockedDungeonLevels.Add(
+            GameManager.instance.gameData.GetNextDungeonLevel(currentDungeonLevel.key));
     }
 
     public void EndRoundLose()

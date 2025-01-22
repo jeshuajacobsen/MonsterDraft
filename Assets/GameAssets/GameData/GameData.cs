@@ -110,7 +110,8 @@ public class GameData
 
         _dungeonData = new Dictionary<string, DungeonLevelData>
         {
-            { "Forest", new DungeonLevelData("Forest") }
+            { "Forest", new DungeonLevelData("Forest") },
+            { "Cave", new DungeonLevelData("Cave") }
         };
     }
 
@@ -154,6 +155,28 @@ public class GameData
     public DungeonLevelData DungeonData(string name)
     {
         return _dungeonData[name];
+    }
+
+    public string GetNextDungeonLevel(string name)
+    {
+        var keys = _dungeonData.Keys.ToList();
+        int currentIndex = keys.IndexOf(name);
+        if (currentIndex == -1 || currentIndex == keys.Count - 1)
+        {
+            return null;
+        }
+        return keys[currentIndex + 1];
+    }
+
+    public string GetPreviousDungeonLevel(string name)
+    {
+        var keys = _dungeonData.Keys.ToList();
+        int currentIndex = keys.IndexOf(name);
+        if (currentIndex == -1 || currentIndex == 0)
+        {
+            return null;
+        }
+        return keys[currentIndex - 1];
     }
 
     public string GetRandomTreasureName(List<string> exclude)

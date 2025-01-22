@@ -14,7 +14,11 @@ public class SpriteManager : MonoBehaviour
 
     public List<SpriteEntry> spriteEntries;
 
+    public List<SpriteEntry> levelSprites;
+
     private Dictionary<string, Sprite> spriteDictionary;
+
+    private Dictionary<string, Sprite> levelSpriteDictionary;
 
     void Awake()
     {
@@ -44,6 +48,19 @@ public class SpriteManager : MonoBehaviour
                 Debug.LogWarning($"Duplicate sprite name: {entry.name}");
             }
         }
+
+        levelSpriteDictionary = new Dictionary<string, Sprite>();
+        foreach (var entry in levelSprites)
+        {
+            if (!levelSpriteDictionary.ContainsKey(entry.name))
+            {
+                levelSpriteDictionary.Add(entry.name, entry.sprite);
+            }
+            else
+            {
+                Debug.LogWarning($"Duplicate sprite name: {entry.name}");
+            }
+        }
     }
 
     public Sprite GetSprite(string spriteName)
@@ -55,6 +72,19 @@ public class SpriteManager : MonoBehaviour
         else
         {
             Debug.LogWarning($"Sprite not found: {spriteName}");
+            return null; // or a default/fallback sprite
+        }
+    }
+
+    public Sprite GetLevelSprite(string level)
+    {
+        if (levelSpriteDictionary.TryGetValue(level, out Sprite sprite))
+        {
+            return sprite;
+        }
+        else
+        {
+            Debug.LogWarning($"Sprite not found: {level}");
             return null; // or a default/fallback sprite
         }
     }
