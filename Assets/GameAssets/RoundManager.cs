@@ -64,10 +64,6 @@ public class RoundManager : MonoBehaviour
 
     public GameObject EnemyBase;
     public GameObject PlayerBase;
-
-    public LargeCardView largeCardView1;
-    public LargeCardView largeCardView2;
-    public LargeCardView largeCardView3;
     public LargeMonsterView largeMonsterView1;
     public LargeMonsterView largeMonsterView2;
     public LargeMonsterView largeMonsterView3;

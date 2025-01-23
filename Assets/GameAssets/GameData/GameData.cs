@@ -11,6 +11,7 @@ public class GameData
 
     private Dictionary<string, SkillData> _skills;
     private Dictionary<string, DungeonLevelData> _dungeonData;
+    public Dictionary<string, int> availableDeckEditorCards;
 
     public GameData()
     {
@@ -112,6 +113,27 @@ public class GameData
         {
             { "Forest", new DungeonLevelData("Forest") },
             { "Cave", new DungeonLevelData("Cave") }
+        };
+
+        availableDeckEditorCards = new Dictionary<string, int>
+        {
+            { "Copper", 10 },
+            { "Silver", 10 },
+            { "Gold", 10 },
+            { "Platinum", 10 },
+            { "Mana Vial", 10 },
+            { "Mana Potion", 10 },
+            { "Mana Crystal", 10 },
+            { "Mana Gem", 10 },
+            { "Borble", 2 },
+            { "Leafree", 2 },
+            { "Owisp", 2 },
+            { "Slimy", 2 },
+            { "Snowbug", 2 },
+            { "Zaple", 2 },
+            { "Fireball", 2 },
+            { "Heal", 2 },
+            { "Shield", 2 }
         };
     }
 

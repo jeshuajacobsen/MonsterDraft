@@ -19,21 +19,21 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (RoundManager.instance.largeCardView1 != null)
+        if (GameManager.instance.largeCardView1 != null)
         {
             SmallCardView smallCard = GetComponentInParent<SmallCardView>();
             StockPile stockPile = GetComponentInParent<StockPile>();
 
             if (smallCard != null && !(smallCard.card is MonsterCard))
             {
-                RoundManager.instance.largeCardView1.SetCard(smallCard.card, eventData.position);
-                RoundManager.instance.largeCardView1.gameObject.SetActive(true);
+                GameManager.instance.largeCardView1.SetCard(smallCard.card, eventData.position);
+                GameManager.instance.largeCardView1.gameObject.SetActive(true);
                 return;
             }
             else if (stockPile != null && !(stockPile.card is MonsterCard))
             {
-                RoundManager.instance.largeCardView1.SetCard(stockPile.card, eventData.position);
-                RoundManager.instance.largeCardView1.gameObject.SetActive(true);
+                GameManager.instance.largeCardView1.SetCard(stockPile.card, eventData.position);
+                GameManager.instance.largeCardView1.gameObject.SetActive(true);
                 return;
             }
             
@@ -63,8 +63,8 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             {
                 if (string.IsNullOrEmpty(evolvesFrom) && string.IsNullOrEmpty(evolvesTo))
                 {
-                    RoundManager.instance.largeCardView1.SetCard(currentCard, eventData.position);
-                    RoundManager.instance.largeCardView1.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView1.SetCard(currentCard, eventData.position);
+                    GameManager.instance.largeCardView1.gameObject.SetActive(true);
                     return;
                 }
 
@@ -73,14 +73,14 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                     MonsterCard evolvesToCard = new MonsterCard(evolvesTo);
                     MonsterCard evolvesFromCard = new MonsterCard(evolvesFrom);
 
-                    RoundManager.instance.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
-                    RoundManager.instance.largeCardView1.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
+                    GameManager.instance.largeCardView1.gameObject.SetActive(true);
 
-                    RoundManager.instance.largeCardView2.SetCard(currentCard, secondCardPosition);
-                    RoundManager.instance.largeCardView2.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView2.SetCard(currentCard, secondCardPosition);
+                    GameManager.instance.largeCardView2.gameObject.SetActive(true);
 
-                    RoundManager.instance.largeCardView3.SetCard(evolvesToCard, thirdCardPosition);
-                    RoundManager.instance.largeCardView3.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView3.SetCard(evolvesToCard, thirdCardPosition);
+                    GameManager.instance.largeCardView3.gameObject.SetActive(true);
                     return;
                 }
 
@@ -88,34 +88,34 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 {
                     MonsterCard evolvesToCard = new MonsterCard(evolvesTo);
 
-                    RoundManager.instance.largeCardView1.SetCard(currentCard, firstCardPosition);
-                    RoundManager.instance.largeCardView1.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView1.SetCard(currentCard, firstCardPosition);
+                    GameManager.instance.largeCardView1.gameObject.SetActive(true);
 
-                    RoundManager.instance.largeCardView2.SetCard(evolvesToCard, secondCardPosition);
-                    RoundManager.instance.largeCardView2.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView2.SetCard(evolvesToCard, secondCardPosition);
+                    GameManager.instance.largeCardView2.gameObject.SetActive(true);
 
                     if (!string.IsNullOrEmpty(evolvesToCard.evolvesTo))
                     {
                         MonsterCard evolvesTo2Card = new MonsterCard(evolvesToCard.evolvesTo);
-                        RoundManager.instance.largeCardView3.SetCard(evolvesTo2Card, thirdCardPosition);
-                        RoundManager.instance.largeCardView3.gameObject.SetActive(true);
+                        GameManager.instance.largeCardView3.SetCard(evolvesTo2Card, thirdCardPosition);
+                        GameManager.instance.largeCardView3.gameObject.SetActive(true);
                     }
                 }
                 else if (!string.IsNullOrEmpty(evolvesFrom))
                 {
                     MonsterCard evolvesFromCard = new MonsterCard(evolvesFrom);
 
-                    RoundManager.instance.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
-                    RoundManager.instance.largeCardView1.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
+                    GameManager.instance.largeCardView1.gameObject.SetActive(true);
 
-                    RoundManager.instance.largeCardView2.SetCard(currentCard, secondCardPosition);
-                    RoundManager.instance.largeCardView2.gameObject.SetActive(true);
+                    GameManager.instance.largeCardView2.SetCard(currentCard, secondCardPosition);
+                    GameManager.instance.largeCardView2.gameObject.SetActive(true);
 
                     if (!string.IsNullOrEmpty(evolvesFromCard.evolvesFrom))
                     {
                         MonsterCard evolvesFrom2Card = new MonsterCard(evolvesFromCard.evolvesFrom);
-                        RoundManager.instance.largeCardView3.SetCard(evolvesFrom2Card, thirdCardPosition);
-                        RoundManager.instance.largeCardView3.gameObject.SetActive(true);
+                        GameManager.instance.largeCardView3.SetCard(evolvesFrom2Card, thirdCardPosition);
+                        GameManager.instance.largeCardView3.gameObject.SetActive(true);
                     }
                 }
             }
@@ -124,8 +124,8 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        RoundManager.instance.largeCardView1.gameObject.SetActive(false);
-        RoundManager.instance.largeCardView2.gameObject.SetActive(false);
-        RoundManager.instance.largeCardView3.gameObject.SetActive(false);
+        GameManager.instance.largeCardView1.gameObject.SetActive(false);
+        GameManager.instance.largeCardView2.gameObject.SetActive(false);
+        GameManager.instance.largeCardView3.gameObject.SetActive(false);
     }
 }

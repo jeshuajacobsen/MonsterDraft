@@ -13,7 +13,14 @@ public class GameManager : MonoBehaviour
     public InitialDeck selectedInitialDeck;
 
     public GameObject menuPanel;
+    public GameObject deckEditorPanel;
     public List<string> unlockedDungeonLevels;
+
+    public LargeCardView largeCardView1;
+    public LargeCardView largeCardView2;
+    public LargeCardView largeCardView3;
+
+    public int prestigePoints = 0;
 
     void Awake()
     {
@@ -45,5 +52,11 @@ public class GameManager : MonoBehaviour
     {
         menuPanel.SetActive(false); 
         RunManager.instance.StartRun();
+    }
+
+    public void OpenDeckEditor()
+    {
+        menuPanel.SetActive(false);
+        deckEditorPanel.SetActive(true);
     }
 }
