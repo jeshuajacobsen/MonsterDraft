@@ -12,6 +12,7 @@ public class MenuPanel : MonoBehaviour
         transform.Find("StartRunButton").GetComponent<Button>().onClick.AddListener(GameManager.instance.StartRun);
         transform.Find("ButtonLeft").GetComponent<Button>().onClick.AddListener(ButtonLeft);
         transform.Find("ButtonRight").GetComponent<Button>().onClick.AddListener(ButtonRight);
+        transform.Find("EditDeckButton").GetComponent<Button>().onClick.AddListener(GameManager.instance.OpenDeckEditor);
         SetDungeonLevel("Forest");
     }
 
@@ -42,10 +43,10 @@ public class MenuPanel : MonoBehaviour
 
         if (GameManager.instance.unlockedDungeonLevels.Contains(dungeonLevelData.key))
         {
-            transform.Find("StartRunButton").gameObject.SetActive(true);
+            transform.Find("StartRunButton").GetComponent<Button>().interactable = true;
             transform.Find("LockedPanel").gameObject.SetActive(false);
         } else {
-            transform.Find("StartRunButton").gameObject.SetActive(false);
+            transform.Find("StartRunButton").GetComponent<Button>().interactable = false;
             transform.Find("LockedPanel").gameObject.SetActive(true);
         }
     }

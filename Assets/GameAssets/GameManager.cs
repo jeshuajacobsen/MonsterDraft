@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Newtonsoft.Json;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
         selectedInitialDeck = new InitialDeck();
         unlockedDungeonLevels = new List<string>();
         unlockedDungeonLevels.Add("Forest");
+        LoadGame();
     }
 
     void Update()
@@ -57,6 +59,60 @@ public class GameManager : MonoBehaviour
     public void OpenDeckEditor()
     {
         menuPanel.SetActive(false);
-        deckEditorPanel.SetActive(true);
+        deckEditorPanel.transform.parent.parent.gameObject.SetActive(true);
+    }
+
+    public void CloseDeckEditor()
+    {
+        deckEditorPanel.transform.parent.parent.gameObject.SetActive(false);
+        menuPanel.SetActive(true);
+        selectedInitialDeck = deckEditorPanel.GetComponent<DeckEditorPanel>().GetSelectedInitialDeck();
+        SaveGame();
+    }
+
+    public void SaveGame()
+    {
+        SaveData saveData = new SaveData(selectedInitialDeck, unlockedDungeonLevels, prestigePoints);
+        saveData.AddCardsForSaving(deckEditorPanel.GetComponent<DeckEditorPanel>().unlockedCards);
+        string jsonData = JsonConvert.SerializeObject(saveData);
+        string path = Application.persistentDataPath + "/savefile.json";
+        System.IO.File.WriteAllText(path, jsonData);
+    }
+
+    public void LoadGame()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+
+        if (System.IO.File.Exists(path))
+        {
+            try
+            {
+                string jsonData = System.IO.File.ReadAllText(path);
+                SaveData saveData = JsonConvert.DeserializeObject<SaveData>(jsonData);
+
+                selectedInitialDeck = new InitialDeck();
+                selectedInitialDeck.LoadCards(saveData.initialDeck);
+                unlockedDungeonLevels = saveData.unlockedDungeonLevels;
+                prestigePoints = saveData.prestigePoints;
+                deckEditorPanel.GetComponent<DeckEditorPanel>().LoadCards(saveData);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Failed to load save file: {ex.Message}");
+                ResetToDefaultSaveData();
+            }
+        }
+        else
+        {
+            ResetToDefaultSaveData();
+        }
+    }
+
+    private void ResetToDefaultSaveData()
+    {
+        selectedInitialDeck = new InitialDeck();
+        unlockedDungeonLevels = new List<string> { "Forest" };
+        prestigePoints = 0;
+        deckEditorPanel.GetComponent<DeckEditorPanel>().FirstTimeSetup();
     }
 }

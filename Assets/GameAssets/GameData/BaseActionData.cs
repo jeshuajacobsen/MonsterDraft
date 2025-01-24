@@ -7,6 +7,7 @@ public class BaseActionData
     public List<string> Effects { get; set; }
     public List<string> Requirements { get; set; }
     public int Cost { get; set; }
+    public int PrestigeCost { get; set; }
 
     public BaseActionData(string name)
     {
@@ -14,6 +15,7 @@ public class BaseActionData
         Description = "This is the description for " + name;
         Effects = new List<string>();
         Requirements = new List<string>();
+        PrestigeCost = 0;
 
         switch (name)
         {
@@ -24,6 +26,7 @@ public class BaseActionData
                 Effects.Add("Damage 3");
                 Description = "Deals 3 damage to an enemy.";
                 Cost = 2;
+                PrestigeCost = 20;
                 break;
             case "Heal":
                 Requirements.Add("Target Ally");
@@ -31,6 +34,7 @@ public class BaseActionData
                 Effects.Add("Heal 4");
                 Description = "Heals an ally for 4 health.";
                 Cost = 3;
+                PrestigeCost = 20;
                 break;
             case "Shield":
                 Requirements.Add("Target Ally");
@@ -38,6 +42,7 @@ public class BaseActionData
                 Effects.Add("Buff Defense Plus 6 Duration 3");
                 Description = "Gives an ally +6 defense for 3 turns.";
                 Cost = 3;
+                PrestigeCost = 20;
                 break;
             case "Preparation":
                 Effects.Add("Actions 2");
@@ -61,16 +66,16 @@ public class BaseActionData
             case "Alchemist":
                 Effects.Add("Select Treasure 1");
                 Effects.Add("Trash Selected");
-                Effects.Add("Gain Treasure Costing Selected Cost Plus 4");
+                Effects.Add("Gain Treasure Costing Selected Cost Plus 6");
                 Description = "Trash a treasure card to gain a treasure card costing up to 4 more.";
-                Cost = 4;
+                Cost = 6;
                 break;
             case "Merchant":
                 Effects.Add("Coins 2");
                 Effects.Add("Actions 1");
                 Effects.Add("Draw 1");
                 Description = "+2 coins\n +1 action\n +1 card.";
-                Cost = 6;
+                Cost = 8;
                 break;
             case "Throne Room":
                 Effects.Add("Select Action 1");
@@ -84,7 +89,7 @@ public class BaseActionData
                 Effects.Add("Trash Selected");
                 Effects.Add("Gain Card Costing Saved");
                 Description = "Trash any number of cards. Gain a card costing up to the sum of the costs of the trashed cards.";
-                Cost = 10;
+                Cost = 12;
                 break;
             case "Vault":
                 Effects.Add("Draw 2");

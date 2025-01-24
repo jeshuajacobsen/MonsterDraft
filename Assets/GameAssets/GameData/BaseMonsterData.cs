@@ -24,8 +24,11 @@ public class BaseMonsterData
     public int experienceGiven = 10;
     public int experienceRequired = 40;
 
+    public int PrestigeCost { get; set; }
+
     public BaseMonsterData(string name)
     {
+        PrestigeCost = 0;
         this.name = name;
         Description = "This is the description for " + name;
         switch (name)
@@ -36,12 +39,13 @@ public class BaseMonsterData
                 Defense = 8;
                 Movement = 1;
                 ManaCost = 8;
-                Cost = 10;
+                Cost = 12;
                 skill1Name = "Bubble";
                 skill2Name = "Wave";
                 rarity = "Epic";
                 evolvesTo = "Pupal";
                 experienceGiven = 40;
+                PrestigeCost = 100;
                 break;
             case "Pupal":
                 Attack = 16;
@@ -49,7 +53,7 @@ public class BaseMonsterData
                 Defense = 12;
                 Movement = 1;
                 ManaCost = 10;
-                Cost = 12;
+                Cost = 14;
                 skill1Name = "Wave";
                 skill2Name = "Water Jet";
                 rarity = "Epic";
@@ -63,7 +67,7 @@ public class BaseMonsterData
                 Defense = 10;
                 Movement = 2;
                 ManaCost = 12;
-                Cost = 15;
+                Cost = 18;
                 skill1Name = "Water Jet";
                 skill2Name = "Aqua Blast";
                 rarity = "Epic";
@@ -76,12 +80,13 @@ public class BaseMonsterData
                 Defense = 7;
                 Movement = 2;
                 ManaCost = 6;
-                Cost = 6;
+                Cost = 8;
                 skill1Name = "Leaf";
                 skill2Name = "Growth";
                 rarity = "Rare";
                 evolvesTo = "Leafear";
                 experienceGiven = 30;
+                PrestigeCost = 50;
                 break;
             case "Leafear":
                 Attack = 12;
@@ -89,7 +94,7 @@ public class BaseMonsterData
                 Defense = 13;
                 Movement = 2;
                 ManaCost = 8;
-                Cost = 10;
+                Cost = 12;
                 skill1Name = "Growth";
                 skill2Name = "Solar Beam";
                 rarity = "Rare";
@@ -102,7 +107,7 @@ public class BaseMonsterData
                 Defense = 14;
                 Movement = 1;
                 ManaCost = 7;
-                Cost = 9;
+                Cost = 11;
                 skill1Name = "Wrap";
                 skill2Name = "Poison Sting";
                 rarity = "Rare";
@@ -114,12 +119,13 @@ public class BaseMonsterData
                 Defense = 4;
                 Movement = 1;
                 ManaCost = 4;
-                Cost = 5;
+                Cost = 6;
                 skill1Name = "Spark";
                 skill2Name = "Burn";
                 rarity = "Uncommon";
                 evolvesTo = "Wallowisp";
                 experienceGiven = 20;
+                PrestigeCost = 30;
                 break;
             case "Wallowisp":
                 Attack = 9;
@@ -127,7 +133,7 @@ public class BaseMonsterData
                 Defense = 7;
                 Movement = 1;
                 ManaCost = 4;
-                Cost = 6;
+                Cost = 8;
                 skill1Name = "Burn";
                 skill2Name = "Heat Wave";
                 rarity = "Uncommon";
@@ -146,6 +152,7 @@ public class BaseMonsterData
                 rarity = "Common";
                 evolvesTo = "Slimier";
                 experienceGiven = 10;
+                PrestigeCost = 10;
                 break;
             case "Slimier":
                 Attack = 3;
@@ -180,12 +187,13 @@ public class BaseMonsterData
                 Defense = 5;
                 Movement = 1;
                 ManaCost = 5;
-                Cost = 5;
+                Cost = 6;
                 skill1Name = "Chill";
                 skill2Name = "Ice Shard";
                 rarity = "Uncommon";
                 evolvesTo = "Snant";
                 experienceGiven = 20;
+                PrestigeCost = 30;
                 break;
             case "Snant":
                 Attack = 12;
@@ -207,7 +215,7 @@ public class BaseMonsterData
                 Defense = 12;
                 Movement = 1;
                 ManaCost = 8;
-                Cost = 9;
+                Cost = 10;
                 skill1Name = "Freeze";
                 skill2Name = "Blizzard";
                 rarity = "Uncommon";
@@ -220,7 +228,7 @@ public class BaseMonsterData
                 Defense = 8;
                 Movement = 1;
                 ManaCost = 8;
-                Cost = 10;
+                Cost = 12;
                 skill1Name = "Bite";
                 skill2Name = "Drain";
                 rarity = "Epic";
@@ -233,7 +241,7 @@ public class BaseMonsterData
                 Defense = 12;
                 Movement = 1;
                 ManaCost = 10;
-                Cost = 12;
+                Cost = 15;
                 skill1Name = "Drain";
                 skill2Name = "Nightmare";
                 rarity = "Epic";
@@ -252,6 +260,7 @@ public class BaseMonsterData
                 rarity = "Common";
                 evolvesTo = "Lightna";
                 experienceGiven = 10;
+                PrestigeCost = 10;
                 break;
             case "Lightna":
                 Attack = 5;

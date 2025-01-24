@@ -10,14 +10,15 @@ public class DeckEditorCardView : MonoBehaviour
 {
     public Card card;
     private GameObject LockedPanel;
-    private int UsingCardCount = 0;
-    private int boughtCardCount = 0;
+    public int usingCardCount = 0;
+    public int boughtCardCount = 0;
     private int cardLimit = 0;
 
     void Start()
     {
         transform.Find("AddButton").GetComponent<Button>().onClick.AddListener(IncreaseCardCount);
         transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(DecreaseCardCount);
+        transform.Find("BuyCardButton").GetComponent<Button>().onClick.AddListener(BuyCard);
     }
 
     void Update()
@@ -31,24 +32,41 @@ public class DeckEditorCardView : MonoBehaviour
         this.cardLimit = cardLimit;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
-        transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = UsingCardCount.ToString() + "/" + boughtCardCount.ToString();
+        transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
+        transform.Find("PrestigeCostText").GetComponent<TextMeshProUGUI>().text = card.PrestigeCost.ToString();
     }
 
     private void IncreaseCardCount()
     {
-        if (UsingCardCount < boughtCardCount)
+        if (usingCardCount < boughtCardCount)
         {
-            UsingCardCount++;
-            transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = UsingCardCount.ToString() + "/" + boughtCardCount.ToString();
+            usingCardCount++;
+            transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
         }
     }
 
     private void DecreaseCardCount()
     {
-        if (UsingCardCount > 0)
+        if (usingCardCount > 0)
         {
-            UsingCardCount--;
-            transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = UsingCardCount.ToString() + "/ " + boughtCardCount.ToString();
+            usingCardCount--;
+            transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/ " + boughtCardCount.ToString();
         }
+    }
+
+    public void BuyCard()
+    {
+        if (boughtCardCount < cardLimit && GameManager.instance.prestigePoints >= card.PrestigeCost)
+        {
+            boughtCardCount++;
+            transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
+        }
+    }
+
+    public void LoadValues(int usingCardCount, int boughtCardCount)
+    {
+        this.usingCardCount = usingCardCount;
+        this.boughtCardCount = boughtCardCount;
+        transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
     }
 }

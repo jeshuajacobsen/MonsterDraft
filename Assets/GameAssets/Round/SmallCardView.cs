@@ -59,7 +59,7 @@ public class SmallCardView : MonoBehaviour
                 return;
             }
 
-            if (result.gameObject == gameObject)
+            if (result.gameObject == gameObject || result.gameObject.transform.IsChildOf(transform))
             {
                 isDragging = true;
                 originalPosition = transform.position;

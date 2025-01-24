@@ -6,6 +6,7 @@ public class DungeonData
     public string name;
     public Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
     public string guaranteedMonster;
+    public int PrestigeReward { get; set; }
 
     public DungeonData(string name)
     {
@@ -20,6 +21,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 5);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
+                PrestigeReward = 10;
                 break;
             case "Forest2":
                 cardProbabilities.Add("Pass", 50);
@@ -29,6 +31,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
+                PrestigeReward = 12;
                 break;
             case "Forest3":
                 cardProbabilities.Add("Pass", 50);
@@ -38,6 +41,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
+                PrestigeReward = 13;
                 break;
             case "Forest4":
                 cardProbabilities.Add("Pass", 40);
@@ -47,6 +51,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
+                PrestigeReward = 15;
                 break;
             case "Forest5":
                 cardProbabilities.Add("Pass", 30);
@@ -56,6 +61,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
+                PrestigeReward = 30;
                 break;
         }
     }
