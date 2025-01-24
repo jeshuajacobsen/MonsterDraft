@@ -17,6 +17,13 @@ public class Dungeon
 
     public Card DrawCard()
     {
+        guaranteedMonsterTimer--;
+        if (guaranteedMonsterTimer == 0)
+        {
+            guaranteedMonsterTimer = 4;
+            return new MonsterCard(guaranteedMonster);
+        }
+        
         int totalProbability = 0;
 
         foreach (var probability in cardProbabilities.Values)
@@ -35,15 +42,6 @@ public class Dungeon
                 string cardName = kvp.Key;
                 string type = GameManager.instance.gameData.GetCardType(cardName);
                 Card card = null;
-                guaranteedMonsterTimer--;
-                if (guaranteedMonsterTimer == 0)
-                {
-                    guaranteedMonsterTimer = 4;
-                    if (type != "Monster")
-                    {
-                        return new MonsterCard(guaranteedMonster);
-                    }
-                }
 
                 switch (type)
                 {

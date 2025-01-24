@@ -5941,6 +5941,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: a8674d00057760141b635c67818d0e1d, type: 3}
   - name: Grass
     sprite: {fileID: 21300000, guid: 70deb2cd953de0c46926db3299778e82, type: 3}
+  - name: Greater Fireball
+    sprite: {fileID: 8483025677953152059, guid: ff95c43045b22994c9f10d8b3631e23d, type: 3}
   - name: Heal
     sprite: {fileID: 21300000, guid: 47430303783aa90459716d181bc79404, type: 3}
   - name: InfoButton
@@ -5953,6 +5955,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 9045d116c2c23d5409a8b4a619a57482, type: 3}
   - name: Lightna
     sprite: {fileID: 3980345088886043443, guid: ca585e60eee842143925d2d4dff14a00, type: 3}
+  - name: Mana Burst
+    sprite: {fileID: -7916896879029228694, guid: 506b2f485f053a54ca338422ab30d8da, type: 3}
   - name: Mana Crystal
     sprite: {fileID: 21300000, guid: 0dfbd16606c24414e99bcd41dbaf5150, type: 3}
   - name: Mana Gem

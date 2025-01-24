@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     public void OpenDeckEditor()
     {
         menuPanel.SetActive(false);
+        deckEditorPanel.GetComponent<DeckEditorPanel>().OnOpen();
         deckEditorPanel.transform.parent.parent.gameObject.SetActive(true);
     }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 public class DeckEditorPanel : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class DeckEditorPanel : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OnOpen()
+    {
+        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = GameManager.instance.prestigePoints.ToString();
     }
 
     public void FirstTimeSetup()

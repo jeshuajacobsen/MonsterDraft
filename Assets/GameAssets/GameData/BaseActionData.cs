@@ -118,6 +118,21 @@ public class BaseActionData
                 Description = "Gain 2 mana for each Ally monster in play. All Ally monsters gain +3 attack this turn.";
                 Cost = 12;
                 break;
+            case "Greater Fireball":
+                Requirements.Add("Target Enemy");
+                Effects.Add("Target Enemy");
+                Effects.Add("Animate Fireball");
+                Effects.Add("Damage 6");
+                Description = "Deals 6 damage to an enemy.";
+                Cost = 6;
+                break;
+            case "Mana Burst":
+                Effects.Add("Mana 2");
+                Effects.Add("Actions 2");
+                Description = "Gain 2 mana and 2 actions.";
+                Cost = 4;
+                break;
+            
             default:
                 Effects.Add("No effect");
                 break;
