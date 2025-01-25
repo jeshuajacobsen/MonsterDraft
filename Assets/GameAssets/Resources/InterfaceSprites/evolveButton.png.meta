@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      evolveButton_0: -6060556558215416280
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

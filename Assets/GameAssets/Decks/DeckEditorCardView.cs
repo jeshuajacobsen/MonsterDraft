@@ -56,9 +56,10 @@ public class DeckEditorCardView : MonoBehaviour
 
     public void BuyCard()
     {
-        if (boughtCardCount < cardLimit && GameManager.instance.prestigePoints >= card.PrestigeCost)
+        if (boughtCardCount < cardLimit && GameManager.instance.PrestigePoints >= card.PrestigeCost)
         {
             boughtCardCount++;
+            GameManager.instance.PrestigePoints -= card.PrestigeCost;
             transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
         }
     }

@@ -4,7 +4,7 @@ public class SaveData
 {
     public List<string> initialDeck { get; set; }
     public List<string> unlockedDungeonLevels { get; set; }
-    public int prestigePoints { get; set; }
+    public int PrestigePoints { get; set; }
 
     public Dictionary<string, int> cardsUsed { get; set; } = new Dictionary<string, int>();
     public Dictionary<string, int> cardsBought { get; set; } = new Dictionary<string, int>();
@@ -18,7 +18,7 @@ public class SaveData
         }
 
         this.unlockedDungeonLevels = unlockedDungeonLevels ?? new List<string>();
-        this.prestigePoints = prestigePoints;
+        this.PrestigePoints = prestigePoints;
     }
 
     public SaveData() { }

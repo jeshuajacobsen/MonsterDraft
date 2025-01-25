@@ -126,7 +126,7 @@ public class RunManager : MonoBehaviour
 
     public void EndRound(List<Card> gainedCards)
     {   
-        GameManager.instance.prestigePoints += currentDungeonLevel.GetDungeonData(currentDungeonIndex).PrestigeReward;
+        GameManager.instance.PrestigePoints += currentDungeonLevel.GetDungeonData(currentDungeonIndex).PrestigeReward;
         currentDungeonIndex++;
         if (currentDungeonIndex <= currentDungeonLevel.dungeons.Count)
         {
