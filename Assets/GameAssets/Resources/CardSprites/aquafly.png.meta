@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      aquafly_0: -4996737028687335721
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

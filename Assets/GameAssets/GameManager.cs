@@ -20,8 +20,20 @@ public class GameManager : MonoBehaviour
     public LargeCardView largeCardView1;
     public LargeCardView largeCardView2;
     public LargeCardView largeCardView3;
+    private int _prestigePoints;
+    [SerializeField] private TextMeshProUGUI prestigeText;
 
-    public int prestigePoints = 0;
+    public int PrestigePoints { 
+        get
+        {
+            return _prestigePoints;
+        }
+        set
+        {
+            _prestigePoints = value;
+            prestigeText.text = _prestigePoints.ToString();
+        }
+    }
 
     void Awake()
     {
@@ -73,7 +85,7 @@ public class GameManager : MonoBehaviour
 
     public void SaveGame()
     {
-        SaveData saveData = new SaveData(selectedInitialDeck, unlockedDungeonLevels, prestigePoints);
+        SaveData saveData = new SaveData(selectedInitialDeck, unlockedDungeonLevels, PrestigePoints);
         saveData.AddCardsForSaving(deckEditorPanel.GetComponent<DeckEditorPanel>().unlockedCards);
         string jsonData = JsonConvert.SerializeObject(saveData);
         string path = Application.persistentDataPath + "/savefile.json";
@@ -84,7 +96,7 @@ public class GameManager : MonoBehaviour
     {
         string path = Application.persistentDataPath + "/savefile.json";
 
-        if (System.IO.File.Exists(path))
+        if (!System.IO.File.Exists(path))
         {
             try
             {
@@ -94,7 +106,7 @@ public class GameManager : MonoBehaviour
                 selectedInitialDeck = new InitialDeck();
                 selectedInitialDeck.LoadCards(saveData.initialDeck);
                 unlockedDungeonLevels = saveData.unlockedDungeonLevels;
-                prestigePoints = saveData.prestigePoints;
+                PrestigePoints = saveData.PrestigePoints;
                 deckEditorPanel.GetComponent<DeckEditorPanel>().LoadCards(saveData);
             }
             catch (System.Exception ex)
@@ -113,7 +125,7 @@ public class GameManager : MonoBehaviour
     {
         selectedInitialDeck = new InitialDeck();
         unlockedDungeonLevels = new List<string> { "Forest" };
-        prestigePoints = 0;
+        PrestigePoints = 0;
         deckEditorPanel.GetComponent<DeckEditorPanel>().FirstTimeSetup();
     }
 }

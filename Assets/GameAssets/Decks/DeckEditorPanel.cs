@@ -20,7 +20,7 @@ public class DeckEditorPanel : MonoBehaviour
 
     public void OnOpen()
     {
-        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = GameManager.instance.prestigePoints.ToString();
+        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = GameManager.instance.PrestigePoints.ToString();
     }
 
     public void FirstTimeSetup()

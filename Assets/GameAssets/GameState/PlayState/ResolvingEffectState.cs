@@ -47,14 +47,17 @@ public class ResolvingEffectState : CardPlayState
             } else if (effectParts[0] == "Mana")
             {
                 int amount = int.Parse(effectParts[1]);
-                if (effectParts[2] == "Per")
+                if (effectParts.Length > 2 && effectParts[2] == "Per")
                 {
                     if (effectParts[3] == "Ally")
                     {
                         amount *= RoundManager.instance.GetAllAllies().Count;
                         RoundManager.instance.Mana += amount;
                     }
+                } else {
+                    RoundManager.instance.Mana += amount;
                 }
+                mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Draw")
             {
                 if (effectParts[1] == "x")

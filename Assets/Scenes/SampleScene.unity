@@ -8205,7 +8205,7 @@ MonoBehaviour:
   largeCardView1: {fileID: 1243203877}
   largeCardView2: {fileID: 1907383613}
   largeCardView3: {fileID: 1245236810}
-  prestigePoints: 0
+  prestigeText: {fileID: 1505566680}
 --- !u!4 &1551016605
 Transform:
   m_ObjectHideFlags: 0

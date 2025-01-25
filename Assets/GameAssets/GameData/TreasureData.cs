@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 public class TreasureData
 {
@@ -7,6 +8,7 @@ public class TreasureData
     public int GoldGeneration { get; set; }
     public int ManaGeneration { get; set; }
     public int PrestigeCost { get; set; }
+    public List<string> Effects { get; set; }
     public TreasureData(string name)
     {
         PrestigeCost = 50;
@@ -60,6 +62,12 @@ public class TreasureData
                 this.ManaGeneration = 24;
                 this.Cost = 24;
                 PrestigeCost = 1500;
+                break;
+            case "Bauble":
+                this.Description = "Gain mana equal to your current coins.";
+                this.Effects.Add("Mana 1 per coins");
+                this.Cost = 1;
+                PrestigeCost = 10;
                 break;
             default:
                 this.Description = "+1 Coins";
