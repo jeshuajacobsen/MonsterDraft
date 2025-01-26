@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
     {
         string path = Application.persistentDataPath + "/savefile.json";
 
-        if (!System.IO.File.Exists(path))
+        if (System.IO.File.Exists(path))
         {
             try
             {
