@@ -23,12 +23,12 @@ public class TabButton : MonoBehaviour
     {
         if (tabName == "Dungeon")
         {
-            transform.parent.parent.Find("DungeonPanel").gameObject.SetActive(true);
-            transform.parent.parent.Find("TownPanel").gameObject.SetActive(false);
+            GameManager.instance.dungeonPanel.transform.gameObject.SetActive(true);
+            GameManager.instance.townPanel.transform.gameObject.SetActive(false);
         } else if (tabName == "Town")
         {
-            transform.parent.parent.Find("DungeonPanel").gameObject.SetActive(false);
-            transform.parent.parent.Find("TownPanel").gameObject.SetActive(true);
+            GameManager.instance.dungeonPanel.transform.gameObject.SetActive(false);
+            GameManager.instance.townPanel.transform.gameObject.SetActive(true);
         }
     }
 }

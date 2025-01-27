@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject menuPanel;
     public GameObject deckEditorPanel;
+    public GameObject dungeonPanel;
+    public GameObject townPanel;
     public List<string> unlockedDungeonLevels;
 
     public LargeCardView largeCardView1;
@@ -96,7 +98,7 @@ public class GameManager : MonoBehaviour
     {
         string path = Application.persistentDataPath + "/savefile.json";
 
-        if (!System.IO.File.Exists(path))
+        if (System.IO.File.Exists(path))
         {
             try
             {

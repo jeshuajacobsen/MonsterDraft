@@ -1,9 +1,9 @@
 {
     "m_SelectedDeviceId": "R5CXC1PYALK",
     "m_SelectedProcess": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "R5CXC1PYALK",
+        "name": "com.DefaultCompany.com.unity.template.mobile2D",
+        "processId": 9069,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -36,6 +36,18 @@
             "deviceId": "98895a384b57584157",
             "name": "com.sec.android.app.launcher",
             "processId": 5820,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CXC1PYALK",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 6681,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CXC1PYALK",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 9069,
             "exited": false
         }
     ],
