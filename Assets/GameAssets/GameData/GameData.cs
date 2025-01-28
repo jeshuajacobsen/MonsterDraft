@@ -56,7 +56,8 @@ public class GameData
             { "Development", new BaseActionData("Development") },
             { "Inspiration", new BaseActionData("Inspiration") },
             { "Greater Fireball", new BaseActionData("Greater Fireball") },
-            { "Mana Burst", new BaseActionData("Mana Burst") }
+            { "Mana Burst", new BaseActionData("Mana Burst") },
+            { "Provisions", new BaseActionData("Provisions") }
         };
 
         _treasureData = new Dictionary<string, TreasureData>

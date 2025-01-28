@@ -20,7 +20,7 @@ public class TownPanel : MonoBehaviour
         
     }
 
-    public void StartRound()
+    public void StartRound(List<string> guaranteedCards)
     {
         stockPiles.Clear();
         
@@ -98,7 +98,14 @@ public class TownPanel : MonoBehaviour
         stockPiles.Add(stockPile);
 
         List<string> actionNames = new List<string>();
-        for(int i = 0; i <= 5; i++)
+        foreach (string cardName in guaranteedCards)
+        {
+            stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
+            stockPile.InitValues(cardName, 10, "Action");
+            actionNames.Add(stockPile.Name);
+            stockPiles.Add(stockPile);
+        }
+        for(int i = 0; i <= 5 - guaranteedCards.Count; i++)
         {
             stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
             stockPile.InitValues(GameManager.instance.gameData.GetRandomActionName(actionNames), 10, "Action");

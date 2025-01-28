@@ -17,7 +17,8 @@ public class MainPhase : GameState
     public int playedActionCardStep = 0;
     public List<SmallCardView> selectedCards = new List<SmallCardView>();
     public Card playedCard;
-    public CardPlayState currentState;
+    public Card gainedCard;
+    
     public List<Card> cardsToAutoPlay = new List<Card>();
     public bool autoPlaying = false;
 
@@ -195,6 +196,12 @@ public class MainPhase : GameState
         playedCard = null;
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
+        SetState(new IdleState(this));
+    }
+
+    public void FinishOnGain()
+    {
+        gainedCard = null;
         SetState(new IdleState(this));
     }
 
@@ -391,7 +398,7 @@ public class MainPhase : GameState
         }
     }
 
-    public void SetState(CardPlayState newState)
+    public override void SetState(CardPlayState newState)
     {
         currentState.ExitState();
         currentState = newState;

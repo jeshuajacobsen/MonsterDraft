@@ -8,12 +8,14 @@ public class BaseActionData
     public List<string> Requirements { get; set; }
     public int Cost { get; set; }
     public int PrestigeCost { get; set; }
+    public List<string> OnGainEffects { get; set; }
 
     public BaseActionData(string name)
     {
         Name = name;
         Description = "This is the description for " + name;
         Effects = new List<string>();
+        OnGainEffects = new List<string>();
         Requirements = new List<string>();
         PrestigeCost = 0;
 
@@ -132,7 +134,12 @@ public class BaseActionData
                 Description = "Gain 2 mana and 2 actions.";
                 Cost = 4;
                 break;
-            
+            case "Provisions":
+                Effects.Add("Nothing");
+                OnGainEffects.Add("Option Mana 2 Draw 1 Coins 2");
+                Description = "When gained, choose one: +2 mana, +1 card, or +2 coins. This card does nothing when played.";
+                Cost = 0;
+                break;
             default:
                 Effects.Add("No effect");
                 break;

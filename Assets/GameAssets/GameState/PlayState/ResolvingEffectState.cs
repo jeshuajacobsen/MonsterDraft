@@ -177,6 +177,7 @@ public class ResolvingEffectState : CardPlayState
             {
                 mainPhase.playedActionCardStep++;
                 mainPhase.SetState(new SelectingTargetMonsterState(mainPhase, mainPhase.playedCard));
+                return;
             } else if (effectParts[0] == "Damage")
             {
                 int damage = int.Parse(effectParts[1]);
@@ -271,6 +272,9 @@ public class ResolvingEffectState : CardPlayState
                         }
                     }
                 }
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Nothing")
+            {
                 mainPhase.playedActionCardStep++;
             }
         }

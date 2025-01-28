@@ -10,8 +10,10 @@ public class RoundManager : MonoBehaviour
     public GameObject roundPanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
     [SerializeField] private SkillVisualEffect SkillVisualEffectPrefab;
+    [SerializeField] private OptionButton optionButtonPrefab;
     public GameObject handContent;
     public GameObject DungeonPanel;
+    public GameObject SelectingOptionPanel;
     public Monster MonsterPrefab;
     public FloatyNumber floatyNumberPrefab;
 
@@ -144,8 +146,7 @@ public class RoundManager : MonoBehaviour
     public void OnDoneButtonClicked()
     {
         Debug.Log("OnDoneButtonClicked called");
-        MainPhase mainPhase = (MainPhase)gameState;
-        mainPhase.SetState(new ResolvingEffectState(mainPhase));
+        gameState.SetState(new ResolvingEffectState((MainPhase)gameState));
     }
 
     public void OnCancelButtonClicked()
@@ -175,7 +176,8 @@ public class RoundManager : MonoBehaviour
         EnemyBase.GetComponent<EnemyBase>().Health = EnemyBase.GetComponent<EnemyBase>().MaxHealth;
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
-        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound();
+        //TODO add guaranteed cards to dungeon data.
+        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {"Provisions"});
         DiscardHand();
         discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);
@@ -362,6 +364,7 @@ public class RoundManager : MonoBehaviour
 
     public void UseSkillOnBase(Monster monster, SkillData skill)
     {
+        Mana -= skill.ManaCost;
         EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
         AddFloatyNumberOverBase(skill.Damage, true, true);
         monster.actionsUsedThisTurn.Add(skill.name);
@@ -377,8 +380,7 @@ public class RoundManager : MonoBehaviour
     {
         if(skill.ManaCost <= Mana)
         {
-            MainPhase mainPhase = (MainPhase)gameState;
-            mainPhase.SetState(new SelectingSkillTargetState(mainPhase, monster, skill));
+            gameState.SetState(new SelectingSkillTargetState((MainPhase)gameState, monster, skill));
         }
     }
 
@@ -745,5 +747,26 @@ public class RoundManager : MonoBehaviour
     {
         FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, overEnemyBase ? EnemyBase.transform : PlayerBase.transform);
         floatyNumber.InitValues(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
+    }
+
+    public void SetupOptionPanel(List<string> options)
+    {
+        SelectingOptionPanel.SetActive(true);
+        foreach (Transform child in SelectingOptionPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (string option in options)
+        {
+            OptionButton optionButton = Instantiate(optionButtonPrefab, SelectingOptionPanel.transform);
+            optionButton.InitValues(option);
+            optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
+        }
+    }
+
+    public void OnOptionSelected()
+    {
+        SelectingOptionPanel.SetActive(false);
+        gameState.SetState(new ResolvingOnGainEffectState((MainPhase)gameState));
     }
 }

@@ -81,9 +81,16 @@ public class StockPile : MonoBehaviour
             }
             else if (cardType == "Action")
             {
-                Card newCard = new ActionCard(Name);
+                ActionCard newCard = new ActionCard(Name);
                 RoundManager.instance.discardPile.AddCard(newCard);
                 RoundManager.instance.cardsGainedThisRound.Add(newCard);
+
+                if (newCard.OnGainEffects.Count > 0)
+                {
+                    MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
+                    mainPhase.gainedCard = newCard;
+                    mainPhase.SetState(new ResolvingOnGainEffectState(mainPhase));
+                }
             }
             StockLeft--;
             transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = StockLeft.ToString();

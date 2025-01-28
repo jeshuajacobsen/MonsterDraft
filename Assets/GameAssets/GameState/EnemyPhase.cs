@@ -190,4 +190,11 @@ public class EnemyPhase : GameState
     {
         Debug.LogError("Tiles cannot be selected during the Draw Phase!");
     }
+
+    public override void SetState(CardPlayState newState)
+    {
+        currentState.ExitState();
+        currentState = newState;
+        currentState.EnterState();
+    }
 }
