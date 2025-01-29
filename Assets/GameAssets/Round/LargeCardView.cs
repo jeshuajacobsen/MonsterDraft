@@ -88,6 +88,19 @@ public class LargeCardView : MonoBehaviour
             transform.Find("SkillsPanel").gameObject.SetActive(false);
             transform.Find("ManaImage").gameObject.SetActive(false);
         }
+
+        if (card is MonsterCard)
+        {
+            transform.Find("CardTypeText").GetComponent<TextMeshProUGUI>().text = "Monster";
+        }
+        else if (card is TreasureCard)
+        {
+            transform.Find("CardTypeText").GetComponent<TextMeshProUGUI>().text = "Treasure";
+        }
+        else if (card is ActionCard)
+        {
+            transform.Find("CardTypeText").GetComponent<TextMeshProUGUI>().text = "Action";
+        }
     }
 
 

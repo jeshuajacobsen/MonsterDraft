@@ -177,7 +177,7 @@ public class RoundManager : MonoBehaviour
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         //TODO add guaranteed cards to dungeon data.
-        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {});
+        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {"Provisions", "Loan"});
         DiscardHand();
         discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);
@@ -749,24 +749,95 @@ public class RoundManager : MonoBehaviour
         floatyNumber.InitValues(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
     }
 
-    public void SetupOptionPanel(List<string> options)
+    public void SetupOptionPanel(List<string> options, List<Card> displayCards)
     {
         SelectingOptionPanel.SetActive(true);
-        foreach (Transform child in SelectingOptionPanel.transform)
+        Transform cardSection = SelectingOptionPanel.transform.Find("CardSection");
+        Transform buttonSection = SelectingOptionPanel.transform.Find("ButtonSection");
+        Transform noCardsText = SelectingOptionPanel.transform.Find("NoCardText");
+        noCardsText.gameObject.SetActive(false);
+        foreach (Transform child in cardSection)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in buttonSection)
         {
             Destroy(child.gameObject);
         }
         foreach (string option in options)
         {
-            OptionButton optionButton = Instantiate(optionButtonPrefab, SelectingOptionPanel.transform);
-            optionButton.InitValues(option);
+            OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
+            optionButton.InitValues(option, displayCards);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
+        }
+        if (displayCards.Count == 0)
+        {
+            cardSection.gameObject.SetActive(false);
+            noCardsText.gameObject.SetActive(true);
+            noCardsText.GetComponent<TextMeshProUGUI>().text = "No cards found.";
+        } else {
+            cardSection.gameObject.SetActive(true);
+            noCardsText.gameObject.SetActive(false);
+            foreach (Card card in displayCards)
+            {
+                SmallCardView cardView = Instantiate(SmallCardViewPrefab, cardSection);
+                cardView.InitValues(card);
+            }
+        }
+    }
+
+    public void SetupOptionPanel(List<string> options)
+    {
+        SelectingOptionPanel.SetActive(true);
+        Transform cardSection = SelectingOptionPanel.transform.Find("CardSection");
+        Transform buttonSection = SelectingOptionPanel.transform.Find("ButtonSection");
+        Transform noCardsText = SelectingOptionPanel.transform.Find("NoCardText");
+        noCardsText.gameObject.SetActive(false);
+        cardSection.gameObject.SetActive(false);
+        foreach (Transform child in cardSection)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in buttonSection)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (string option in options)
+        {
+            OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
+            optionButton.InitValues(option, new List<Card>());
+            optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
+        }
+    }
+
+    public void TrashCardsFromDeck(List<Card> cards)
+    {
+        foreach (Card card in cards)
+        {
+            roundDeck.Trash(card);
+        }
+    }
+
+    public void DiscardCardsFromDeck(List<Card> cards)
+    {
+        foreach (Card card in cards)
+        {
+            roundDeck.Discard(card);
         }
     }
 
     public void OnOptionSelected()
     {
         SelectingOptionPanel.SetActive(false);
-        gameState.SetState(new ResolvingOnGainEffectState((MainPhase)gameState));
+        if (gameState is MainPhase)
+        {
+            if (((MainPhase)gameState).playedCard != null)
+            {
+                gameState.SetState(new ResolvingEffectState((MainPhase)gameState));
+            } else {
+                gameState.SetState(new ResolvingOnGainEffectState((MainPhase)gameState));
+            }
+        }
+       
     }
 }

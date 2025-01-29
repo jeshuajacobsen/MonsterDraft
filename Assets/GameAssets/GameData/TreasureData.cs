@@ -72,6 +72,13 @@ public class TreasureData
                 this.effects.Add("Mana 1 Per Coins/2");
                 this.Cost = 6;
                 break;
+            case "Loan":
+                this.Description = "When you play this, reveal the next treasure card in your deck. Trash it or discard it.";
+                this.GoldGeneration = 2;
+                this.effects.Add("Search Deck Next Treasure");
+                this.effects.Add("Found Option Trash Discard");
+                this.Cost = 4;
+                break;
             default:
                 this.Description = "+1 Coins";
                 this.GoldGeneration = 0;

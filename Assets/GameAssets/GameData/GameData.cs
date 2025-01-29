@@ -70,7 +70,8 @@ public class GameData
             { "Mana Potion", new TreasureData("Mana Potion") },
             { "Mana Crystal", new TreasureData("Mana Crystal") },
             { "Mana Gem", new TreasureData("Mana Gem") },
-            { "Bauble", new TreasureData("Bauble") }
+            { "Bauble", new TreasureData("Bauble") },
+            { "Loan", new TreasureData("Loan") }
         };
 
         _skills = new Dictionary<string, SkillData>

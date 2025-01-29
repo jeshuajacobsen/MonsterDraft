@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ResolvingEffectState : CardPlayState
 {
@@ -262,6 +263,18 @@ public class ResolvingEffectState : CardPlayState
                             }
                         }
                     }
+                } else if (effectParts[1] == "Deck")
+                {
+                    if (effectParts[2] == "Next")
+                    {
+                        Card nextCard = FindNextCardInDeck(effectParts[3]);
+                        if (nextCard == null)
+                        {
+                            RoundManager.instance.roundDeck.ShuffleDiscardIntoDeck();
+                            nextCard = FindNextCardInDeck(effectParts[3]);
+                        }
+                        mainPhase.foundCards.Add(nextCard);
+                    }
                 }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Found")
@@ -276,6 +289,17 @@ public class ResolvingEffectState : CardPlayState
                         }
                     }
                 }
+                else if (effectParts[1] == "Option")
+                {
+                    List<string> options = new List<string>();
+                    for (int j = 2; j < effectParts.Length; j++)
+                    {
+                        options.Add(effectParts[j]);
+                    }
+                    mainPhase.playedActionCardStep++;
+                    mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                    return;
+                }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Nothing")
             {
@@ -284,6 +308,18 @@ public class ResolvingEffectState : CardPlayState
         }
         
         mainPhase.FinishPlay();
+    }
+
+    private Card FindNextCardInDeck(string cardType)
+    {
+        for (int i = 0; i < RoundManager.instance.roundDeck.cards.Count; i++)
+        {
+            if (RoundManager.instance.roundDeck.cards[i].Type == cardType)
+            {
+                return RoundManager.instance.roundDeck.cards[i];
+            }
+        }
+        return null;
     }
 
     public override void ExitState()

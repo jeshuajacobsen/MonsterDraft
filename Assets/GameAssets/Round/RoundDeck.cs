@@ -49,4 +49,23 @@ public class RoundDeck : Deck
         }
         RoundManager.instance.discardPile.cards.Clear();
     }
+
+    public void Discard(Card card)
+    {
+        Card cardToRemove = cards.Find(c => c.Name == card.Name);
+        if (cardToRemove != null)
+        {
+            cards.Remove(cardToRemove);
+        }
+        RoundManager.instance.discardPile.cards.Add(card);
+    }
+
+    public void Trash(Card card)
+    {
+        Card cardToRemove = cards.Find(c => c.Name == card.Name);
+        if (cardToRemove != null)
+        {
+            cards.Remove(cardToRemove);
+        }
+    }
 }

@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class OptionButton : MonoBehaviour
 {
     string effect;
+    List<Card> cards;
 
     void Start()
     {
-        transform.GetComponent<Button>().onClick.AddListener(OnClick);
+        
     }
 
     void Update()
@@ -16,9 +18,10 @@ public class OptionButton : MonoBehaviour
         
     }
 
-    public void InitValues(string effect)
+    public void InitValues(string effect, List<Card> cards)
     {
         this.effect = effect;
+        this.cards = cards;
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Coins")
         {
@@ -29,7 +32,14 @@ public class OptionButton : MonoBehaviour
         } else if (effectParts[0] == "Mana")
         {
             transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "+" + effectParts[1] + " Mana";
+        } else if (effectParts[0] == "Trash")
+        {
+            transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Trash";
+        } else if (effectParts[0] == "Discard")
+        {
+            transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Discard";
         }
+        transform.GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
     private void OnClick()
@@ -47,6 +57,12 @@ public class OptionButton : MonoBehaviour
         } else if (effectParts[0] == "Mana")
         {
             RoundManager.instance.Mana += int.Parse(effectParts[1]);
+        } else if (effectParts[0] == "Trash")
+        {
+            RoundManager.instance.TrashCardsFromDeck(this.cards);
+        } else if (effectParts[0] == "Discard")
+        {
+            RoundManager.instance.DiscardCardsFromDeck(this.cards);
         }
         
     }
