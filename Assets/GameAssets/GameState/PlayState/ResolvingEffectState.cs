@@ -41,7 +41,15 @@ public class ResolvingEffectState : CardPlayState
                         RoundManager.instance.Coins += mainPhase.selectedCards.Count * int.Parse(effectParts[3]);
                     }
                 } else {
-                    RoundManager.instance.Coins += int.Parse(effectParts[1]);
+                    int coins = int.Parse(effectParts[1]);
+                    if (effectParts.Length > 2 && effectParts[2] == "Per")
+                    {
+                        if (effectParts[3] == "Treasure" && effectParts[4] == "Played")
+                        {
+                            coins *= mainPhase.treasuresPlayed;
+                        }
+                    }
+                    RoundManager.instance.Coins += coins;
                 }
                 mainPhase.playedActionCardStep++;
                 

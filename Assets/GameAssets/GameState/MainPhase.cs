@@ -18,6 +18,7 @@ public class MainPhase : GameState
     public List<SmallCardView> selectedCards = new List<SmallCardView>();
     public Card playedCard;
     public Card gainedCard;
+    public int treasuresPlayed = 0;
     
     public List<Card> cardsToAutoPlay = new List<Card>();
     public bool autoPlaying = false;
@@ -217,6 +218,7 @@ public class MainPhase : GameState
 
     public void PlayTreasureCard(TreasureCard treasureCard)
     {
+        treasuresPlayed++;
         roundManager.Coins += treasureCard.GoldGeneration;
         roundManager.Mana += treasureCard.ManaGeneration;
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();

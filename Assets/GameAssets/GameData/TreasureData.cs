@@ -79,6 +79,11 @@ public class TreasureData
                 this.effects.Add("Found Option Trash Discard");
                 this.Cost = 4;
                 break;
+            case "Investments":
+                this.Description = "Gain coins equal to the number of treasure cards you've played this turn including this card.";
+                this.effects.Add("Coins 1 Per Treasure Played");
+                this.Cost = 5;
+                break;
             default:
                 this.Description = "+1 Coins";
                 this.GoldGeneration = 0;
