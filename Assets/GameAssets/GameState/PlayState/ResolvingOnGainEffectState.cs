@@ -24,9 +24,9 @@ public class ResolvingOnGainEffectState : CardPlayState
 
     private void ResolveEffects()
     {
-        for (int i = mainPhase.playedActionCardStep; i < ((ActionCard)mainPhase.gainedCard).OnGainEffects.Count; i++)
+        for (int i = mainPhase.playedActionCardStep; i < ((ActionCard)mainPhase.gainedCard).onGainEffects.Count; i++)
         {
-            string[] effectParts = ((ActionCard)mainPhase.gainedCard).OnGainEffects[i].Split(' ');
+            string[] effectParts = ((ActionCard)mainPhase.gainedCard).onGainEffects[i].Split(' ');
             if (effectParts[0] == "Option")
             {
                 List<string> options = new List<string>();

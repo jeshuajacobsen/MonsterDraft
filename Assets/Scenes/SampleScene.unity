@@ -3161,7 +3161,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &669442317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3216,8 +3216,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -3277,8 +3277,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -65, y: -340}
-  m_SizeDelta: {x: 1315.5342, y: 157.856}
+  m_AnchoredPosition: {x: 478.98, y: -194.02222}
+  m_SizeDelta: {x: 2391.5, y: 171.3356}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &677101853
 PrefabInstance:
@@ -5842,6 +5842,7 @@ GameObject:
   - component: {fileID: 1147202723}
   - component: {fileID: 1147202722}
   - component: {fileID: 1147202721}
+  - component: {fileID: 1147202724}
   m_Layer: 5
   m_Name: SelectOptionPanel
   m_TagString: Untagged
@@ -5932,6 +5933,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147202719}
   m_CullTransparentMesh: 1
+--- !u!114 &1147202724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147202719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1 &1150268522
 GameObject:
   m_ObjectHideFlags: 0
@@ -6259,7 +6274,7 @@ MonoBehaviour:
   - name: Grass
     sprite: {fileID: 21300000, guid: 70deb2cd953de0c46926db3299778e82, type: 3}
   - name: Greater Fireball
-    sprite: {fileID: 8483025677953152059, guid: ff95c43045b22994c9f10d8b3631e23d, type: 3}
+    sprite: {fileID: 5751926311701206469, guid: ef0fd842ffb73664a9d9795aa856331a, type: 3}
   - name: Heal
     sprite: {fileID: 21300000, guid: 47430303783aa90459716d181bc79404, type: 3}
   - name: InfoButton
@@ -6294,6 +6309,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: dc19f151b783fed478c7a1379bfb374d, type: 3}
   - name: Preparation
     sprite: {fileID: 21300000, guid: 6da0b462b49d80043b753d0377bc1b88, type: 3}
+  - name: Provisions
+    sprite: {fileID: -3214809654246193797, guid: 107504ebd71965146a01468ac419d37d, type: 3}
   - name: Pupal
     sprite: {fileID: -1649516999337575513, guid: 5e1718579656c5c4482a671bc8bda8bd, type: 3}
   - name: Range
@@ -6334,6 +6351,8 @@ MonoBehaviour:
     sprite: {fileID: -5070116007335442539, guid: 73b0b65934d8adb4aa7a5f5d4c29b521, type: 3}
   - name: Zaple
     sprite: {fileID: 21300000, guid: 630b029cac45527438da344f3f6b2c9e, type: 3}
+  - name: Bauble
+    sprite: {fileID: 1564380436212139970, guid: c69c0165ea7bcd649a2052bc0077aeb2, type: 3}
   levelSprites:
   - name: darkForest
     sprite: {fileID: 9197848482490137289, guid: d7692a487baf94943b295171ebc290d0, type: 3}

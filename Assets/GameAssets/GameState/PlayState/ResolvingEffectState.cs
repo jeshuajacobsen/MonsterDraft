@@ -24,9 +24,9 @@ public class ResolvingEffectState : CardPlayState
 
     private void ResolveEffects()
     {
-        for (int i = mainPhase.playedActionCardStep; i < ((ActionCard)mainPhase.playedCard).effects.Count; i++)
+        for (int i = mainPhase.playedActionCardStep; i < mainPhase.playedCard.effects.Count; i++)
         {
-            string[] effectParts = ((ActionCard)mainPhase.playedCard).effects[i].Split(' ');
+            string[] effectParts = mainPhase.playedCard.effects[i].Split(' ');
             if (effectParts[0] == "Actions")
             {
                 RoundManager.instance.Actions += int.Parse(effectParts[1]);
@@ -52,6 +52,10 @@ public class ResolvingEffectState : CardPlayState
                     if (effectParts[3] == "Ally")
                     {
                         amount *= RoundManager.instance.GetAllAllies().Count;
+                        RoundManager.instance.Mana += amount;
+                    } else if (effectParts[3] == "Coins/2")
+                    {
+                        amount *= RoundManager.instance.Coins / 2;
                         RoundManager.instance.Mana += amount;
                     }
                 } else {

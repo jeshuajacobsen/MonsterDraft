@@ -7,11 +7,13 @@ public class Card
     public string Description { get; set; }
     public int Cost { get; set; }
     public int PrestigeCost { get; set; }
-    public List<string> OnGainEffects { get; set; }
+    public List<string> onGainEffects { get; set; }
+    public List<string> effects;
 
     public Card(string name, string type)
     {
-        OnGainEffects = new List<string>();
+        onGainEffects = new List<string>();
+        effects = new List<string>();
         Name = name;
         Type = type;
         if (type == "Monster")
@@ -27,6 +29,8 @@ public class Card
             Description = baseStats.Description;
             Cost = baseStats.Cost;
             PrestigeCost = baseStats.PrestigeCost;
+            onGainEffects = baseStats.onGainEffects;
+            effects = baseStats.effects;
         }
         else if (type == "Action")
         {
@@ -34,7 +38,8 @@ public class Card
             Description = baseStats.Description;
             Cost = baseStats.Cost;
             PrestigeCost = baseStats.PrestigeCost;
-            OnGainEffects = baseStats.OnGainEffects;
+            onGainEffects = baseStats.onGainEffects;
+            effects = baseStats.effects;
         }
 
     }

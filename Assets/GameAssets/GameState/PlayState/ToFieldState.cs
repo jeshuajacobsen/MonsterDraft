@@ -75,6 +75,7 @@ public class ToFieldState : CardPlayState
 
         if (cardView.card is TreasureCard)
         {
+            mainPhase.RemoveCard(cardView);
             mainPhase.PlayTreasureCard((TreasureCard)cardView.card);
             return;
         }

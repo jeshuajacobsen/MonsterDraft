@@ -34,6 +34,8 @@ public class TownPanel : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        List<string> treasureNames = new List<string> 
+            { "Copper", "Silver", "Gold", "Platinum", "Mana Vial", "Mana Potion", "Mana Crystal", "Mana Gem" };
         StockPile stockPile = Instantiate(basicStockPilePrefab, basicGoodsTransform);
         stockPile.InitValues("Copper", 10, "Treasure");
         basicStockPiles.Add(stockPile);
@@ -101,15 +103,22 @@ public class TownPanel : MonoBehaviour
         foreach (string cardName in guaranteedCards)
         {
             stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
-            stockPile.InitValues(cardName, 10, "Action");
+            stockPile.InitValues(cardName, 10, GameManager.instance.gameData.GetCardType(cardName));
             actionNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
         }
+        List<string> combinedNames = new List<string>(actionNames);
+        combinedNames.AddRange(treasureNames);
         for(int i = 0; i <= 5 - guaranteedCards.Count; i++)
         {
             stockPile = Instantiate(stockPilePrefab, mainGoodsTransform);
-            stockPile.InitValues(GameManager.instance.gameData.GetRandomActionName(actionNames), 10, "Action");
-            actionNames.Add(stockPile.Name);
+            
+            string name = GameManager.instance.gameData.GetRandomActionOrTreasureName(combinedNames);
+            stockPile.InitValues(
+                name, 
+                10, 
+                GameManager.instance.gameData.GetCardType(name));
+            combinedNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
         }
 

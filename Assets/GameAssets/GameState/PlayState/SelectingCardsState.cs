@@ -19,6 +19,8 @@ public class SelectingCardsState : CardPlayState
     {
         Debug.Log("Selecting cards State Entered");
         RoundManager.instance.SetupDoneButton();
+        RoundManager.instance.messageText.text = "Select " + numberToSelect + " cards";
+        RoundManager.instance.messageText.gameObject.SetActive(true);
     }
 
     public override void HandleInput()
@@ -120,5 +122,7 @@ public class SelectingCardsState : CardPlayState
             cardView.GetComponent<Image>().color = Color.white;
         });
         mainPhase.selectedCards = selectedCards;
+        RoundManager.instance.messageText.text = "";
+        RoundManager.instance.messageText.gameObject.SetActive(false);
     }
 }

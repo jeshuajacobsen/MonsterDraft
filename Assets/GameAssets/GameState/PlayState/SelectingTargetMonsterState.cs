@@ -20,6 +20,8 @@ public class SelectingTargetMonsterState : CardPlayState
         Debug.Log("Quick Selecting Monster Tile State Entered");
         MarkValidTargets(card as ActionCard);
         //mainPhase.playedActionCardStep++;
+        RoundManager.instance.messageText.text = "Select target for " + card.Name;
+        RoundManager.instance.messageText.gameObject.SetActive(true);
     }
 
     public override void HandleInput()

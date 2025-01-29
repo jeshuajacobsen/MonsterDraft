@@ -145,7 +145,7 @@ public class MainPhase : GameState
         if (card is ActionCard)
         {
             ActionCard actionCard = (ActionCard)card;
-            if (roundManager.Actions > 0 && RequirementsMet(actionCard))
+            if (roundManager.Actions > 0)
             {
                 return true;
             }
@@ -188,7 +188,7 @@ public class MainPhase : GameState
 
     public void FinishPlay()
     {
-        if (!autoPlaying)
+        if (!autoPlaying && playedCard is ActionCard)
         {
             roundManager.Actions--;
         }
@@ -205,61 +205,6 @@ public class MainPhase : GameState
         SetState(new IdleState(this));
     }
 
-
-    public bool RequirementsMet(ActionCard actionCard)
-    {
-        if (actionCard.requirements.Count == 0)
-        {
-            return true;
-        }
-        foreach (string requirement in actionCard.requirements)
-        {
-            string[] requirementParts = requirement.Split(' ');
-            if (requirementParts[0] == "Target")
-            {
-                if (requirementParts[1] == "Enemy")
-                {
-                    for (int row = 1; row <= 3; row++)
-                    {
-                        for (int tile = 1; tile <= 7; tile++)
-                        {
-                            Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
-                            if (tileTransform != null)
-                            {
-                                Tile tileComponent = tileTransform.GetComponent<Tile>();
-                                if (tileComponent.monster != null && tileComponent.monster.team == "Enemy")
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                    
-                } else if (requirementParts[1] == "Ally")
-                {
-                    for (int row = 1; row <= 3; row++)
-                    {
-                        for (int tile = 1; tile <= 7; tile++)
-                        {
-                            Transform tileTransform = roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
-                            if (tileTransform != null)
-                            {
-                                Tile tileComponent = tileTransform.GetComponent<Tile>();
-                                if (tileComponent.monster != null && tileComponent.monster.team == "Ally")
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public void RemoveCard(SmallCardView cardView)
     {
         roundManager.discardPile.AddCard(cardView.card);
@@ -274,13 +219,15 @@ public class MainPhase : GameState
     {
         roundManager.Coins += treasureCard.GoldGeneration;
         roundManager.Mana += treasureCard.ManaGeneration;
-        roundManager.discardPile.AddCard(treasureCard);
-        SmallCardView treasureCardView = roundManager.hand.Find(x => x.card == treasureCard);
-        roundManager.RemoveCardFromHand(treasureCardView);
-        Destroy(treasureCardView.gameObject);
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
-        SetState(new IdleState(this));
+        if (treasureCard.effects.Count > 0)
+        {
+            playedCard = treasureCard;
+            SetState(new ResolvingEffectState(this));
+        } else {
+            SetState(new IdleState(this));
+        }
     }
 
     public override void PlayCard(Card card, Vector3 position)

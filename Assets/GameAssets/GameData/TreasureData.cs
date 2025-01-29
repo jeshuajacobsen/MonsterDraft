@@ -8,9 +8,13 @@ public class TreasureData
     public int GoldGeneration { get; set; }
     public int ManaGeneration { get; set; }
     public int PrestigeCost { get; set; }
-    public List<string> Effects { get; set; }
+    public List<string> effects { get; set; }
+    public List<string> onGainEffects;
+
     public TreasureData(string name)
     {
+        this.effects = new List<string>();
+        this.onGainEffects = new List<string>();
         PrestigeCost = 50;
         this.Name = name;
         switch (name)
@@ -52,22 +56,21 @@ public class TreasureData
                 PrestigeCost = 90;
                 break;
             case "Mana Crystal":
-                this.Description = "+11 Mana";
-                this.ManaGeneration = 11;
+                this.Description = "+10 Mana";
+                this.ManaGeneration = 10;
                 this.Cost = 13;
                 PrestigeCost = 300;
                 break;
             case "Mana Gem":
-                this.Description = "+24 Mana";
-                this.ManaGeneration = 24;
+                this.Description = "+18 Mana";
+                this.ManaGeneration = 18;
                 this.Cost = 24;
                 PrestigeCost = 1500;
                 break;
             case "Bauble":
-                this.Description = "Gain mana equal to your current coins.";
-                this.Effects.Add("Mana 1 per coins");
-                this.Cost = 1;
-                PrestigeCost = 10;
+                this.Description = "Gain mana equal to half your current coins.";
+                this.effects.Add("Mana 1 Per Coins/2");
+                this.Cost = 6;
                 break;
             default:
                 this.Description = "+1 Coins";

@@ -69,7 +69,8 @@ public class GameData
             { "Mana Vial", new TreasureData("Mana Vial") },
             { "Mana Potion", new TreasureData("Mana Potion") },
             { "Mana Crystal", new TreasureData("Mana Crystal") },
-            { "Mana Gem", new TreasureData("Mana Gem") }
+            { "Mana Gem", new TreasureData("Mana Gem") },
+            { "Bauble", new TreasureData("Bauble") }
         };
 
         _skills = new Dictionary<string, SkillData>
@@ -229,5 +230,16 @@ public class GameData
             return "";
         }
         return actionNames[Random.Range(0, actionNames.Count)];
+    }
+
+    public string GetRandomActionOrTreasureName(List<string> exclude)
+    {
+        List<string> names = _actionData.Keys.ToList().Concat(_treasureData.Keys.ToList()).ToList();
+        names.RemoveAll(exclude.Contains);
+        if (names.Count == 0)
+        {
+            return "";
+        }
+        return names[Random.Range(0, names.Count)];
     }
 }

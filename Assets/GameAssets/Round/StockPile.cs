@@ -85,7 +85,7 @@ public class StockPile : MonoBehaviour
                 RoundManager.instance.discardPile.AddCard(newCard);
                 RoundManager.instance.cardsGainedThisRound.Add(newCard);
 
-                if (newCard.OnGainEffects.Count > 0)
+                if (newCard.onGainEffects.Count > 0)
                 {
                     MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
                     mainPhase.gainedCard = newCard;
