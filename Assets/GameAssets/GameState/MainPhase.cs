@@ -118,6 +118,19 @@ public class MainPhase : GameState
         roundManager.DiscardHand();
         roundManager.Mana = 0;
         roundManager.Coins = 0;
+        List<PersistentEffect> effectsToRemove = new List<PersistentEffect>();
+        foreach (var effect in roundManager.persistentEffects)
+        {
+            effect.duration--;
+            if (effect.duration <= 0)
+            {
+                effectsToRemove.Add(effect);
+            }
+        }
+        foreach (var effect in effectsToRemove)
+        {
+            roundManager.persistentEffects.Remove(effect);
+        }
         currentState.ExitState();
         ExitMainPhase.Invoke();
     }

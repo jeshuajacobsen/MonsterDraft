@@ -73,7 +73,7 @@ public class TreasureData
                 this.Cost = 6;
                 break;
             case "Loan":
-                this.Description = "When you play this, reveal the next treasure card in your deck. Trash it or discard it.";
+                this.Description = "+2 Coins \nWhen you play this, reveal the next treasure card in your deck. Trash it or discard it.";
                 this.GoldGeneration = 2;
                 this.effects.Add("Search Deck Next Treasure");
                 this.effects.Add("Found Option Trash Discard");

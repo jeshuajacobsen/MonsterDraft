@@ -1,8 +1,26 @@
 using System.Collections.Generic;
-
+using System;
 public class SkillData
 {
-    public int ManaCost { get; set; }
+    private int _manaCost;
+    public int ManaCost {
+        get
+        {
+            int costChange = 0;
+            foreach (var effect in RoundManager.instance.persistentEffects)
+            {
+                if (effect.type == "SkillsCost")
+                {
+                    costChange += effect.amount;
+                }
+            } return Math.Max(0, _manaCost + costChange);
+        }
+
+        set
+        {
+            _manaCost = value;
+        }
+    }
     public int Damage { get; set; }
     public int Range { get; set; }
     public string name;

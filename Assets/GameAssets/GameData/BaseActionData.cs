@@ -134,6 +134,12 @@ public class BaseActionData
                 Description = "When gained, choose one: +2 mana, +1 card, or +2 coins. This card does nothing when played.";
                 Cost = 0;
                 break;
+            case "Fury":
+                this.Description = "For the rest of the turn, monster skills cost 2 less but no less than 0. Your monsters can use an additional skill.";
+                this.effects.Add("PersistentEffect SkillsCost -2 Duration 1");
+                this.effects.Add("PersistentEffect AdditionalSkills 1 Duration 1");
+                Cost = 15;
+                break;
             default:
                 effects.Add("No effect");
                 break;

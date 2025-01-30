@@ -81,6 +81,7 @@ public class RoundManager : MonoBehaviour
     public List<VisualEffect> effects;
     public GameObject fireballPanel;
     public List<VisualEffect> visualEffects = new List<VisualEffect>();
+    public List<PersistentEffect> persistentEffects = new List<PersistentEffect>();
 
     void Awake()
     {
@@ -177,7 +178,7 @@ public class RoundManager : MonoBehaviour
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         //TODO add guaranteed cards to dungeon data.
-        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {"Investments"});
+        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {});
         DiscardHand();
         discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);

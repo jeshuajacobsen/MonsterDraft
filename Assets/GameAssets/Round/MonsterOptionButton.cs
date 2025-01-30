@@ -25,15 +25,17 @@ public class MonsterOptionButton : MonoBehaviour
     {
         this.monster = monster;
         this.option = option;
-        if (option == "Movement")
+
+        int additionalSkills = 0;
+        foreach (var effect in RoundManager.instance.persistentEffects)
         {
-            transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = "Move " + monster.Movement;
-            if (RoundManager.CheckForMonster(monster.tileOn, 1) != null && monster.tileOn.name != "Tile7")
+            if (effect.type == "AdditionalSkills")
             {
-                transform.GetComponent<Button>().interactable = false;
+                additionalSkills = effect.amount;
             }
         }
-        else if (option == "Skill1")
+
+        if (option == "Skill1")
         {
             transform.GetComponent<Button>().interactable = false;
             transform.Find("MoveNameText").GetComponent<TextMeshProUGUI>().text = monster.skill1.name;
@@ -41,7 +43,8 @@ public class MonsterOptionButton : MonoBehaviour
             SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
             skillDirections.SetDirections(monster.skill1.directions);
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-            if (RoundManager.instance.Mana >= monster.skill1.ManaCost && monster.actionsUsedThisTurn.Count == 0)
+            if (RoundManager.instance.Mana >= monster.skill1.ManaCost && 
+                monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
                 if (RoundManager.instance.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
                 {
@@ -58,7 +61,8 @@ public class MonsterOptionButton : MonoBehaviour
             SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
             skillDirections.SetDirections(monster.skill2.directions);
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-            if (RoundManager.instance.Mana >= monster.skill2.ManaCost && monster.actionsUsedThisTurn.Count == 0)
+            if (RoundManager.instance.Mana >= monster.skill2.ManaCost && 
+                monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
                 if (RoundManager.instance.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
                 {
@@ -75,12 +79,7 @@ public class MonsterOptionButton : MonoBehaviour
 
     public void OnClick()
     {
-        if (option == "Movement")
-        {
-            RoundManager.instance.MoveMonster(monster);
-            RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
-        }
-        else if (option == "Skill1")
+        if (option == "Skill1")
         {
 
             RoundManager.instance.SelectSkill(monster, monster.skill1);

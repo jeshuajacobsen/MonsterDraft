@@ -312,6 +312,20 @@ public class ResolvingEffectState : CardPlayState
             } else if (effectParts[0] == "Nothing")
             {
                 mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "PersistentEffect")
+            {
+                if (effectParts[1] == "SkillsCost")
+                {
+                    int amount = int.Parse(effectParts[2]);
+                    RoundManager.instance.persistentEffects.Add(
+                        new PersistentEffect("SkillsCost", amount, "Skills cost " + amount, int.Parse(effectParts[4])));
+                } else if (effectParts[1] == "AdditionalSkills")
+                {
+                    int amount = int.Parse(effectParts[2]);
+                    RoundManager.instance.persistentEffects.Add(
+                        new PersistentEffect("AdditionalSkills", amount, "Monsters can use " + amount + " extra skills", int.Parse(effectParts[4])));
+                }
+                mainPhase.playedActionCardStep++;
             }
         }
         

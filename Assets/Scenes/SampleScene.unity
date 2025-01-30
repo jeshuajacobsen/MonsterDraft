@@ -6360,6 +6360,8 @@ MonoBehaviour:
     sprite: {fileID: -3534647325576296009, guid: 01851ef40f9d9184cb4870c815ff3e79, type: 3}
   - name: Forest
     sprite: {fileID: 21300000, guid: 60af0bfb993682c4bb87cc2e82415bd1, type: 3}
+  - name: Fury
+    sprite: {fileID: -5207577772078591440, guid: 0af21bdc7578c73448a74c1de7793e6d, type: 3}
   - name: Gold
     sprite: {fileID: 21300000, guid: a8674d00057760141b635c67818d0e1d, type: 3}
   - name: Grass
@@ -6372,12 +6374,16 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f5b5669d6b704ae41bc0d59145579afc, type: 3}
   - name: Inspiration
     sprite: {fileID: 3284758457489151648, guid: 09ca6c086d4a1d840bace3941b721119, type: 3}
+  - name: Investments
+    sprite: {fileID: 2978743254220827305, guid: 12769031e30683345a757a1a7b882d69, type: 3}
   - name: Leafear
     sprite: {fileID: 5594525134645161022, guid: e66d314aed6d6984e88696081c9ab334, type: 3}
   - name: Leafree
     sprite: {fileID: 21300000, guid: 9045d116c2c23d5409a8b4a619a57482, type: 3}
   - name: Lightna
     sprite: {fileID: 3980345088886043443, guid: ca585e60eee842143925d2d4dff14a00, type: 3}
+  - name: Loan
+    sprite: {fileID: 8637591845778648698, guid: 33a54d74ce924c24cbb02568fa4aef90, type: 3}
   - name: Mana Burst
     sprite: {fileID: -7916896879029228694, guid: 506b2f485f053a54ca338422ab30d8da, type: 3}
   - name: Mana Crystal
@@ -6442,8 +6448,6 @@ MonoBehaviour:
     sprite: {fileID: -5070116007335442539, guid: 73b0b65934d8adb4aa7a5f5d4c29b521, type: 3}
   - name: Zaple
     sprite: {fileID: 21300000, guid: 630b029cac45527438da344f3f6b2c9e, type: 3}
-  - name: Loan
-    sprite: {fileID: 8637591845778648698, guid: 33a54d74ce924c24cbb02568fa4aef90, type: 3}
   levelSprites:
   - name: darkForest
     sprite: {fileID: 9197848482490137289, guid: d7692a487baf94943b295171ebc290d0, type: 3}
