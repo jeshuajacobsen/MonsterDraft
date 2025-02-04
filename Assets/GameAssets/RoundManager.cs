@@ -147,7 +147,12 @@ public class RoundManager : MonoBehaviour
     public void OnDoneButtonClicked()
     {
         Debug.Log("OnDoneButtonClicked called");
-        gameState.SetState(new ResolvingEffectState((MainPhase)gameState));
+        if (gameState is AutoPlayingMonsterState)
+        {
+            gameState.SetState(new IdleState((MainPhase)gameState));
+        } else {
+            gameState.SetState(new ResolvingEffectState((MainPhase)gameState));
+        }
     }
 
     public void OnCancelButtonClicked()
@@ -768,7 +773,7 @@ public class RoundManager : MonoBehaviour
         foreach (string option in options)
         {
             OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
-            optionButton.InitValues(option, displayCards);
+            optionButton.InitValues(option, displayCards, gameState);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
         }
         if (displayCards.Count == 0)
@@ -806,7 +811,7 @@ public class RoundManager : MonoBehaviour
         foreach (string option in options)
         {
             OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
-            optionButton.InitValues(option, new List<Card>());
+            optionButton.InitValues(option, new List<Card>(), gameState);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
         }
     }

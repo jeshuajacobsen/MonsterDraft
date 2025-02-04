@@ -7,6 +7,7 @@ public class OptionButton : MonoBehaviour
 {
     string effect;
     List<Card> cards;
+    GameState mainPhase;
 
     void Start()
     {
@@ -18,10 +19,11 @@ public class OptionButton : MonoBehaviour
         
     }
 
-    public void InitValues(string effect, List<Card> cards)
+    public void InitValues(string effect, List<Card> cards, GameState mainPhase)
     {
         this.effect = effect;
         this.cards = cards;
+        this.mainPhase = mainPhase;
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Coins")
         {
@@ -38,6 +40,12 @@ public class OptionButton : MonoBehaviour
         } else if (effectParts[0] == "Discard")
         {
             transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Discard";
+        } else if (effectParts[0] == "DrawRevealed")
+        {
+            transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Draw";
+        } else if (effectParts[0] == "Play")
+        {
+            transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Play";
         }
         transform.GetComponent<Button>().onClick.AddListener(OnClick);
     }
@@ -63,6 +71,18 @@ public class OptionButton : MonoBehaviour
         } else if (effectParts[0] == "Discard")
         {
             RoundManager.instance.DiscardCardsFromDeck(this.cards);
+        } else if (effectParts[0] == "DrawRevealed")
+        {
+            foreach (Card card in cards)
+            {
+                RoundManager.instance.AddCardToHand(card);
+            }
+        } else if (effectParts[0] == "Play")
+        {
+            foreach (Card card in cards)
+            {
+                ((MainPhase)mainPhase).cardsToAutoPlay.Add(card);
+            }
         }
         
     }

@@ -250,16 +250,20 @@ public class MainPhase : GameState
 
     }
 
+    private void PlayMonster(MonsterCard monsterCard, Tile target)
+    {
+        Monster newMonster = Instantiate(roundManager.MonsterPrefab, target.transform);
+        newMonster.InitValues(monsterCard, target, "Ally");
+        target.monster = newMonster;
+        roundManager.Mana -= monsterCard.ManaCost;
+    }
+
     public void PlayCardWithTarget(SmallCardView cardView, Tile target)
     {
         VisualEffect visualEffect = null;
         if (cardView.card is MonsterCard)
         {
-            MonsterCard monsterCard = (MonsterCard)cardView.card;
-            Monster newMonster = Instantiate(roundManager.MonsterPrefab, target.transform);
-            newMonster.InitValues(monsterCard, target, "Ally");
-            target.monster = newMonster;
-            roundManager.Mana -= monsterCard.ManaCost;
+            PlayMonster((MonsterCard)cardView.card, target);
         }
         else if (cardView.card is ActionCard)
         {
@@ -312,6 +316,10 @@ public class MainPhase : GameState
                         visualEffect = RoundManager.instance.AddVisualEffect("Fireball", target);
                         playedActionCardStep++;
                     }
+                } else if (effectParts[0] == "Destroy")
+                {
+                    target.monster.Health = 0;
+                    playedActionCardStep++;
                 }
             }
             FinishPlay();
@@ -320,6 +328,11 @@ public class MainPhase : GameState
         }
         RemoveCard(cardView);
         SetState(new IdleState(this));
+    }
+
+    public void AutoPlayMonsterCard(MonsterCard monsterCard, Tile target)
+    {
+        PlayMonster(monsterCard, target);
     }
 
     public override void SelectTile(Tile tile, Vector2 pointerPosition)

@@ -84,6 +84,11 @@ public class TreasureData
                 this.effects.Add("Coins 1 Per Treasure Played");
                 this.Cost = 5;
                 break;
+            case "Evolution Stone":
+                this.Description = "Gain 20 experience points.";
+                this.effects.Add("Experience 20");
+                this.Cost = 12;
+                break;
             default:
                 this.Description = "+1 Coins";
                 this.GoldGeneration = 0;

@@ -71,6 +71,10 @@ public class ResolvingEffectState : CardPlayState
                     RoundManager.instance.Mana += amount;
                 }
                 mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Experience")
+            {
+                RoundManager.instance.Experience += int.Parse(effectParts[1]);
+                mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Draw")
             {
                 if (effectParts[1] == "x")
@@ -299,14 +303,47 @@ public class ResolvingEffectState : CardPlayState
                 }
                 else if (effectParts[1] == "Option")
                 {
-                    List<string> options = new List<string>();
-                    for (int j = 2; j < effectParts.Length; j++)
+                    if (effectParts[2] == "If")
                     {
-                        options.Add(effectParts[j]);
+                        if (effectParts[3] == "Cost")
+                        {
+                            int limit = int.Parse(effectParts[4]);
+                            if (effectParts[5] == "Mana")
+                            {
+                                if (effectParts[6] == "Less")
+                                {
+                                    if (effectParts[7] == "Play")
+                                    {
+                                        List<string> options = new List<string>();
+                                        if (mainPhase.foundCards.Count == 0)
+                                        {
+                                            options.Add("Done");
+                                        }
+                                        else if (mainPhase.foundCards[0].Cost <= limit)
+                                        {
+                                            options.Add("Play");
+                                            options.Add("DrawRevealed");
+                                            mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                                        } else {
+                                            options.Add("DrawRevealed");
+                                            mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));                                        
+                                        }
+                                        mainPhase.playedActionCardStep++;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        List<string> options = new List<string>();
+                        for (int j = 2; j < effectParts.Length; j++)
+                        {
+                            options.Add(effectParts[j]);
+                        }
+                        mainPhase.playedActionCardStep++;
+                        mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                        return;
                     }
-                    mainPhase.playedActionCardStep++;
-                    mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
-                    return;
                 }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Nothing")
@@ -324,6 +361,20 @@ public class ResolvingEffectState : CardPlayState
                     int amount = int.Parse(effectParts[2]);
                     RoundManager.instance.persistentEffects.Add(
                         new PersistentEffect("AdditionalSkills", amount, "Monsters can use " + amount + " extra skills", int.Parse(effectParts[4])));
+                }
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Destroy")
+            {
+                if (effectParts[1] == "Target")
+                {
+                    mainPhase.selectedTile.monster.Health = 0;
+                }
+                mainPhase.playedActionCardStep++;
+            } else if (effectParts[0] == "Animate")
+            {
+                if (effectParts[1] == "Fireball")
+                {
+                    RoundManager.instance.AddVisualEffect("Fireball", mainPhase.selectedTile);
                 }
                 mainPhase.playedActionCardStep++;
             }

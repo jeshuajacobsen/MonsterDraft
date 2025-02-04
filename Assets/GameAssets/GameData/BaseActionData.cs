@@ -140,6 +140,25 @@ public class BaseActionData
                 this.effects.Add("PersistentEffect AdditionalSkills 1 Duration 1");
                 Cost = 15;
                 break;
+            case "Annihilate":
+                this.Description = "Destroy an enemy.";
+                this.effects.Add("Target Enemy");
+                this.effects.Add("Destroy Target");
+                Cost = 15;
+                break;
+            case "Summon":
+                this.Description = "When you play this, reveal the next monster card in your deck." 
+                    + "If it costs 4 or less mana, you may put it into play otherwise put it into your hand.";
+                this.effects.Add("Search Deck Next Monster");
+                this.effects.Add("Found Option If Cost 4 Mana Less Play Else Hand");
+                Cost = 8;
+                break;
+            case "Recycle":
+                this.Description = "Trash a card from your hand. If you do, draw a card.";
+                this.effects.Add("Select Cards 1");
+                this.effects.Add("Trash Selected");
+                this.effects.Add("Draw 1");
+                break;
             default:
                 effects.Add("No effect");
                 break;

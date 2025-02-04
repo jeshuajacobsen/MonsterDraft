@@ -6338,6 +6338,8 @@ MonoBehaviour:
   spriteEntries:
   - name: Alchemist
     sprite: {fileID: 21300000, guid: 15b4f0d1d5f7a3546a6df9ad240a637a, type: 3}
+  - name: Annihilate
+    sprite: {fileID: 1631239928983192277, guid: 6e94b6e642b13874a811154ec7dc9f79, type: 3}
   - name: Aquafly
     sprite: {fileID: -4996737028687335721, guid: 07bdb0513f93c3f47b377ab7e74a625e, type: 3}
   - name: AttackSymbol
@@ -6354,6 +6356,8 @@ MonoBehaviour:
     sprite: {fileID: -6715298244629837518, guid: 7cb8f08325ceea34bb1435a32efc56b3, type: 3}
   - name: EnemyBackground
     sprite: {fileID: 21300000, guid: 1a0a71cfdfcdca241aa6051d3d0d653b, type: 3}
+  - name: Evolution Stone
+    sprite: {fileID: 1292794195935669178, guid: ab96f445a04b2d04da45878c89880a61, type: 3}
   - name: Fireball
     sprite: {fileID: 21300000, guid: 7e2796d82f81a3c419731588bb39e626, type: 3}
   - name: Forge
@@ -6412,6 +6416,8 @@ MonoBehaviour:
     sprite: {fileID: -1649516999337575513, guid: 5e1718579656c5c4482a671bc8bda8bd, type: 3}
   - name: Range
     sprite: {fileID: 21300000, guid: 98b3a9899478d9f42a0e1d461003fb0a, type: 3}
+  - name: Recycle
+    sprite: {fileID: 7507011894936811572, guid: 0c669dff33eaabe4a96160e62643ecbd, type: 3}
   - name: Research
     sprite: {fileID: 21300000, guid: 3252f62755e09aa48b518aef7c4c96c2, type: 3}
   - name: Shield
@@ -6438,6 +6444,8 @@ MonoBehaviour:
     sprite: {fileID: 7532739790990566679, guid: 1957e07d4d0a5204f9a7cb491ed061c3, type: 3}
   - name: Storage
     sprite: {fileID: 21300000, guid: ff67c9b4b0258cf47b35bef02d46ff06, type: 3}
+  - name: Summon
+    sprite: {fileID: -4631336749209548592, guid: a57e398474529cd42874d110e5af544e, type: 3}
   - name: Throne Room
     sprite: {fileID: 21300000, guid: c502bf700ba03cc40b333d1c0bea6c41, type: 3}
   - name: Thunda

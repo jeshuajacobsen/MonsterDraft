@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R5CXC1PYALK",
         "name": "com.DefaultCompany.com.unity.template.mobile2D",
-        "processId": 21828,
+        "processId": 30103,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -54,6 +54,12 @@
             "deviceId": "R5CXC1PYALK",
             "name": "com.DefaultCompany.com.unity.template.mobile2D",
             "processId": 21828,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CXC1PYALK",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 30103,
             "exited": false
         }
     ],

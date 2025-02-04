@@ -24,7 +24,7 @@ public class StockPile : MonoBehaviour
         
     }
 
-    public void InitValues(string name, int stockLeft,string cardType)
+    public void InitValues(string name, int stockLeft, string cardType)
     {
         this.cardType = cardType;
         if (this.cardType == "Monster")
@@ -46,7 +46,7 @@ public class StockPile : MonoBehaviour
         }
         this.StockLeft = stockLeft;
         transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = stockLeft.ToString();
-        this.Cost = card.Cost;
+        this.Cost = this.card.Cost;
         transform.Find("CostBackgroundImage").Find("CostText").GetComponent<TextMeshProUGUI>().text = this.Cost.ToString();
         transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(name);
     }

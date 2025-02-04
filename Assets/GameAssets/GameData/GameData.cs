@@ -58,7 +58,9 @@ public class GameData
             { "Greater Fireball", new BaseActionData("Greater Fireball") },
             { "Mana Burst", new BaseActionData("Mana Burst") },
             { "Provisions", new BaseActionData("Provisions") },
-            { "Fury", new BaseActionData("Fury") }
+            { "Fury", new BaseActionData("Fury") },
+            { "Annihilate", new BaseActionData("Annihilate") },
+            { "Summon", new BaseActionData("Summon") }
         };
 
         _treasureData = new Dictionary<string, TreasureData>
@@ -73,7 +75,8 @@ public class GameData
             { "Mana Gem", new TreasureData("Mana Gem") },
             { "Bauble", new TreasureData("Bauble") },
             { "Loan", new TreasureData("Loan") },
-            { "Investments", new TreasureData("Investments") }
+            { "Investments", new TreasureData("Investments") },
+            { "Evolution Stone", new TreasureData("Evolution Stone") }
         };
 
         _skills = new Dictionary<string, SkillData>
