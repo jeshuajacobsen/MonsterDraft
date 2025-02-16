@@ -8,6 +8,7 @@ public class RoundManager : MonoBehaviour
 {
     public static RoundManager instance;
     public GameObject roundPanel;
+    public GameObject gemStorePanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
     [SerializeField] private SkillVisualEffect SkillVisualEffectPrefab;
     [SerializeField] private OptionButton optionButtonPrefab;
@@ -99,7 +100,24 @@ public class RoundManager : MonoBehaviour
 
     public void Start()
     {
-        
+        roundPanel.transform.Find("BoostMenuButton").GetComponent<Button>().onClick.AddListener(() => {
+            if (roundPanel.transform.Find("BoostsPanel").gameObject.activeSelf)
+            {
+                roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
+                gemStorePanel.SetActive(false);
+                return;
+            }
+            roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(true);
+        });
+        roundPanel.transform.Find("BoostsPanel").Find("CloseButton").GetComponent<Button>().onClick.AddListener(() => {
+            roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
+        });
+        gemStorePanel.transform.Find("CloseButton").GetComponent<Button>().onClick.AddListener(() => {
+            gemStorePanel.SetActive(false);
+        });
+        roundPanel.transform.Find("BoostsPanel").Find("GemStoreButton").GetComponent<Button>().onClick.AddListener(() => {
+            gemStorePanel.SetActive(true);
+        });
     }
 
     public void Update()
@@ -122,18 +140,28 @@ public class RoundManager : MonoBehaviour
     public void SetupDoneButton(bool showCancel = true)
     {
         doneButton.gameObject.SetActive(true);
-        if (doneButton.onClick.GetPersistentEventCount() == 0)
-        {
-            doneButton.onClick.AddListener(OnDoneButtonClicked);
-        }
+        doneButton.onClick.RemoveAllListeners();
+        doneButton.onClick.AddListener(OnDoneButtonClicked);
         
-        if ((gameState is MainPhase && ((MainPhase)gameState).autoPlaying) || !showCancel)
+        if (showCancel)
         {
-            return;
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.gameObject.SetActive(true);
+            cancelButton.onClick.AddListener(OnCancelButtonClicked);
         }
-        
+    }
+
+    public void SetupBoostCancelButton(int gemCost)
+    {
         cancelButton.gameObject.SetActive(true);
-        cancelButton.onClick.AddListener(OnCancelButtonClicked);
+        cancelButton.onClick.RemoveAllListeners();
+        if (cancelButton.onClick.GetPersistentEventCount() == 0)
+        {
+            cancelButton.onClick.AddListener(() => {
+                GameManager.instance.Gems += gemCost;
+                gameState.SwitchPhaseState(new IdleState((MainPhase)gameState));
+            });
+        }
     }
 
     public void CleanupDoneButton()
@@ -146,12 +174,11 @@ public class RoundManager : MonoBehaviour
 
     public void OnDoneButtonClicked()
     {
-        Debug.Log("OnDoneButtonClicked called");
         if (gameState is AutoPlayingMonsterState)
         {
-            gameState.SetState(new IdleState((MainPhase)gameState));
+            gameState.SwitchPhaseState(new IdleState((MainPhase)gameState));
         } else {
-            gameState.SetState(new ResolvingEffectState((MainPhase)gameState));
+            gameState.SwitchPhaseState(new ResolvingEffectState((MainPhase)gameState));
         }
     }
 
@@ -386,7 +413,7 @@ public class RoundManager : MonoBehaviour
     {
         if(skill.ManaCost <= Mana)
         {
-            gameState.SetState(new SelectingSkillTargetState((MainPhase)gameState, monster, skill));
+            gameState.SwitchPhaseState(new SelectingSkillTargetState((MainPhase)gameState, monster, skill));
         }
     }
 
@@ -839,9 +866,9 @@ public class RoundManager : MonoBehaviour
         {
             if (((MainPhase)gameState).playedCard != null)
             {
-                gameState.SetState(new ResolvingEffectState((MainPhase)gameState));
+                gameState.SwitchPhaseState(new ResolvingEffectState((MainPhase)gameState));
             } else {
-                gameState.SetState(new ResolvingOnGainEffectState((MainPhase)gameState));
+                gameState.SwitchPhaseState(new ResolvingOnGainEffectState((MainPhase)gameState));
             }
         }
        

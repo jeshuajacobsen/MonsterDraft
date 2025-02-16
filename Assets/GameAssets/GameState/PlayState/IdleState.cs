@@ -21,9 +21,9 @@ public class IdleState : CardPlayState
             mainPhase.playedCard = mainPhase.cardsToAutoPlay[0];
             if (mainPhase.cardsToAutoPlay[0] is MonsterCard)
             {
-                mainPhase.SetState(new AutoPlayingMonsterState(mainPhase, (MonsterCard)mainPhase.cardsToAutoPlay[0]));
+                mainPhase.SwitchPhaseState(new AutoPlayingMonsterState(mainPhase, (MonsterCard)mainPhase.cardsToAutoPlay[0]));
             } else {
-                mainPhase.SetState(new ResolvingEffectState(mainPhase));
+                mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
             }
             mainPhase.cardsToAutoPlay.RemoveAt(0);
         } else {
@@ -74,20 +74,20 @@ public class IdleState : CardPlayState
                             if (actionCard.StartsWithTarget())
                             {
                                 mainPhase.playedActionCardStep++;
-                                mainPhase.SetState(new QuickSelectingTargetMonsterState(mainPhase, cardView));
+                                mainPhase.SwitchPhaseState(new QuickSelectingTargetMonsterState(mainPhase, cardView));
                             }
                             else
                             {
-                                mainPhase.SetState(new ToFieldState(mainPhase, cardView));
+                                mainPhase.SwitchPhaseState(new ToFieldState(mainPhase, cardView));
                             }
                         }
                         else if (cardView.card is MonsterCard)
                         {
-                            mainPhase.SetState(new QuickSelectingMonsterTileState(mainPhase, cardView));
+                            mainPhase.SwitchPhaseState(new QuickSelectingMonsterTileState(mainPhase, cardView));
                         }
                         else if (cardView.card is TreasureCard)
                         {
-                            mainPhase.SetState(new ToFieldState(mainPhase, cardView));
+                            mainPhase.SwitchPhaseState(new ToFieldState(mainPhase, cardView));
                         }
                         break;
                     }

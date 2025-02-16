@@ -89,7 +89,7 @@ public class StockPile : MonoBehaviour
                 {
                     MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
                     mainPhase.gainedCard = newCard;
-                    mainPhase.SetState(new ResolvingOnGainEffectState(mainPhase));
+                    mainPhase.SwitchPhaseState(new ResolvingOnGainEffectState(mainPhase));
                 }
             }
             StockLeft--;

@@ -96,13 +96,13 @@ public class ResolvingEffectState : CardPlayState
                 mainPhase.playedActionCardStep++;
                 if (effectParts[1] == "Cards")
                 {
-                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "None"));
+                    mainPhase.SwitchPhaseState(new SelectingCardsState(mainPhase, effectParts[2], "None"));
                 } else if (effectParts[1] == "Treasure")
                 {
-                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "Treasure"));
+                    mainPhase.SwitchPhaseState(new SelectingCardsState(mainPhase, effectParts[2], "Treasure"));
                 } else if (effectParts[1] == "Action")
                 {
-                    mainPhase.SetState(new SelectingCardsState(mainPhase, effectParts[2], "Action"));
+                    mainPhase.SwitchPhaseState(new SelectingCardsState(mainPhase, effectParts[2], "Action"));
                 }
                 return;
             } else if (effectParts[0] == "Discard")
@@ -163,7 +163,7 @@ public class ResolvingEffectState : CardPlayState
                                     cost += mainPhase.selectedCards[0].card.Cost;
                                     cost += int.Parse(effectParts[6]);
                                     bool cancelable = mainPhase.playedActionCardStep == 1;
-                                    mainPhase.SetState(new GainingCardState(mainPhase, restriction, cost, cancelable));
+                                    mainPhase.SwitchPhaseState(new GainingCardState(mainPhase, restriction, cost, cancelable));
                                     return;
                                 }
                             }
@@ -171,7 +171,7 @@ public class ResolvingEffectState : CardPlayState
                     } else if (effectParts[3] == "Saved")
                     {
                         bool cancelable = mainPhase.playedActionCardStep == 1;
-                        mainPhase.SetState(new GainingCardState(mainPhase, restriction, mainPhase.savedValue, cancelable));
+                        mainPhase.SwitchPhaseState(new GainingCardState(mainPhase, restriction, mainPhase.savedValue, cancelable));
                         return;
                     }
                 }
@@ -193,7 +193,7 @@ public class ResolvingEffectState : CardPlayState
             } else if (effectParts[0] == "Target")
             {
                 mainPhase.playedActionCardStep++;
-                mainPhase.SetState(new SelectingTargetMonsterState(mainPhase, mainPhase.playedCard));
+                mainPhase.SwitchPhaseState(new SelectingTargetMonsterState(mainPhase, mainPhase.playedCard));
                 return;
             } else if (effectParts[0] == "Damage")
             {
@@ -323,10 +323,10 @@ public class ResolvingEffectState : CardPlayState
                                         {
                                             options.Add("Play");
                                             options.Add("DrawRevealed");
-                                            mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                                            mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
                                         } else {
                                             options.Add("DrawRevealed");
-                                            mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));                                        
+                                            mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));                                        
                                         }
                                         mainPhase.playedActionCardStep++;
                                         return;
@@ -341,7 +341,7 @@ public class ResolvingEffectState : CardPlayState
                             options.Add(effectParts[j]);
                         }
                         mainPhase.playedActionCardStep++;
-                        mainPhase.SetState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                        mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
                         return;
                     }
                 }

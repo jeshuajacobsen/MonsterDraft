@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Newtonsoft.Json;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject menuPanel;
     public GameObject deckEditorPanel;
+    public GameObject cardImprovementPanel;
     public GameObject dungeonPanel;
     public GameObject townPanel;
     public List<string> unlockedDungeonLevels;
@@ -34,6 +36,21 @@ public class GameManager : MonoBehaviour
         {
             _prestigePoints = value;
             prestigeText.text = _prestigePoints.ToString();
+        }
+    }
+
+
+    private int _gems;
+    public UnityEvent OwnedGemsChanged = new UnityEvent();
+    public int Gems {
+        get
+        {
+            return _gems;
+        }
+        set
+        {
+            _gems = value;
+            OwnedGemsChanged.Invoke();
         }
     }
 
@@ -82,6 +99,20 @@ public class GameManager : MonoBehaviour
         deckEditorPanel.transform.parent.parent.gameObject.SetActive(false);
         menuPanel.SetActive(true);
         selectedInitialDeck = deckEditorPanel.GetComponent<DeckEditorPanel>().GetSelectedInitialDeck();
+        SaveGame();
+    }
+
+    public void OpenCardImprovementPanel()
+    {
+        menuPanel.SetActive(false);
+        cardImprovementPanel.transform.parent.parent.gameObject.SetActive(true);
+        cardImprovementPanel.GetComponent<CardImprovementPanel>().OnOpen();
+    }
+
+    public void CloseCardImprovementPanel()
+    {
+        cardImprovementPanel.transform.parent.parent.gameObject.SetActive(false);
+        menuPanel.SetActive(true);
         SaveGame();
     }
 

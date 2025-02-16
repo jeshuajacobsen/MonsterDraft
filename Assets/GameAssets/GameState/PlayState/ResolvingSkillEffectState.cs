@@ -75,7 +75,7 @@ public class ResolvingSkillEffectState : CardPlayState
             }
         }
         
-        mainPhase.SetState(new IdleState(mainPhase));
+        mainPhase.SwitchPhaseState(new IdleState(mainPhase));
     }
 
     public override void ExitState()

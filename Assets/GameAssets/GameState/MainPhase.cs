@@ -186,7 +186,7 @@ public class MainPhase : GameState
                 }
             }
         }
-        SetState(new IdleState(this));
+        SwitchPhaseState(new IdleState(this));
     }
 
     public void CancelFullPlay()
@@ -197,7 +197,7 @@ public class MainPhase : GameState
             roundManager.AddCardToHand(playedCard);
         }
         playedCard = null;
-        SetState(new IdleState(this));
+        SwitchPhaseState(new IdleState(this));
     }
 
     public void FinishPlay()
@@ -210,13 +210,13 @@ public class MainPhase : GameState
         playedCard = null;
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
-        SetState(new IdleState(this));
+        SwitchPhaseState(new IdleState(this));
     }
 
     public void FinishOnGain()
     {
         gainedCard = null;
-        SetState(new IdleState(this));
+        SwitchPhaseState(new IdleState(this));
     }
 
     public void RemoveCard(SmallCardView cardView)
@@ -239,9 +239,9 @@ public class MainPhase : GameState
         if (treasureCard.effects.Count > 0)
         {
             playedCard = treasureCard;
-            SetState(new ResolvingEffectState(this));
+            SwitchPhaseState(new ResolvingEffectState(this));
         } else {
-            SetState(new IdleState(this));
+            SwitchPhaseState(new IdleState(this));
         }
     }
 
@@ -255,7 +255,6 @@ public class MainPhase : GameState
         Monster newMonster = Instantiate(roundManager.MonsterPrefab, target.transform);
         newMonster.InitValues(monsterCard, target, "Ally");
         target.monster = newMonster;
-        roundManager.Mana -= monsterCard.ManaCost;
     }
 
     public void PlayCardWithTarget(SmallCardView cardView, Tile target)
@@ -263,6 +262,7 @@ public class MainPhase : GameState
         VisualEffect visualEffect = null;
         if (cardView.card is MonsterCard)
         {
+            roundManager.Mana -= ((MonsterCard)cardView.card).ManaCost;
             PlayMonster((MonsterCard)cardView.card, target);
         }
         else if (cardView.card is ActionCard)
@@ -327,7 +327,7 @@ public class MainPhase : GameState
             return;
         }
         RemoveCard(cardView);
-        SetState(new IdleState(this));
+        SwitchPhaseState(new IdleState(this));
     }
 
     public void AutoPlayMonsterCard(MonsterCard monsterCard, Tile target)
@@ -373,7 +373,7 @@ public class MainPhase : GameState
         }
     }
 
-    public override void SetState(CardPlayState newState)
+    public override void SwitchPhaseState(CardPlayState newState)
     {
         currentState.ExitState();
         currentState = newState;

@@ -35,7 +35,7 @@ public class ResolvingOnGainEffectState : CardPlayState
                     options.Add(effectParts[j] + " " + effectParts[j + 1]);
                 }
                 mainPhase.playedActionCardStep++;
-                mainPhase.SetState(new SelectingOptionState(mainPhase, options));
+                mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options));
                 return;
             }
         }

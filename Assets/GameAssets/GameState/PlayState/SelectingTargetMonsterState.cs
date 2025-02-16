@@ -58,7 +58,7 @@ public class SelectingTargetMonsterState : CardPlayState
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
                 {
                     mainPhase.selectedTile = validTargets[i];
-                    mainPhase.SetState(new ResolvingEffectState(mainPhase));
+                    mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
                     // If you only want to select a single tile, break after setting state
                     break;
                 }

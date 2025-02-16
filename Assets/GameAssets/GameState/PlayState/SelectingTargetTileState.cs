@@ -53,7 +53,7 @@ public class SelectingTargetTileState : CardPlayState
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
                 {
                     mainPhase.selectedTile = validTargets[i];
-                    mainPhase.SetState(new ResolvingEffectState(mainPhase));
+                    mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
                     break;
                 }
             }

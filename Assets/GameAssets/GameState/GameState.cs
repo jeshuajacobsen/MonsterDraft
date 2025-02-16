@@ -23,6 +23,6 @@ public abstract class GameState : MonoBehaviour
 
     public abstract void SelectTile(Tile tile, Vector2 position);
 
-    public abstract void SetState(CardPlayState newState);
+    public abstract void SwitchPhaseState(CardPlayState newState);
 
 }

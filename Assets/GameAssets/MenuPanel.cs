@@ -13,6 +13,7 @@ public class MenuPanel : MonoBehaviour
         transform.Find("ButtonLeft").GetComponent<Button>().onClick.AddListener(ButtonLeft);
         transform.Find("ButtonRight").GetComponent<Button>().onClick.AddListener(ButtonRight);
         transform.Find("EditDeckButton").GetComponent<Button>().onClick.AddListener(GameManager.instance.OpenDeckEditor);
+        transform.Find("ImproveCardsButton").GetComponent<Button>().onClick.AddListener(GameManager.instance.OpenCardImprovementPanel);
         SetDungeonLevel("Forest");
     }
 

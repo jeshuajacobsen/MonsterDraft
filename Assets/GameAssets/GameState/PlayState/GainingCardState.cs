@@ -59,7 +59,7 @@ public class GainingCardState : CardPlayState
     public void GainCard(Card card)
     {
         RoundManager.instance.discardPile.AddCard(card);
-        mainPhase.SetState(new ResolvingEffectState(mainPhase));
+        mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
     }
 
     public override void ExitState()

@@ -61,11 +61,11 @@ public class SelectingSkillTargetState : CardPlayState
                 RoundManager.instance.UseSkillOnBase(monster, skill);
                 if (skill.effects.Count > 0)
                 {
-                    mainPhase.SetState(new ResolvingSkillEffectState(mainPhase, skill, monster, null));
+                    mainPhase.SwitchPhaseState(new ResolvingSkillEffectState(mainPhase, skill, monster, null));
                 }
                 else
                 {
-                    mainPhase.SetState(new IdleState(mainPhase));
+                    mainPhase.SwitchPhaseState(new IdleState(mainPhase));
                 }
                 return;
             }
@@ -75,11 +75,11 @@ public class SelectingSkillTargetState : CardPlayState
                 RoundManager.instance.UseAreaSkill(monster, skill, validTargets);
                 if (skill.effects.Count > 0)
                 {
-                    mainPhase.SetState(new ResolvingSkillEffectState(mainPhase, skill, monster, validTargets));
+                    mainPhase.SwitchPhaseState(new ResolvingSkillEffectState(mainPhase, skill, monster, validTargets));
                 }
                 else
                 {
-                    mainPhase.SetState(new IdleState(mainPhase));
+                    mainPhase.SwitchPhaseState(new IdleState(mainPhase));
                 }
                 return;
             }
@@ -97,17 +97,17 @@ public class SelectingSkillTargetState : CardPlayState
                     RoundManager.instance.UseSkill(monster, skill, tile);
                     if (skill.effects.Count > 0)
                     {
-                        mainPhase.SetState(new ResolvingSkillEffectState(mainPhase, skill, monster, new List<Tile>{tile}));
+                        mainPhase.SwitchPhaseState(new ResolvingSkillEffectState(mainPhase, skill, monster, new List<Tile>{tile}));
                     }
                     else
                     {
-                        mainPhase.SetState(new IdleState(mainPhase));
+                        mainPhase.SwitchPhaseState(new IdleState(mainPhase));
                     }
                     return;
                 }
             }
 
-            mainPhase.SetState(new IdleState(mainPhase));
+            mainPhase.SwitchPhaseState(new IdleState(mainPhase));
         }
     }
 

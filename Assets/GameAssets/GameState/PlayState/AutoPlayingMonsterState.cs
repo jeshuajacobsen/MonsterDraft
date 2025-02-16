@@ -7,23 +7,31 @@ public class AutoPlayingMonsterState : CardPlayState
 {
     private List<Tile> validTargets;
     private MonsterCard card;
+    private int gemCost;
 
-    public AutoPlayingMonsterState(MainPhase mainPhase, MonsterCard card) : base(mainPhase)
+    public AutoPlayingMonsterState(MainPhase mainPhase, MonsterCard card, int gemCost = 0) : base(mainPhase)
     {
         this.validTargets = new List<Tile>();
         this.card = card;
+        this.gemCost = gemCost;
     }
     public override void EnterState()
     {
         Debug.Log("Auto Playing Monster State Entered");
+        RoundManager.instance.roundPanel.transform.Find("TownPanel").gameObject.SetActive(false);
         MarkValidTargets();
-        RoundManager.instance.SetupDoneButton();
-        //mainPhase.playedActionCardStep++;
+        if (gemCost > 0)
+        {
+            RoundManager.instance.roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
+            RoundManager.instance.SetupBoostCancelButton(gemCost);
+        } else {
+            RoundManager.instance.SetupDoneButton(false);
+        }
     }
 
     public override void HandleInput()
     {
-        // Handle target selection input
+        
     }
 
     public override void UpdateState()
@@ -40,8 +48,6 @@ public class AutoPlayingMonsterState : CardPlayState
         {
             pointerUp = true;
             pointerPosition = Input.GetTouch(0).position;
-        } else {
-            pointerPosition = Input.mousePosition;
         }
 
         if (pointerUp)
@@ -55,6 +61,7 @@ public class AutoPlayingMonsterState : CardPlayState
         Debug.Log("Exiting playing monster state");
         validTargets.ForEach(tile => tile.GetComponent<Image>().color = Color.white);
         validTargets.Clear();
+        RoundManager.instance.CleanupDoneButton();
     }
 
     public void MarkValidTargets()
@@ -80,18 +87,6 @@ public class AutoPlayingMonsterState : CardPlayState
 
     public void HandleCardDrop(MonsterCard card, Vector2 dropPosition)
     {
-        RectTransform parentRect = RoundManager.instance.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
-
-        bool isInsideHand = RectTransformUtility.RectangleContainsScreenPoint(
-            parentRect,
-            dropPosition,
-            mainPhase.mainCamera
-        );
-
-        if (isInsideHand)
-        {
-            return;
-        }
         for (int i = 0; i < validTargets.Count; i++)
         {
             if (RectTransformUtility.RectangleContainsScreenPoint(
@@ -101,7 +96,7 @@ public class AutoPlayingMonsterState : CardPlayState
             ))
             {
                 mainPhase.AutoPlayMonsterCard(card, validTargets[i]);
-                mainPhase.SetState(new IdleState(mainPhase));
+                mainPhase.SwitchPhaseState(new IdleState(mainPhase));
             }
         }
     }
