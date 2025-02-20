@@ -21,7 +21,7 @@ public class Dungeon
         if (guaranteedMonsterTimer == 0)
         {
             guaranteedMonsterTimer = 4;
-            return new MonsterCard(guaranteedMonster);
+            return new MonsterCard(guaranteedMonster, GameManager.instance.cardLevels[guaranteedMonster]);
         }
         
         int totalProbability = 0;
@@ -46,13 +46,13 @@ public class Dungeon
                 switch (type)
                 {
                     case "Monster":
-                        card = new MonsterCard(cardName);
+                        card = new MonsterCard(cardName, GameManager.instance.cardLevels[cardName]);
                         break;
                     case "Action":
-                        card = new ActionCard(cardName);
+                        card = new ActionCard(cardName, GameManager.instance.cardLevels[cardName]);
                         break;
                     case "Treasure":
-                        card = new TreasureCard(cardName);
+                        card = new TreasureCard(cardName, GameManager.instance.cardLevels[cardName]);
                         break;
                     case "Pass":
                         break;

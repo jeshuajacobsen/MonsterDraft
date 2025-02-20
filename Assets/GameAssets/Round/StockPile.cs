@@ -29,15 +29,15 @@ public class StockPile : MonoBehaviour
         this.cardType = cardType;
         if (this.cardType == "Monster")
         {
-            card = new MonsterCard(name);
+            card = new MonsterCard(name, GameManager.instance.cardLevels[name]);
         }
         else if (this.cardType == "Treasure")
         {
-            card = new TreasureCard(name);
+            card = new TreasureCard(name, GameManager.instance.cardLevels[name]);
         }
         else if (this.cardType == "Action")
         {
-            card = new ActionCard(name);
+            card = new ActionCard(name, GameManager.instance.cardLevels[name]);
         }
         this.Name = name;
         if (transform.Find("NameText") != null)
@@ -46,7 +46,7 @@ public class StockPile : MonoBehaviour
         }
         this.StockLeft = stockLeft;
         transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = stockLeft.ToString();
-        this.Cost = this.card.Cost;
+        this.Cost = this.card.CoinCost;
         transform.Find("CostBackgroundImage").Find("CostText").GetComponent<TextMeshProUGUI>().text = this.Cost.ToString();
         transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(name);
     }
@@ -69,23 +69,23 @@ public class StockPile : MonoBehaviour
 
             if (cardType == "Monster")
             {
-                Card newCard = new MonsterCard(Name);
+                Card newCard = new MonsterCard(Name, GameManager.instance.cardLevels[Name]);
                 RoundManager.instance.discardPile.AddCard(newCard);
                 RoundManager.instance.cardsGainedThisRound.Add(newCard);
             }
             else if (cardType == "Treasure")
             {
-                Card newCard = new TreasureCard(Name);
+                Card newCard = new TreasureCard(Name, GameManager.instance.cardLevels[Name]);
                 RoundManager.instance.discardPile.AddCard(newCard);
                 RoundManager.instance.cardsGainedThisRound.Add(newCard);
             }
             else if (cardType == "Action")
             {
-                ActionCard newCard = new ActionCard(Name);
+                ActionCard newCard = new ActionCard(Name, GameManager.instance.cardLevels[Name]);
                 RoundManager.instance.discardPile.AddCard(newCard);
                 RoundManager.instance.cardsGainedThisRound.Add(newCard);
 
-                if (newCard.onGainEffects.Count > 0)
+                if (newCard.OnGainEffects.Count > 0)
                 {
                     MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
                     mainPhase.gainedCard = newCard;

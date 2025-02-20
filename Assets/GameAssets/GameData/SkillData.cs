@@ -39,87 +39,87 @@ public class SkillData
         effects = new List<string>();
         switch (name)
         {
-            //Basic
+            // Basic
             case "Zap":
-                ManaCost = 1;
-                Damage = 3;
+                ManaCost = 10;
+                Damage = 30;
                 Range = 2;
                 directions = "Forward";
                 attackVisualEffect = "Lightning";
                 break;
             case "Bubble":
-                ManaCost = 1;
-                Damage = 5;
+                ManaCost = 10;
+                Damage = 50;
                 Range = 1;
                 directions = "Forward Backward";
                 attackVisualEffect = "Water";
                 break;
             case "Leaf":
-                ManaCost = 2;
-                Damage = 6;
+                ManaCost = 20;
+                Damage = 60;
                 Range = 1;
                 directions = "Forward";
                 attackVisualEffect = "Leaf";
                 break;
             case "Spark":
-                ManaCost = 1;
-                Damage = 5;
+                ManaCost = 10;
+                Damage = 50;
                 Range = 1;
                 directions = "Forward Backward";
                 attackVisualEffect = "Fire";
                 break;
             case "Wrap":
-                ManaCost = 3;
-                Damage = 9;
+                ManaCost = 30;
+                Damage = 90;
                 Range = 1;
                 directions = "Forward";
                 break;
             case "Goo":
-                ManaCost = 1;
-                Damage = 4;
+                ManaCost = 10;
+                Damage = 40;
                 Range = 1;
                 directions = "Forward Backward";
                 break;
             case "Chill":
-                ManaCost = 2;
-                Damage = 6;
+                ManaCost = 20;
+                Damage = 60;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 break;
             case "Bite":
-                ManaCost = 2;
-                Damage = 7;
+                ManaCost = 20;
+                Damage = 70;
                 Range = 1;
                 directions = "Forward Backward";
                 attackVisualEffect = "Bite";
                 break;
 
-            //Intermidiate
+            // Intermediate
             case "Shock":
-                ManaCost = 2;
-                Damage = 5;
+                ManaCost = 20;
+                Damage = 50;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 attackVisualEffect = "Lightning";
                 break;
             case "Burn":
-                ManaCost = 3;
-                Damage = 8;
+                ManaCost = 30;
+                Damage = 80;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 attackVisualEffect = "Fire";
                 break;
             case "Growth":
-                ManaCost = 3;
+                ManaCost = 30;
                 Damage = 0;
-                effects.Add("Buff Attack Plus 10 Duration 3");
+                effects.Add("Buff Attack Plus 100 Duration 3");
                 Range = 0;
                 directions = "";
-                Description = "Increase attack by 10 for 3 turns";
+                Description = "Increase attack by 100 for 3 turns";
                 break;
             case "Wave":
-                ManaCost = 4;
-                Damage = 10;
+                ManaCost = 40;
+                Damage = 100;
                 Range = 2;
                 directions = "Forward DiagonalForward";
                 attacksAllInRange = true;
@@ -127,44 +127,44 @@ public class SkillData
                 attackVisualEffect = "Water";
                 break;
             case "Poison Sting":
-                ManaCost = 5;
-                Damage = 12;
+                ManaCost = 50;
+                Damage = 120;
                 Range = 1;
                 directions = "Forward Backward";
                 //effects.Add("Poison 3");
                 break;
             case "Slime Ball":
-                ManaCost = 2;
-                Damage = 6;
+                ManaCost = 20;
+                Damage = 60;
                 Range = 1;
                 directions = "Forward Backward";
                 //effects.Add("Slow 2");
                 break;
             case "Ice Shard":
-                ManaCost = 3;
-                Damage = 10;
+                ManaCost = 30;
+                Damage = 100;
                 Range = 1;
                 directions = "Forward Backward";
                 break;
             case "Drain":
-                ManaCost = 4;
-                Damage = 8;
+                ManaCost = 40;
+                Damage = 80;
                 Range = 1;
                 directions = "Forward Backward";
-                //effects.Add("Heal 4");
+                //effects.Add("Heal 40");
                 break;
 
-            //Advanced
+            // Advanced
             case "Lightning":
-                ManaCost = 5;
-                Damage = 12;
+                ManaCost = 50;
+                Damage = 120;
                 Range = 2;
                 directions = "Forward Up Down";
                 attackVisualEffect = "Lightning";
                 break;
             case "Heat Wave":
-                ManaCost = 6;
-                Damage = 10;
+                ManaCost = 60;
+                Damage = 100;
                 Range = 1;
                 attacksAllInRange = true;
                 directions = "Forward Backward Up Down";
@@ -172,52 +172,52 @@ public class SkillData
                 attackVisualEffect = "Fire";
                 break;
             case "Solar Beam":
-                ManaCost = 6;
-                Damage = 20;
+                ManaCost = 60;
+                Damage = 200;
                 Range = 2;
                 directions = "Forward";
                 break;
             case "Water Jet":
-                ManaCost = 5;
-                Damage = 10;
+                ManaCost = 50;
+                Damage = 100;
                 Range = 2;
                 directions = "Forward Backward";
                 attacksAllInRange = true;
                 attackVisualEffect = "Water";
                 break;
             case "Multiply":
-                ManaCost = 3;
+                ManaCost = 30;
                 Damage = 0;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 //effects.Add("Slow 3");
                 break;
             case "Freeze":
-                ManaCost = 4;
-                Damage = 12;
+                ManaCost = 40;
+                Damage = 120;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 //effects.Add("Freeze 2");
                 break;
             case "Nightmare":
-                ManaCost = 5;
-                Damage = 15;
+                ManaCost = 50;
+                Damage = 150;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 //effects.Add("Sleep 2");
                 break;
 
-            //Expert
+            // Expert
             case "Thunder Bolt":
-                ManaCost = 10;
-                Damage = 23;
+                ManaCost = 100;
+                Damage = 230;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 attackVisualEffect = "Lightning";
                 break;
             case "Inferno":
-                ManaCost = 13;
-                Damage = 18;
+                ManaCost = 130;
+                Damage = 180;
                 Range = 2;
                 attacksAllInRange = true;
                 directions = "Forward Backward Up Down";
@@ -225,29 +225,29 @@ public class SkillData
                 attackVisualEffect = "Fire";
                 break;
             case "Poison Ivy":
-                ManaCost = 6;
-                Damage = 20;
+                ManaCost = 60;
+                Damage = 200;
                 Range = 1;
                 directions = "Forward DiagonalForward";
                 break;
             case "Aqua Blast":
-                ManaCost = 12;
-                Damage = 25;
+                ManaCost = 120;
+                Damage = 250;
                 Range = 1;
                 directions = "Forward DiagonalForward";
                 attacksAllInRange = true;
                 attackVisualEffect = "Water";
                 break;
             case "Slime Storm":
-                ManaCost = 8;
-                Damage = 15;
+                ManaCost = 80;
+                Damage = 150;
                 Range = 1;
                 directions = "Forward Backward Up Down";
                 attacksAllInRange = true;
                 break;
             case "Blizzard":
-                ManaCost = 10;
-                Damage = 15;
+                ManaCost = 100;
+                Damage = 150;
                 Range = 2;
                 directions = "Forward Backward Up Down DiagonalForward DiagonalBackward";
                 attacksAllInRange = true;

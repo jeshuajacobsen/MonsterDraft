@@ -22,12 +22,12 @@ public class LargeCardView : MonoBehaviour
     
     }
 
-    public void SetCard(Card card, Vector2 pointerPosition, bool move = true)
+    public void SetCard(Card card, Vector2 pointerPosition, bool move = true, bool levelPlusOne = false)
     {
         this.card = card;
         transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
-        transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = card.Cost.ToString();
+        transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = card.CoinCost.ToString();
 
         RectTransform rectTransform = GetComponent<RectTransform>();
         if (rectTransform == null)
@@ -101,6 +101,8 @@ public class LargeCardView : MonoBehaviour
         {
             transform.Find("CardTypeText").GetComponent<TextMeshProUGUI>().text = "Action";
         }
+
+        transform.Find("LevelText").GetComponent<TextMeshProUGUI>().text = "Level: " + GameManager.instance.cardLevels[card.Name];
     }
 
 
@@ -143,4 +145,51 @@ public class LargeCardView : MonoBehaviour
         }
     }
 
+    public void MarkImprovements()
+    {
+        if (card is MonsterCard monsterCard)
+        {
+            if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].health > 0)
+            {
+                transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.green;
+            } else {
+                transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+
+            if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].attack > 0)
+            {
+                transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.green;
+            } else {
+                transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+            
+            if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].defense > 0)
+            {
+                transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.green;
+            } else {
+                transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+
+            if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].movement > 0)
+            {
+                transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.green;
+            } else {
+                transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+
+            if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].manaCost > 0)
+            {
+                transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.red;
+            } else {
+                transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+
+            if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].coinCost > 0)
+            {
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.red;
+            } else {
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+        }
+    }
 }

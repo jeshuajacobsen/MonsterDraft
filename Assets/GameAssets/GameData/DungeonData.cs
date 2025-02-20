@@ -21,7 +21,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 5);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
-                PrestigeReward = 10;
+                PrestigeReward = 100;
                 break;
             case "Forest2":
                 cardProbabilities.Add("Pass", 50);
@@ -31,7 +31,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
-                PrestigeReward = 12;
+                PrestigeReward = 120;
                 break;
             case "Forest3":
                 cardProbabilities.Add("Pass", 50);
@@ -41,7 +41,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
-                PrestigeReward = 13;
+                PrestigeReward = 130;
                 break;
             case "Forest4":
                 cardProbabilities.Add("Pass", 40);
@@ -51,7 +51,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
-                PrestigeReward = 15;
+                PrestigeReward = 150;
                 break;
             case "Forest5":
                 cardProbabilities.Add("Pass", 30);
@@ -61,7 +61,7 @@ public class DungeonData
                 cardProbabilities.Add("Heal", 10);
                 cardProbabilities.Add("Slimy", 20);
                 guaranteedMonster = "Slimy";
-                PrestigeReward = 30;
+                PrestigeReward = 300;
                 break;
         }
     }

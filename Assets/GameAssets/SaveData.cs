@@ -8,8 +8,9 @@ public class SaveData
 
     public Dictionary<string, int> cardsUsed { get; set; } = new Dictionary<string, int>();
     public Dictionary<string, int> cardsBought { get; set; } = new Dictionary<string, int>();
+    public Dictionary<string, int> cardLevels = new Dictionary<string, int>();
 
-    public SaveData(InitialDeck initialDeck, List<string> unlockedDungeonLevels, int prestigePoints)
+    public SaveData(InitialDeck initialDeck, List<string> unlockedDungeonLevels, int prestigePoints, Dictionary<string, int> cardLevels)
     {
         this.initialDeck = new List<string>();
         foreach (var card in initialDeck.cards)
@@ -19,6 +20,7 @@ public class SaveData
 
         this.unlockedDungeonLevels = unlockedDungeonLevels ?? new List<string>();
         this.PrestigePoints = prestigePoints;
+        this.cardLevels = cardLevels;
     }
 
     public SaveData() { }

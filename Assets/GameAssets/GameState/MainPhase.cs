@@ -232,7 +232,7 @@ public class MainPhase : GameState
     public void PlayTreasureCard(TreasureCard treasureCard)
     {
         treasuresPlayed++;
-        roundManager.Coins += treasureCard.GoldGeneration;
+        roundManager.Coins += treasureCard.CoinGeneration;
         roundManager.Mana += treasureCard.ManaGeneration;
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;

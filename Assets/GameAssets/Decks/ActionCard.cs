@@ -4,7 +4,7 @@ public class ActionCard : Card
 {
     public List<string> requirements;
 
-    public ActionCard(string name) : base(name, "Action")
+    public ActionCard(string name, int level) : base(name, "Action", level)
     {
         
     }

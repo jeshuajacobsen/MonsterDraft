@@ -160,7 +160,7 @@ public class ResolvingEffectState : CardPlayState
                                 int cost = 0;
                                 if (mainPhase.selectedCards.Count > 0)
                                 {
-                                    cost += mainPhase.selectedCards[0].card.Cost;
+                                    cost += mainPhase.selectedCards[0].card.CoinCost;
                                     cost += int.Parse(effectParts[6]);
                                     bool cancelable = mainPhase.playedActionCardStep == 1;
                                     mainPhase.SwitchPhaseState(new GainingCardState(mainPhase, restriction, cost, cancelable));
@@ -253,7 +253,7 @@ public class ResolvingEffectState : CardPlayState
                         int sum = 0;
                         for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                         {
-                            sum += mainPhase.selectedCards[j].card.Cost;
+                            sum += mainPhase.selectedCards[j].card.CoinCost;
                         }
                         mainPhase.savedValue = sum;
                     }
@@ -319,7 +319,7 @@ public class ResolvingEffectState : CardPlayState
                                         {
                                             options.Add("Done");
                                         }
-                                        else if (mainPhase.foundCards[0].Cost <= limit)
+                                        else if (mainPhase.foundCards[0].CoinCost <= limit)
                                         {
                                             options.Add("Play");
                                             options.Add("DrawRevealed");

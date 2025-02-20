@@ -54,7 +54,8 @@ public class BoostButton : MonoBehaviour
             }
             else
             {
-                MonsterCard card = new MonsterCard(GameManager.instance.gameData.GetRandomMonsterName(new List<string>(), "Common"));
+                string monsterName = GameManager.instance.gameData.GetRandomMonsterName(new List<string>(), "Common");
+                MonsterCard card = new MonsterCard(monsterName, GameManager.instance.cardLevels[monsterName]);
                 yield return new WaitForEndOfFrame();
                 RoundManager.instance.gameState.SwitchPhaseState(new AutoPlayingMonsterState((MainPhase)RoundManager.instance.gameState, card, gemCost));
             }

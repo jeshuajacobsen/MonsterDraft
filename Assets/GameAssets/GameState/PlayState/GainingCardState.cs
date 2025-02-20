@@ -38,7 +38,7 @@ public class GainingCardState : CardPlayState
 
     public bool MeetsRestrictions(Card card)
     {
-        if (card.Cost > cost)
+        if (card.CoinCost > cost)
         {
             return false;
         }

@@ -191,7 +191,7 @@ public class RunManager : MonoBehaviour
 
             if (gainedCards.Count == 0)
             {
-                largeCardViews[i].GetComponent<LargeCardView>().SetCard(new TreasureCard("Copper"), new Vector2(0, 0), false);
+                largeCardViews[i].GetComponent<LargeCardView>().SetCard(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]), new Vector2(0, 0), false);
             }
             
         }

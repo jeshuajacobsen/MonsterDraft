@@ -31,15 +31,15 @@ public class DeckEditorPanel : MonoBehaviour
             string type = GameManager.instance.gameData.GetCardType(cardName.Key);
             if(type == "Treasure")
             {
-                cardView.InitValues(new TreasureCard(cardName.Key), cardName.Value);
+                cardView.InitValues(new TreasureCard(cardName.Key, GameManager.instance.cardLevels[cardName.Key]), cardName.Value);
             }
             else if(type == "Monster")
             {
-                cardView.InitValues(new MonsterCard(cardName.Key), cardName.Value);
+                cardView.InitValues(new MonsterCard(cardName.Key, GameManager.instance.cardLevels[cardName.Key]), cardName.Value);
             }
             else if(type == "Action")
             {
-                cardView.InitValues(new ActionCard(cardName.Key), cardName.Value);
+                cardView.InitValues(new ActionCard(cardName.Key, GameManager.instance.cardLevels[cardName.Key]), cardName.Value);
             }
             int count = GameManager.instance.selectedInitialDeck.cards.Count(card => card.Name == cardName.Key);
             cardView.LoadValues(count, count);
@@ -60,15 +60,24 @@ public class DeckEditorPanel : MonoBehaviour
             string type = GameManager.instance.gameData.GetCardType(card);
             if(type == "Treasure")
             {
-                cardView.InitValues(new TreasureCard(card), GameManager.instance.gameData.availableDeckEditorCards[card]);
+                cardView.InitValues(
+                    new TreasureCard(card, GameManager.instance.cardLevels[card]), 
+                    GameManager.instance.gameData.availableDeckEditorCards[card]
+                );
             }
             else if(type == "Monster")
             {
-                cardView.InitValues(new MonsterCard(card), GameManager.instance.gameData.availableDeckEditorCards[card]);
+                cardView.InitValues(
+                    new MonsterCard(card, GameManager.instance.cardLevels[card]), 
+                    GameManager.instance.gameData.availableDeckEditorCards[card]
+                );
             }
             else if(type == "Action")
             {
-                cardView.InitValues(new ActionCard(card), GameManager.instance.gameData.availableDeckEditorCards[card]);
+                cardView.InitValues(
+                    new ActionCard(card, GameManager.instance.cardLevels[card]), 
+                    GameManager.instance.gameData.availableDeckEditorCards[card]
+                );
             }
             cardView.LoadValues(saveData.cardsUsed[card], saveData.cardsBought[card]);
             unlockedCards.Add(cardView);

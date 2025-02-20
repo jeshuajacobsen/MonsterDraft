@@ -137,10 +137,12 @@ public class GameData
             { "Mana Gem", 10 },
             { "Borble", 2 },
             { "Leafree", 2 },
+            { "Olla", 2 },
             { "Owisp", 2 },
             { "Slimy", 2 },
             { "Snowbug", 2 },
             { "Zaple", 2 },
+            { "Squrl", 2 },
             { "Fireball", 2 },
             { "Heal", 2 },
             { "Shield", 2 }
@@ -247,5 +249,20 @@ public class GameData
             return "";
         }
         return names[Random.Range(0, names.Count)];
+    }
+
+    public List<string> GetAllMonsterNames()
+    {
+        return _baseMonsterData.Keys.ToList();
+    }
+
+    public List<string> GetAllActionNames()
+    {
+        return _actionData.Keys.ToList();
+    }
+
+    public List<string> GetAllTreasureNames()
+    {
+        return _treasureData.Keys.ToList();
     }
 }

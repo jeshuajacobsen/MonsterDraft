@@ -21,11 +21,12 @@ public class IdleState : CardPlayState
             mainPhase.playedCard = mainPhase.cardsToAutoPlay[0];
             if (mainPhase.cardsToAutoPlay[0] is MonsterCard)
             {
+                mainPhase.cardsToAutoPlay.RemoveAt(0);
                 mainPhase.SwitchPhaseState(new AutoPlayingMonsterState(mainPhase, (MonsterCard)mainPhase.cardsToAutoPlay[0]));
             } else {
+                mainPhase.cardsToAutoPlay.RemoveAt(0);
                 mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
             }
-            mainPhase.cardsToAutoPlay.RemoveAt(0);
         } else {
             mainPhase.autoPlaying = false;
         }

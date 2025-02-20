@@ -46,6 +46,10 @@ public class EnemyPhase : GameState
             return;
         }
         Card card = roundManager.currentDungeon.DrawCard();
+        if (card != null)
+        {
+            card.level = 1;
+        }
         if (card != null && card is MonsterCard)
         {
         

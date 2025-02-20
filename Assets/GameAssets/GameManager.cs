@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject menuPanel;
     public GameObject deckEditorPanel;
     public GameObject cardImprovementPanel;
+    public GameObject SelectedCardImprovementPanel;
     public GameObject dungeonPanel;
     public GameObject townPanel;
     public List<string> unlockedDungeonLevels;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
     public LargeCardView largeCardView3;
     private int _prestigePoints;
     [SerializeField] private TextMeshProUGUI prestigeText;
-
+    public UnityEvent OwnedPrestigeChanged = new UnityEvent();
     public int PrestigePoints { 
         get
         {
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _prestigePoints = value;
-            prestigeText.text = _prestigePoints.ToString();
+            OwnedPrestigeChanged.Invoke();
         }
     }
 
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Dictionary<string, int> cardLevels = new Dictionary<string, int>();
+
     void Awake()
     {
 
@@ -70,9 +73,23 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        selectedInitialDeck = new InitialDeck();
         unlockedDungeonLevels = new List<string>();
         unlockedDungeonLevels.Add("Forest");
+        foreach (string cardName in GameManager.instance.gameData.GetAllMonsterNames())
+        {
+            cardLevels.Add(cardName, 1);
+        }
+
+        foreach (string cardName in GameManager.instance.gameData.GetAllTreasureNames())
+        {
+            cardLevels.Add(cardName, 1);
+        }
+
+        foreach (string cardName in GameManager.instance.gameData.GetAllActionNames())
+        {
+            cardLevels.Add(cardName, 1);
+        } 
+        selectedInitialDeck = new InitialDeck();
         LoadGame();
     }
 
@@ -116,9 +133,20 @@ public class GameManager : MonoBehaviour
         SaveGame();
     }
 
+    public void OpenSelectedCardImprovementPanel(Card card)
+    {
+        SelectedCardImprovementPanel.SetActive(true);
+        SelectedCardImprovementPanel.GetComponent<SelectedCardPanel>().OnOpen(card);
+    }
+
+    public void CloseSelectedCardImprovementPanel()
+    {
+        SelectedCardImprovementPanel.SetActive(false);
+    }
+
     public void SaveGame()
     {
-        SaveData saveData = new SaveData(selectedInitialDeck, unlockedDungeonLevels, PrestigePoints);
+        SaveData saveData = new SaveData(selectedInitialDeck, unlockedDungeonLevels, PrestigePoints, cardLevels);
         saveData.AddCardsForSaving(deckEditorPanel.GetComponent<DeckEditorPanel>().unlockedCards);
         string jsonData = JsonConvert.SerializeObject(saveData);
         string path = Application.persistentDataPath + "/savefile.json";
@@ -135,12 +163,12 @@ public class GameManager : MonoBehaviour
             {
                 string jsonData = System.IO.File.ReadAllText(path);
                 SaveData saveData = JsonConvert.DeserializeObject<SaveData>(jsonData);
-
-                selectedInitialDeck = new InitialDeck();
-                selectedInitialDeck.LoadCards(saveData.initialDeck);
                 unlockedDungeonLevels = saveData.unlockedDungeonLevels;
                 PrestigePoints = saveData.PrestigePoints;
                 deckEditorPanel.GetComponent<DeckEditorPanel>().LoadCards(saveData);
+                cardLevels = saveData.cardLevels;
+                selectedInitialDeck = new InitialDeck();
+                selectedInitialDeck.LoadCards(saveData.initialDeck);
             }
             catch (System.Exception ex)
             {

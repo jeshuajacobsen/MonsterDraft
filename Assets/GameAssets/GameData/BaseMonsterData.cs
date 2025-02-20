@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class BaseMonsterData
 {
@@ -11,7 +10,7 @@ public class BaseMonsterData
     public int Movement { get; set; }
     public int ManaCost { get; set; }
     public string Description { get; set; }
-    public int Cost { get; set; }
+    public int CoinCost { get; set; }
 
     public string rarity = "Common";
 
@@ -21,283 +20,158 @@ public class BaseMonsterData
     public string evolvesFrom = "";
     public string evolvesTo = "";
 
-    public int experienceGiven = 10;
-    public int experienceRequired = 40;
+    public int experienceGiven = 100;
+    public int experienceRequired = 400;
 
     public int PrestigeCost { get; set; }
+
+    public int maxLevel;
+    public List<MonsterCardLevelData> levelData = new List<MonsterCardLevelData>();
+    public int baseLevelUpCost;
 
     public BaseMonsterData(string name)
     {
         PrestigeCost = 0;
         this.name = name;
         Description = "This is the description for " + name;
+
         switch (name)
         {
             case "Borble":
-                Attack = 10;
-                Health = 26;
-                Defense = 8;
-                Movement = 1;
-                ManaCost = 8;
-                Cost = 12;
-                skill1Name = "Bubble";
-                skill2Name = "Wave";
-                rarity = "Epic";
-                evolvesTo = "Pupal";
-                experienceGiven = 40;
-                PrestigeCost = 100;
+                SetBaseStats(100, 260, 80, 1, 80, 120, "Bubble", "Wave", "Epic", "Pupal", null, 400, 1000);
                 break;
             case "Pupal":
-                Attack = 16;
-                Health = 38;
-                Defense = 12;
-                Movement = 1;
-                ManaCost = 10;
-                Cost = 14;
-                skill1Name = "Wave";
-                skill2Name = "Water Jet";
-                rarity = "Epic";
-                evolvesFrom = "Borble";
-                evolvesTo = "Aquafly";
-                experienceGiven = 60;
+                SetBaseStats(160, 380, 120, 1, 100, 140, "Wave", "Water Jet", "Epic", "Aquafly", "Borble", 600, 0);
                 break;
             case "Aquafly":
-                Attack = 10;
-                Health = 51;
-                Defense = 10;
-                Movement = 2;
-                ManaCost = 12;
-                Cost = 18;
-                skill1Name = "Water Jet";
-                skill2Name = "Aqua Blast";
-                rarity = "Epic";
-                evolvesFrom = "Pupal";
-                experienceGiven = 90;
+                SetBaseStats(100, 510, 100, 2, 120, 180, "Water Jet", "Aqua Blast", "Epic", null, "Pupal", 900, 0);
                 break;
             case "Leafree":
-                Attack = 6;
-                Health = 22;
-                Defense = 7;
-                Movement = 2;
-                ManaCost = 6;
-                Cost = 8;
-                skill1Name = "Leaf";
-                skill2Name = "Growth";
-                rarity = "Rare";
-                evolvesTo = "Leafear";
-                experienceGiven = 30;
-                PrestigeCost = 50;
+                SetBaseStats(60, 220, 70, 2, 60, 80, "Leaf", "Growth", "Rare", "Leafear", null, 300, 500);
                 break;
             case "Leafear":
-                Attack = 12;
-                Health = 35;
-                Defense = 13;
-                Movement = 2;
-                ManaCost = 8;
-                Cost = 12;
-                skill1Name = "Growth";
-                skill2Name = "Solar Beam";
-                rarity = "Rare";
-                evolvesFrom = "Leafree";
-                experienceGiven = 50;
+                SetBaseStats(120, 350, 130, 2, 80, 120, "Growth", "Solar Beam", "Rare", null, "Leafree", 500, 0);
                 break;
             case "Olla":
-                Attack = 15;
-                Health = 35;
-                Defense = 14;
-                Movement = 1;
-                ManaCost = 7;
-                Cost = 11;
-                skill1Name = "Wrap";
-                skill2Name = "Poison Sting";
-                rarity = "Rare";
-                experienceGiven = 50;
+                SetBaseStats(150, 350, 140, 1, 70, 110, "Wrap", "Poison Sting", "Rare", null, null, 500, 600);
                 break;
             case "Owisp":
-                Attack = 5;
-                Health = 15;
-                Defense = 4;
-                Movement = 1;
-                ManaCost = 4;
-                Cost = 6;
-                skill1Name = "Spark";
-                skill2Name = "Burn";
-                rarity = "Uncommon";
-                evolvesTo = "Wallowisp";
-                experienceGiven = 20;
-                PrestigeCost = 30;
+                SetBaseStats(50, 150, 40, 1, 40, 60, "Spark", "Burn", "Uncommon", "Wallowisp", null, 200, 300);
                 break;
             case "Wallowisp":
-                Attack = 9;
-                Health = 22;
-                Defense = 7;
-                Movement = 1;
-                ManaCost = 4;
-                Cost = 8;
-                skill1Name = "Burn";
-                skill2Name = "Heat Wave";
-                rarity = "Uncommon";
-                evolvesFrom = "Owisp";
-                experienceGiven = 30;
+                SetBaseStats(90, 220, 70, 1, 40, 80, "Burn", "Heat Wave", "Uncommon", null, "Owisp", 300, 0);
                 break;
             case "Slimy":
-                Attack = 2;
-                Health = 12;
-                Defense = 1;
-                Movement = 1;
-                ManaCost = 2;
-                Cost = 3;
-                skill1Name = "Goo";
-                skill2Name = "Slime Ball";
-                rarity = "Common";
-                evolvesTo = "Slimier";
-                experienceGiven = 10;
-                PrestigeCost = 10;
+                SetBaseStats(20, 120, 10, 1, 20, 30, "Goo", "Slime Ball", "Common", "Slimier", null, 100, 100);
                 break;
             case "Slimier":
-                Attack = 3;
-                Health = 18;
-                Defense = 2;
-                Movement = 1;
-                ManaCost = 4;
-                Cost = 5;
-                skill1Name = "Slime Ball";
-                skill2Name = "Multiply";
-                rarity = "Common";
-                evolvesFrom = "Slimy";
-                evolvesTo = "Slimiest";
-                experienceGiven = 20;
+                SetBaseStats(30, 180, 20, 1, 40, 50, "Slime Ball", "Multiply", "Common", "Slimiest", "Slimy", 200, 0);
                 break;
             case "Slimiest":
-                Attack = 6;
-                Health = 35;
-                Defense = 4;
-                Movement = 1;
-                ManaCost = 6;
-                Cost = 7;
-                skill1Name = "Multiply";
-                skill2Name = "Slime Storm";
-                rarity = "Common";
-                evolvesFrom = "Slimier";
-                experienceGiven = 30;
+                SetBaseStats(60, 350, 40, 1, 60, 70, "Multiply", "Slime Storm", "Common", null, "Slimier", 300, 0);
                 break;
             case "Snowbug":
-                Attack = 8;
-                Health = 20;
-                Defense = 5;
-                Movement = 1;
-                ManaCost = 5;
-                Cost = 6;
-                skill1Name = "Chill";
-                skill2Name = "Ice Shard";
-                rarity = "Uncommon";
-                evolvesTo = "Snant";
-                experienceGiven = 20;
-                PrestigeCost = 30;
+                SetBaseStats(80, 200, 50, 1, 50, 60, "Chill", "Ice Shard", "Uncommon", "Snant", null, 200, 300);
                 break;
             case "Snant":
-                Attack = 12;
-                Health = 30;
-                Defense = 8;
-                Movement = 1;
-                ManaCost = 6;
-                Cost = 7;
-                skill1Name = "Ice Shard";
-                skill2Name = "Freeze";
-                rarity = "Uncommon";
-                evolvesFrom = "Snowbug";
-                evolvesTo = "Snowpede";
-                experienceGiven = 30;
+                SetBaseStats(120, 300, 80, 1, 60, 70, "Ice Shard", "Freeze", "Uncommon", "Snowpede", "Snowbug", 300, 0);
                 break;
             case "Snowpede":
-                Attack = 17;
-                Health = 45;
-                Defense = 12;
-                Movement = 1;
-                ManaCost = 8;
-                Cost = 10;
-                skill1Name = "Freeze";
-                skill2Name = "Blizzard";
-                rarity = "Uncommon";
-                evolvesFrom = "Snant";
-                experienceGiven = 50;
+                SetBaseStats(170, 450, 120, 1, 80, 100, "Freeze", "Blizzard", "Uncommon", null, "Snant", 500, 0);
                 break;
             case "Squrl":
-                Attack = 11;
-                Health = 35;
-                Defense = 8;
-                Movement = 1;
-                ManaCost = 8;
-                Cost = 12;
-                skill1Name = "Bite";
-                skill2Name = "Drain";
-                rarity = "Epic";
-                evolvesTo = "Squrile";
-                experienceGiven = 40;
+                SetBaseStats(110, 350, 80, 1, 80, 120, "Bite", "Drain", "Epic", "Squrile", null, 400, 1000);
                 break;
             case "Squrile":
-                Attack = 15;
-                Health = 45;
-                Defense = 12;
-                Movement = 1;
-                ManaCost = 10;
-                Cost = 15;
-                skill1Name = "Drain";
-                skill2Name = "Nightmare";
-                rarity = "Epic";
-                evolvesFrom = "Squrl";
-                experienceGiven = 70;
+                SetBaseStats(150, 450, 120, 1, 100, 150, "Drain", "Nightmare", "Epic", null, "Squrl", 700, 0);
                 break;
             case "Zaple":
-                Attack = 3;
-                Health = 10;
-                Defense = 1;
-                Movement = 1;
-                ManaCost = 2;
-                Cost = 4;
-                skill1Name = "Zap";
-                skill2Name = "Shock";
-                rarity = "Common";
-                evolvesTo = "Lightna";
-                experienceGiven = 10;
-                PrestigeCost = 10;
+                SetBaseStats(30, 100, 10, 1, 20, 40, "Zap", "Shock", "Common", "Lightna", null, 100, 100);
                 break;
             case "Lightna":
-                Attack = 5;
-                Health = 15;
-                Defense = 2;
-                Movement = 2;
-                ManaCost = 3;
-                Cost = 6;
-                skill1Name = "Shock";
-                skill2Name = "Lightning";
-                rarity = "Common";
-                evolvesFrom = "Zaple";
-                evolvesTo = "Thunda";
-                experienceGiven = 20;
+                SetBaseStats(50, 150, 20, 2, 30, 60, "Shock", "Lightning", "Common", "Thunda", "Zaple", 200, 0);
                 break;
             case "Thunda":
-                Attack = 8;
-                Health = 23;
-                Defense = 3;
-                Movement = 2;
-                ManaCost = 5;
-                Cost = 10;
-                skill1Name = "Lightning";
-                skill2Name = "Thunder Bolt";
-                rarity = "Common";
-                evolvesFrom = "Lightna";
-                experienceGiven = 40;
+                SetBaseStats(80, 230, 30, 2, 50, 100, "Lightning", "Thunder Bolt", "Common", null, "Lightna", 400, 0);
                 break;
             default:
                 Debug.Log("Invalid name: " + name);
-                Attack = 0;
-                Health = 0;
-                Defense = 0;
-                ManaCost = 0;
-                Cost = 0;
-                skill1Name = "Zap";
-                skill2Name = "Spark";
+                SetBaseStats(0, 0, 0, 0, 0, 0, "Zap", "Spark", "Common", null, null, 0, 0);
+                break;
+        }
+
+        maxLevel = levelData.Count + 1;
+    }
+
+    private void SetBaseStats(int attack, int health, int defense, int movement, int manaCost, int coinCost,
+                              string skill1, string skill2, string rarity, string evolvesTo, string evolvesFrom,
+                              int experience, int prestigeCost)
+    {
+        Attack = attack;
+        Health = health;
+        Defense = defense;
+        Movement = movement;
+        ManaCost = manaCost;
+        CoinCost = coinCost;
+        skill1Name = skill1;
+        skill2Name = skill2;
+        this.rarity = rarity;
+        this.evolvesTo = evolvesTo;
+        this.evolvesFrom = evolvesFrom;
+        experienceGiven = experience;
+        PrestigeCost = prestigeCost;
+
+        GenerateLevelData();
+    }
+
+    private void GenerateLevelData()
+    {
+        levelData.Clear();
+        float attackMultiplier = 0.1f;
+        float healthMultiplier = 0.15f;
+        float defenseMultiplier = 0.12f;
+        float costMultiplier = 0.2f;
+        float manaMultiplier = 0.1f;
+
+        int currentAttack = Attack;
+        int currentHealth = Health;
+        int currentDefense = Defense;
+        int currentManaCost = ManaCost;
+        int currentCoinCost = CoinCost;
+
+        for (int i = 0; i < 9; i++)
+        {
+            int atkIncrease = Mathf.RoundToInt(currentAttack * attackMultiplier);
+            int hpIncrease = Mathf.RoundToInt(currentHealth * healthMultiplier);
+            int defIncrease = Mathf.RoundToInt(currentDefense * defenseMultiplier);
+            int manaIncrease = Mathf.RoundToInt(currentManaCost * manaMultiplier);
+            int coinIncrease = Mathf.RoundToInt(currentCoinCost * costMultiplier);
+
+            levelData.Add(new MonsterCardLevelData(atkIncrease, hpIncrease, defIncrease, 0, manaIncrease, coinIncrease));
+
+            currentAttack += atkIncrease;
+            currentHealth += hpIncrease;
+            currentDefense += defIncrease;
+            currentManaCost += manaIncrease;
+            currentCoinCost += coinIncrease;
+        }
+
+        switch (rarity)
+        {
+            case "Common":
+                baseLevelUpCost = 20;
+                break;
+            case "Uncommon":
+                baseLevelUpCost = 50;
+                break;
+            case "Rare":
+                baseLevelUpCost = 120;
+                break;
+            case "Epic":
+                baseLevelUpCost = 300;
+                break;
+            default:
+                baseLevelUpCost = 20;
                 break;
         }
     }

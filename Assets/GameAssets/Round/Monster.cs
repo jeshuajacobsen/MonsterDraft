@@ -118,7 +118,7 @@ public class Monster : MonoBehaviour
 
     private void Evolve()
     {
-        MonsterCard monsterCard = new MonsterCard(evolvesTo);
+        MonsterCard monsterCard = new MonsterCard(evolvesTo, GameManager.instance.cardLevels[evolvesTo]);
         RoundManager.instance.Experience -= experienceRequired;
         this.InitValues(monsterCard, tileOn, team);
     }
