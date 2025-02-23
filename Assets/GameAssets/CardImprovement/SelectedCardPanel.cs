@@ -62,7 +62,7 @@ public class SelectedCardPanel : MonoBehaviour
             }
             else
             {
-                levelUpCostText.color = Color.green;
+                levelUpCostText.color = Color.black;
             }
         }
         

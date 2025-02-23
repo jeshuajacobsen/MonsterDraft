@@ -9,7 +9,6 @@ public class BaseMonsterData
     public int Defense { get; set; }
     public int Movement { get; set; }
     public int ManaCost { get; set; }
-    public string Description { get; set; }
     public int CoinCost { get; set; }
 
     public string rarity = "Common";
@@ -33,7 +32,6 @@ public class BaseMonsterData
     {
         PrestigeCost = 0;
         this.name = name;
-        Description = "This is the description for " + name;
 
         switch (name)
         {

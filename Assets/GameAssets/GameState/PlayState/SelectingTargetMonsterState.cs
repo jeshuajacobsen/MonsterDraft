@@ -75,7 +75,7 @@ public class SelectingTargetMonsterState : CardPlayState
 
     public void MarkValidTargets(ActionCard actionCard)
     {
-        string effect = actionCard.effects[mainPhase.playedActionCardStep - 1];
+        string effect = actionCard.Effects[mainPhase.playedActionCardStep - 1];
 
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Target")

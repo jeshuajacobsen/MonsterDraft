@@ -10,6 +10,8 @@ public class BaseActionData
     public List<string> onGainEffects { get; set; }
     public int maxLevel;
     public int baseLevelUpCost;
+    public List<ActionCardLevelData> levelData = new List<ActionCardLevelData>();
+    public Dictionary<string, string> effectVariables = new Dictionary<string, string>();
 
     public BaseActionData(string name)
     {
@@ -166,5 +168,6 @@ public class BaseActionData
                 effects.Add("No effect");
                 break;
         }
+        maxLevel = levelData.Count + 1;
     }
 }

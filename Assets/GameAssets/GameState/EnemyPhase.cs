@@ -72,7 +72,7 @@ public class EnemyPhase : GameState
         } else if (card != null && card is ActionCard)
         {
             ActionCard actionCard = (ActionCard)card;
-            string[] effects = actionCard.effects[0].Split(' ');
+            string[] effects = actionCard.Effects[0].Split(' ');
             List<Monster> targets = new List<Monster>();
 
             if (effects[0] == "Target")
@@ -115,9 +115,9 @@ public class EnemyPhase : GameState
             int damageDealt = 0;
             Monster target = targets[Random.Range(0, targets.Count)];
             VisualEffect visualEffect = null;
-            for (int i = 1; i < actionCard.effects.Count; i++)
+            for (int i = 1; i < actionCard.Effects.Count; i++)
             {
-                string[] effectParts = actionCard.effects[i].Split(' ');
+                string[] effectParts = actionCard.Effects[i].Split(' ');
                 if (effectParts[0] == "Damage")
                 {
                     if (visualEffect != null)

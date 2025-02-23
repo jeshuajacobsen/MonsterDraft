@@ -236,7 +236,7 @@ public class MainPhase : GameState
         roundManager.Mana += treasureCard.ManaGeneration;
         ScrollRect scrollRect = roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
-        if (treasureCard.effects.Count > 0)
+        if (treasureCard.Effects.Count > 0)
         {
             playedCard = treasureCard;
             SwitchPhaseState(new ResolvingEffectState(this));
@@ -268,9 +268,9 @@ public class MainPhase : GameState
         else if (cardView.card is ActionCard)
         {
             ActionCard actionCard = (ActionCard)cardView.card;
-            for (int i = playedActionCardStep; i < actionCard.effects.Count; i++)
+            for (int i = playedActionCardStep; i < actionCard.Effects.Count; i++)
             {
-                string[] effectParts = actionCard.effects[i].Split(' ');
+                string[] effectParts = actionCard.Effects[i].Split(' ');
                 if (effectParts[0] == "Damage")
                 {
                     if (visualEffect != null)

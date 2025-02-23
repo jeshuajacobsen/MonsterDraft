@@ -62,7 +62,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
 
     public void MarkValidTargets(ActionCard actionCard)
     {
-        foreach (string effect in actionCard.effects)
+        foreach (string effect in actionCard.Effects)
         {
             string[] effectParts = effect.Split(' ');
             if (effectParts[0] == "Target")

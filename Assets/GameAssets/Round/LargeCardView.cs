@@ -83,7 +83,14 @@ public class LargeCardView : MonoBehaviour
         {
             // Non-monster card
             transform.Find("CardDescription").gameObject.SetActive(true);
-            transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = card.Description;
+            if (card is TreasureCard treasureCard)
+            {
+                transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = treasureCard.Description;
+            }
+            else if (card is ActionCard actionCard)
+            {
+                transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = actionCard.Description;
+            }
             transform.Find("StatsPanel").gameObject.SetActive(false);
             transform.Find("SkillsPanel").gameObject.SetActive(false);
             transform.Find("ManaImage").gameObject.SetActive(false);
@@ -153,42 +160,71 @@ public class LargeCardView : MonoBehaviour
             {
                 transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
-                transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.white;
+                transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
             if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].attack > 0)
             {
                 transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
-                transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.white;
+                transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
             
             if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].defense > 0)
             {
                 transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
-                transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.white;
+                transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
             if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].movement > 0)
             {
                 transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
-                transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.white;
+                transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
             if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].manaCost > 0)
             {
                 transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.red;
             } else {
-                transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.white;
+                transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
             if (GameManager.instance.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].coinCost > 0)
             {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.red;
             } else {
-                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.white;
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.black;
+            }
+        } else if (card is TreasureCard treasureCard)
+        {
+            Color manaColor = Color.black;
+            Color coinColor = Color.black;
+            TreasureCardLevelData levelData = GameManager.instance.gameData.GetTreasureData(card.Name).levelData[card.level - 2];
+            if (levelData.manaGeneration > 0)
+            {
+                manaColor = Color.green;
+            }
+            if (levelData.coinGeneration > 0)
+            {
+                coinColor = Color.green;
+            }
+            string desc = treasureCard.GetColoredDescription(coinColor, manaColor);
+            transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = treasureCard.GetColoredDescription(coinColor, manaColor);
+            if (levelData.coinCost > 0)
+            {
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.red;
+            } else {
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.black;
+            }
+        } else if (card is ActionCard actionCard)
+        {
+            if (GameManager.instance.gameData.GetActionData(card.Name).levelData[card.level - 2].coinCost > 0)
+            {
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.red;
+            } else {
+                transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
         }
     }

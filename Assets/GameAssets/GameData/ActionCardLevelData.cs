@@ -1,12 +1,16 @@
+using System.Collections.Generic;
+
 
 public class ActionCardLevelData
 {
-    public int effectIndex;
-    public string effectValue;
+    public Dictionary<int, string> effectChanges = new Dictionary<int, string>();
+    public Dictionary<string, string> effectVariableChanges = new Dictionary<string, string>();
+    public int coinCost;
 
-    public ActionCardLevelData(int effectIndex, string effectValue)
+    public ActionCardLevelData(Dictionary<int, string> effectChanges, Dictionary<string, string> effectVariableChanges, int coinCost)
     {
-        this.effectIndex = effectIndex;
-        this.effectValue = effectValue;
+        this.effectChanges = effectChanges;
+        this.effectVariableChanges = effectVariableChanges;
+        this.coinCost = coinCost;
     }
 }

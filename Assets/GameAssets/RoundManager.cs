@@ -203,14 +203,15 @@ public class RoundManager : MonoBehaviour
                 }
             } 
         }
-        PlayerBase.GetComponent<PlayerBase>().MaxHealth = 20;
-        EnemyBase.GetComponent<EnemyBase>().MaxHealth = 20;
+        //TODO adjust health based on dungeon level
+        PlayerBase.GetComponent<PlayerBase>().MaxHealth = 200;
+        EnemyBase.GetComponent<EnemyBase>().MaxHealth = 200;
         PlayerBase.GetComponent<PlayerBase>().Health = PlayerBase.GetComponent<PlayerBase>().MaxHealth;
         EnemyBase.GetComponent<EnemyBase>().Health = EnemyBase.GetComponent<EnemyBase>().MaxHealth;
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         //TODO add guaranteed cards to dungeon data.
-        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {});
+        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {"Loan"});
         DiscardHand();
         discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);

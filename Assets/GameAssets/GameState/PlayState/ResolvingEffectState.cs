@@ -25,9 +25,9 @@ public class ResolvingEffectState : CardPlayState
 
     private void ResolveEffects()
     {
-        for (int i = mainPhase.playedActionCardStep; i < mainPhase.playedCard.effects.Count; i++)
+        for (int i = mainPhase.playedActionCardStep; i < mainPhase.playedCard.Effects.Count; i++)
         {
-            string[] effectParts = mainPhase.playedCard.effects[i].Split(' ');
+            string[] effectParts = mainPhase.playedCard.Effects[i].Split(' ');
             if (effectParts[0] == "Actions")
             {
                 RoundManager.instance.Actions += int.Parse(effectParts[1]);
@@ -64,7 +64,7 @@ public class ResolvingEffectState : CardPlayState
                         RoundManager.instance.Mana += amount;
                     } else if (effectParts[3] == "Coins/2")
                     {
-                        amount *= RoundManager.instance.Coins / 2;
+                        amount = RoundManager.instance.Coins / 2;
                         RoundManager.instance.Mana += amount;
                     }
                 } else {
@@ -279,6 +279,7 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[2] == "Next")
                     {
+                        mainPhase.foundCards.Clear();
                         Card nextCard = FindNextCardInDeck(effectParts[3]);
                         if (nextCard == null)
                         {
@@ -319,7 +320,7 @@ public class ResolvingEffectState : CardPlayState
                                         {
                                             options.Add("Done");
                                         }
-                                        else if (mainPhase.foundCards[0].CoinCost <= limit)
+                                        else if (((MonsterCard)mainPhase.foundCards[0]).ManaCost <= limit)
                                         {
                                             options.Add("Play");
                                             options.Add("DrawRevealed");
