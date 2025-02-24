@@ -33,7 +33,7 @@ public class DeckEditorCardView : MonoBehaviour
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
         transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
-        transform.Find("PrestigeCostText").GetComponent<TextMeshProUGUI>().text = card.PrestigeCost.ToString();
+        transform.Find("PrestigeCostText").GetComponent<TextMeshProUGUI>().text = card.BuyCardPrestigeCost.ToString();
     }
 
     private void IncreaseCardCount()
@@ -56,10 +56,10 @@ public class DeckEditorCardView : MonoBehaviour
 
     public void BuyCard()
     {
-        if (boughtCardCount < cardLimit && GameManager.instance.PrestigePoints >= card.PrestigeCost)
+        if (boughtCardCount < cardLimit && GameManager.instance.PrestigePoints >= card.BuyCardPrestigeCost)
         {
             boughtCardCount++;
-            GameManager.instance.PrestigePoints -= card.PrestigeCost;
+            GameManager.instance.PrestigePoints -= card.BuyCardPrestigeCost;
             transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
         }
     }

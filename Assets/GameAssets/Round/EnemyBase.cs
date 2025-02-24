@@ -33,8 +33,8 @@ public class EnemyBase : MonoBehaviour
     
     void Start()
     {
-        MaxHealth = 20;
-        Health = 20;
+        MaxHealth = 200;
+        Health = 200;
     }
 
     void Update()

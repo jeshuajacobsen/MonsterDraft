@@ -170,8 +170,14 @@ public class ResolvingEffectState : CardPlayState
                         }
                     } else if (effectParts[3] == "Saved")
                     {
+                        int additionalCost = 0;
+                        if (effectParts[4] == "Plus")
+                        {
+                            additionalCost = int.Parse(effectParts[5]);
+                        }
                         bool cancelable = mainPhase.playedActionCardStep == 1;
-                        mainPhase.SwitchPhaseState(new GainingCardState(mainPhase, restriction, mainPhase.savedValue, cancelable));
+                        mainPhase.SwitchPhaseState(
+                            new GainingCardState(mainPhase, restriction, mainPhase.savedValue + additionalCost, cancelable));
                         return;
                     }
                 }

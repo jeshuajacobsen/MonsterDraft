@@ -211,7 +211,7 @@ public class RoundManager : MonoBehaviour
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         //TODO add guaranteed cards to dungeon data.
-        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {"Loan"});
+        roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {});
         DiscardHand();
         discardPile.cards.Clear();
         roundDeck = new RoundDeck(RunManager.instance.runDeck);

@@ -30,7 +30,10 @@ public class Monster : MonoBehaviour
             }
             if (_health <= 0)
             {
-                RoundManager.instance.Experience += this.experienceGiven;
+                if (team == "Enemy")
+                {
+                    RoundManager.instance.Experience += this.experienceGiven;
+                }
                 tileOn.monster = null;
                 if (RoundManager.instance.largeMonsterView1.monster == this)
                 {

@@ -19,82 +19,83 @@ public class BaseMonsterData
     public string evolvesFrom = "";
     public string evolvesTo = "";
 
-    public int experienceGiven = 100;
-    public int experienceRequired = 400;
+    public int experienceGiven = 10;
+    public int experienceRequired = 40;
 
-    public int PrestigeCost { get; set; }
+    public int LevelUpPrestigeCost { get; set; }
+    public int BuyCardPrestigeCost { get; set; }
 
     public int maxLevel;
     public List<MonsterCardLevelData> levelData = new List<MonsterCardLevelData>();
-    public int baseLevelUpCost;
 
     public BaseMonsterData(string name)
     {
-        PrestigeCost = 0;
+        LevelUpPrestigeCost = 0;
+        BuyCardPrestigeCost = 0;
         this.name = name;
 
         switch (name)
         {
             case "Borble":
-                SetBaseStats(100, 260, 80, 1, 80, 120, "Bubble", "Wave", "Epic", "Pupal", null, 400, 1000);
+                SetBaseStats(100, 260, 80, 1, 80, 120, "Bubble", "Wave", "Epic", "Pupal", null, 20, 1000, 1000);
                 break;
             case "Pupal":
-                SetBaseStats(160, 380, 120, 1, 100, 140, "Wave", "Water Jet", "Epic", "Aquafly", "Borble", 600, 0);
+                SetBaseStats(160, 380, 120, 1, 100, 140, "Wave", "Water Jet", "Epic", "Aquafly", "Borble", 30, 2000, 0);
                 break;
             case "Aquafly":
-                SetBaseStats(100, 510, 100, 2, 120, 180, "Water Jet", "Aqua Blast", "Epic", null, "Pupal", 900, 0);
+                SetBaseStats(100, 510, 100, 2, 120, 180, "Water Jet", "Aqua Blast", "Epic", null, "Pupal", 40, 3000, 0);
                 break;
             case "Leafree":
-                SetBaseStats(60, 220, 70, 2, 60, 80, "Leaf", "Growth", "Rare", "Leafear", null, 300, 500);
+                SetBaseStats(60, 220, 70, 2, 60, 80, "Leaf", "Growth", "Rare", "Leafear", null, 15, 500, 500);
                 break;
             case "Leafear":
-                SetBaseStats(120, 350, 130, 2, 80, 120, "Growth", "Solar Beam", "Rare", null, "Leafree", 500, 0);
+                SetBaseStats(120, 350, 130, 2, 80, 120, "Growth", "Solar Beam", "Rare", null, "Leafree", 20, 500, 0);
                 break;
             case "Olla":
-                SetBaseStats(150, 350, 140, 1, 70, 110, "Wrap", "Poison Sting", "Rare", null, null, 500, 600);
+                SetBaseStats(150, 350, 140, 1, 70, 110, "Wrap", "Poison Sting", "Rare", null, null, 20, 600, 600);
                 break;
             case "Owisp":
-                SetBaseStats(50, 150, 40, 1, 40, 60, "Spark", "Burn", "Uncommon", "Wallowisp", null, 200, 300);
+                SetBaseStats(50, 150, 40, 1, 40, 60, "Spark", "Burn", "Uncommon", "Wallowisp", null, 10, 300, 300);
                 break;
             case "Wallowisp":
-                SetBaseStats(90, 220, 70, 1, 40, 80, "Burn", "Heat Wave", "Uncommon", null, "Owisp", 300, 0);
+                SetBaseStats(90, 220, 70, 1, 40, 80, "Burn", "Heat Wave", "Uncommon", null, "Owisp", 15, 600, 0);
                 break;
             case "Slimy":
-                SetBaseStats(20, 120, 10, 1, 20, 30, "Goo", "Slime Ball", "Common", "Slimier", null, 100, 100);
+                SetBaseStats(20, 120, 10, 1, 20, 30, "Goo", "Slime Ball", "Common", "Slimier", null, 5, 100, 100);
                 break;
             case "Slimier":
-                SetBaseStats(30, 180, 20, 1, 40, 50, "Slime Ball", "Multiply", "Common", "Slimiest", "Slimy", 200, 0);
+                SetBaseStats(30, 180, 20, 1, 40, 50, "Slime Ball", "Multiply", "Common", "Slimiest", "Slimy", 10, 200, 0);
                 break;
             case "Slimiest":
-                SetBaseStats(60, 350, 40, 1, 60, 70, "Multiply", "Slime Storm", "Common", null, "Slimier", 300, 0);
+                SetBaseStats(60, 350, 40, 1, 60, 70, "Multiply", "Slime Storm", "Common", null, "Slimier", 15, 400, 0);
                 break;
             case "Snowbug":
-                SetBaseStats(80, 200, 50, 1, 50, 60, "Chill", "Ice Shard", "Uncommon", "Snant", null, 200, 300);
+                SetBaseStats(80, 200, 50, 1, 50, 60, "Chill", "Ice Shard", "Uncommon", "Snant", null, 10, 300, 300);
                 break;
             case "Snant":
-                SetBaseStats(120, 300, 80, 1, 60, 70, "Ice Shard", "Freeze", "Uncommon", "Snowpede", "Snowbug", 300, 0);
+                SetBaseStats(120, 300, 80, 1, 60, 70, "Ice Shard", "Freeze", "Uncommon", "Snowpede", "Snowbug", 15, 300, 0);
                 break;
             case "Snowpede":
-                SetBaseStats(170, 450, 120, 1, 80, 100, "Freeze", "Blizzard", "Uncommon", null, "Snant", 500, 0);
+                SetBaseStats(170, 450, 120, 1, 80, 100, "Freeze", "Blizzard", "Uncommon", null, "Snant", 20, 600, 0);
                 break;
             case "Squrl":
-                SetBaseStats(110, 350, 80, 1, 80, 120, "Bite", "Drain", "Epic", "Squrile", null, 400, 1000);
+                SetBaseStats(110, 350, 80, 1, 80, 120, "Bite", "Drain", "Epic", "Squrile", null, 20, 1000, 1000);
                 break;
             case "Squrile":
-                SetBaseStats(150, 450, 120, 1, 100, 150, "Drain", "Nightmare", "Epic", null, "Squrl", 700, 0);
+                SetBaseStats(150, 450, 120, 1, 100, 150, "Drain", "Nightmare", "Epic", null, "Squrl", 30, 2000, 0);
                 break;
             case "Zaple":
-                SetBaseStats(30, 100, 10, 1, 20, 40, "Zap", "Shock", "Common", "Lightna", null, 100, 100);
+                SetBaseStats(30, 100, 10, 1, 20, 40, "Zap", "Shock", "Common", "Lightna", null, 5, 100, 100);
                 break;
             case "Lightna":
-                SetBaseStats(50, 150, 20, 2, 30, 60, "Shock", "Lightning", "Common", "Thunda", "Zaple", 200, 0);
+                SetBaseStats(50, 150, 20, 2, 30, 60, "Shock", "Lightning", "Common", "Thunda", "Zaple", 10, 200, 0);
                 break;
             case "Thunda":
-                SetBaseStats(80, 230, 30, 2, 50, 100, "Lightning", "Thunder Bolt", "Common", null, "Lightna", 400, 0);
+                SetBaseStats(80, 230, 30, 2, 50, 100, "Lightning", "Thunder Bolt", "Common", null, "Lightna", 15, 400, 0);
                 break;
             default:
                 Debug.Log("Invalid name: " + name);
-                SetBaseStats(0, 0, 0, 0, 0, 0, "Zap", "Spark", "Common", null, null, 0, 0);
+                SetBaseStats(0, 0, 0, 0, 0, 0, "Zap", "Spark", "Common", null, null, 0, 0, 0);
                 break;
         }
 
@@ -103,7 +104,7 @@ public class BaseMonsterData
 
     private void SetBaseStats(int attack, int health, int defense, int movement, int manaCost, int coinCost,
                               string skill1, string skill2, string rarity, string evolvesTo, string evolvesFrom,
-                              int experience, int prestigeCost)
+                              int experience, int LevelUpPrestigeCost, int buyCardPrestigeCost)
     {
         Attack = attack;
         Health = health;
@@ -117,7 +118,8 @@ public class BaseMonsterData
         this.evolvesTo = evolvesTo;
         this.evolvesFrom = evolvesFrom;
         experienceGiven = experience;
-        PrestigeCost = prestigeCost;
+        LevelUpPrestigeCost = LevelUpPrestigeCost;
+        BuyCardPrestigeCost = buyCardPrestigeCost;
 
         GenerateLevelData();
     }
@@ -157,19 +159,19 @@ public class BaseMonsterData
         switch (rarity)
         {
             case "Common":
-                baseLevelUpCost = 20;
+                LevelUpPrestigeCost = 20;
                 break;
             case "Uncommon":
-                baseLevelUpCost = 50;
+                LevelUpPrestigeCost = 50;
                 break;
             case "Rare":
-                baseLevelUpCost = 120;
+                LevelUpPrestigeCost = 120;
                 break;
             case "Epic":
-                baseLevelUpCost = 300;
+                LevelUpPrestigeCost = 300;
                 break;
             default:
-                baseLevelUpCost = 20;
+                LevelUpPrestigeCost = 20;
                 break;
         }
     }

@@ -51,9 +51,12 @@ public class TreasureCard : Card
             }
             description = description.Replace("{CoinGeneration}", CoinGeneration.ToString());
             description = description.Replace("{ManaGeneration}", ManaGeneration.ToString());
-            foreach (var effectVariable in this.EffectVariables)
+            if (this.EffectVariables != null)
             {
-                description = description.Replace("{" + effectVariable.Key + "}", effectVariable.Value.ToString());
+                foreach (var effectVariable in this.EffectVariables)
+                {
+                    description = description.Replace("{" + effectVariable.Key + "}", effectVariable.Value.ToString());
+                }
             }
             return description;
         }
@@ -77,14 +80,11 @@ public class TreasureCard : Card
         Dictionary<string, string> variableChanges = new Dictionary<string, string>();
         if (level > 1)
         {
-            if (Type == "Treasure")
-                variableChanges = GameManager.instance.gameData.GetTreasureData(Name).levelData[level - 2].effectVariableChanges;
-            else if (Type == "Action")
-                variableChanges = GameManager.instance.gameData.GetActionData(Name).levelData[level - 2].effectVariableChanges;
+            variableChanges = GameManager.instance.gameData.GetTreasureData(Name).levelData[level - 2].effectVariableChanges;
         }
         foreach (var effectVariable in this.EffectVariables)
         {
-            if (variableChanges.ContainsKey(effectVariable.Key))
+            if (variableChanges != null && variableChanges.ContainsKey(effectVariable.Key))
             {
                 description = description.Replace("{" + effectVariable.Key + "}",
                     "<color=#" + ColorUtility.ToHtmlStringRGB(Color.green) + ">" + effectVariable.Value.ToString() + "</color>");

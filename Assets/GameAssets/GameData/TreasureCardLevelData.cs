@@ -5,7 +5,7 @@ public class TreasureCardLevelData
 {
     public int coinGeneration;
     public int manaGeneration;
-    public int coinCost;
+    public int coinCostChange;
     public Dictionary<int, string> effectChanges = new Dictionary<int, string>();
     public Dictionary<string, string> effectVariableChanges = new Dictionary<string, string>();
     public string description;
@@ -19,7 +19,7 @@ public class TreasureCardLevelData
     {
         this.coinGeneration = coinGeneration;
         this.manaGeneration = manaGeneration;
-        this.coinCost = coinCost;
+        this.coinCostChange = coinCost;
         this.effectChanges = effectChanges;
         this.effectVariableChanges = effectVariableChanges;
         this.description = description;
@@ -29,7 +29,7 @@ public class TreasureCardLevelData
     {
         this.coinGeneration = coinGeneration;
         this.manaGeneration = manaGeneration;
-        this.coinCost = coinCost;
+        this.coinCostChange = coinCost;
         this.effectVariableChanges = new Dictionary<string, string>();
     }
 }

@@ -54,9 +54,9 @@ public class SelectedCardPanel : MonoBehaviour
             transform.Find("ArrowImage").gameObject.SetActive(true);
             transform.Find("LevelUpCostPanel").gameObject.SetActive(true);
             TextMeshProUGUI levelUpCostText = transform.Find("LevelUpCostPanel/Text").GetComponent<TextMeshProUGUI>();
-            levelUpCostText.text = card.LevelUpCost.ToString();
+            levelUpCostText.text = card.LevelUpPrestigeCost.ToString();
             
-            if (GameManager.instance.PrestigePoints < card.LevelUpCost)
+            if (GameManager.instance.PrestigePoints < card.LevelUpPrestigeCost)
             {
                 levelUpCostText.color = Color.red;
             }
@@ -70,9 +70,9 @@ public class SelectedCardPanel : MonoBehaviour
 
     public void LevelUpSelectedCard()
     {
-        if (GameManager.instance.PrestigePoints >= selectedCard.LevelUpCost)
+        if (GameManager.instance.PrestigePoints >= selectedCard.LevelUpPrestigeCost)
         {
-            GameManager.instance.PrestigePoints -= selectedCard.LevelUpCost;
+            GameManager.instance.PrestigePoints -= selectedCard.LevelUpPrestigeCost;
             GameManager.instance.cardLevels[selectedCard.Name]++;
             OnOpen(transform.Find("LargeCardViewAfter").GetComponent<LargeCardView>().card);
             GameManager.instance.selectedInitialDeck.ResetLevels();

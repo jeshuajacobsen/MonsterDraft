@@ -7,7 +7,7 @@ public class MonsterCardLevelData
     public int defense;
     public int movement;
     public int manaCost;
-    public int coinCost;
+    public int coinCostChange;
 
     public MonsterCardLevelData(int attack, int health, int defense, int movement, int manaCost, int coinCost)
     {
@@ -16,6 +16,6 @@ public class MonsterCardLevelData
         this.defense = defense;
         this.movement = movement;
         this.manaCost = manaCost;
-        this.coinCost = coinCost;
+        this.coinCostChange = coinCost;
     }
 }
