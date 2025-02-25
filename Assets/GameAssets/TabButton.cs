@@ -2,12 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class TabButton : MonoBehaviour
 {
 
     [SerializeField] private string tabName;
-    // Start is called before the first frame update
+    
+    private GameManager _gameManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager)
+    {
+        _gameManager = gameManager;
+    }
+
     void Start()
     {
         transform.GetComponent<Button>().onClick.AddListener(OnClick);
@@ -23,12 +32,12 @@ public class TabButton : MonoBehaviour
     {
         if (tabName == "Dungeon")
         {
-            GameManager.instance.dungeonPanel.transform.gameObject.SetActive(true);
-            GameManager.instance.townPanel.transform.gameObject.SetActive(false);
+            _gameManager.dungeonPanel.transform.gameObject.SetActive(true);
+            _gameManager.townPanel.transform.gameObject.SetActive(false);
         } else if (tabName == "Town")
         {
-            GameManager.instance.dungeonPanel.transform.gameObject.SetActive(false);
-            GameManager.instance.townPanel.transform.gameObject.SetActive(true);
+            _gameManager.dungeonPanel.transform.gameObject.SetActive(false);
+            _gameManager.townPanel.transform.gameObject.SetActive(true);
         }
     }
 }

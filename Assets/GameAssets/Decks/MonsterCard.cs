@@ -1,3 +1,5 @@
+using Zenject;
+
 public class MonsterCard : Card
 {
     private int _attack;
@@ -7,7 +9,7 @@ public class MonsterCard : Card
             int addedAttack = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedAttack += GameManager.instance.gameData.GetBaseMonsterData(Name).levelData[i].attack;
+                addedAttack += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].attack;
             }
             return _attack + addedAttack;
         }
@@ -25,7 +27,7 @@ public class MonsterCard : Card
             int addedHealth = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedHealth += GameManager.instance.gameData.GetBaseMonsterData(Name).levelData[i].health;
+                addedHealth += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].health;
             }
             return _health + addedHealth;
         }
@@ -42,7 +44,7 @@ public class MonsterCard : Card
             int addedDefense = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedDefense += GameManager.instance.gameData.GetBaseMonsterData(Name).levelData[i].defense;
+                addedDefense += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].defense;
             }
             return _defense + addedDefense;
         }
@@ -59,7 +61,7 @@ public class MonsterCard : Card
             int addedMovement = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedMovement += GameManager.instance.gameData.GetBaseMonsterData(Name).levelData[i].movement;
+                addedMovement += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].movement;
             }
             return _movement + addedMovement;
         }
@@ -76,7 +78,7 @@ public class MonsterCard : Card
             int addedManaCost = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedManaCost += GameManager.instance.gameData.GetBaseMonsterData(Name).levelData[i].manaCost;
+                addedManaCost += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].manaCost;
             }
             return _manaCost + addedManaCost;
         }
@@ -94,16 +96,26 @@ public class MonsterCard : Card
     public int experienceGiven;
     public int experienceRequired;
 
-    public MonsterCard(string name, int level) : base(name, "Monster", level)
+    private GameManager _gameManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager)
     {
-        BaseMonsterData baseStats = GameManager.instance.gameData.GetBaseMonsterData(name);
+        _gameManager = gameManager;
+    }
+
+    public void Initialize(string name, int level)
+    {
+        base.Initialize(name, "Monster", level);
+
+        BaseMonsterData baseStats = _gameManager.gameData.GetBaseMonsterData(name);
         Attack = baseStats.Attack;
         Health = baseStats.Health;
         Defense = baseStats.Defense;
         Movement = baseStats.Movement;
         ManaCost = baseStats.ManaCost;
-        skill1 = GameManager.instance.gameData.GetSkill(baseStats.skill1Name);
-        skill2 = GameManager.instance.gameData.GetSkill(baseStats.skill2Name);
+        skill1 = _gameManager.gameData.GetSkill(baseStats.skill1Name);
+        skill2 = _gameManager.gameData.GetSkill(baseStats.skill2Name);
         evolvesFrom = baseStats.evolvesFrom;
         evolvesTo = baseStats.evolvesTo;
         experienceGiven = baseStats.experienceGiven;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class TreasureCard : Card
 {
@@ -10,7 +11,7 @@ public class TreasureCard : Card
             int addedCoinGeneration = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedCoinGeneration += GameManager.instance.gameData.GetTreasureData(Name).levelData[i].coinGeneration;
+                addedCoinGeneration += _gameManager.gameData.GetTreasureData(Name).levelData[i].coinGeneration;
             }
             return _coinGeneration + addedCoinGeneration;
         }
@@ -27,7 +28,7 @@ public class TreasureCard : Card
             int addedManaGeneration = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedManaGeneration += GameManager.instance.gameData.GetTreasureData(Name).levelData[i].manaGeneration;
+                addedManaGeneration += _gameManager.gameData.GetTreasureData(Name).levelData[i].manaGeneration;
             }
             return _manaGeneration + addedManaGeneration;
         }
@@ -41,7 +42,7 @@ public class TreasureCard : Card
         get
         {
             string description = _description;
-            List<TreasureCardLevelData> levelData = GameManager.instance.gameData.GetTreasureData(Name).levelData;
+            List<TreasureCardLevelData> levelData = _gameManager.gameData.GetTreasureData(Name).levelData;
             for (int i = 0; i < level - 1; i++)
             {
                 if (!string.IsNullOrEmpty(levelData[i].description))
@@ -67,7 +68,7 @@ public class TreasureCard : Card
         string coinReplacement = "<color=#" + ColorUtility.ToHtmlStringRGB(coinColor) + ">" + CoinGeneration + "</color>";
         string manaReplacement = "<color=#" + ColorUtility.ToHtmlStringRGB(manaColor) + ">" + ManaGeneration + "</color>";
         string description = _description;
-        List<TreasureCardLevelData> levelData = GameManager.instance.gameData.GetTreasureData(Name).levelData;
+        List<TreasureCardLevelData> levelData = _gameManager.gameData.GetTreasureData(Name).levelData;
         for (int i = 0; i < level - 1; i++)
         {
             if (!string.IsNullOrEmpty(levelData[i].description))
@@ -80,7 +81,7 @@ public class TreasureCard : Card
         Dictionary<string, string> variableChanges = new Dictionary<string, string>();
         if (level > 1)
         {
-            variableChanges = GameManager.instance.gameData.GetTreasureData(Name).levelData[level - 2].effectVariableChanges;
+            variableChanges = _gameManager.gameData.GetTreasureData(Name).levelData[level - 2].effectVariableChanges;
         }
         foreach (var effectVariable in this.EffectVariables)
         {
@@ -97,9 +98,11 @@ public class TreasureCard : Card
         return description;
     }
 
-    public TreasureCard(string name, int level) : base(name, "Treasure", level)
+    public void Initialize(string name, int level)
     {
-        TreasureData baseStats = GameManager.instance.gameData.GetTreasureData(name);
+        base.Initialize(name, "Treasure", level);
+
+        TreasureData baseStats = _gameManager.gameData.GetTreasureData(name);
         CoinGeneration = baseStats.CoinGeneration;
         ManaGeneration = baseStats.ManaGeneration;
         _description = baseStats.Description;

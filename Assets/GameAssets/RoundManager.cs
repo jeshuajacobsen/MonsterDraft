@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using Zenject;
 
 public class RoundManager : MonoBehaviour
 {
@@ -84,6 +85,16 @@ public class RoundManager : MonoBehaviour
     public List<VisualEffect> visualEffects = new List<VisualEffect>();
     public List<PersistentEffect> persistentEffects = new List<PersistentEffect>();
 
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
     void Awake()
     {
 
@@ -158,7 +169,7 @@ public class RoundManager : MonoBehaviour
         if (cancelButton.onClick.GetPersistentEventCount() == 0)
         {
             cancelButton.onClick.AddListener(() => {
-                GameManager.instance.Gems += gemCost;
+                _gameManager.Gems += gemCost;
                 gameState.SwitchPhaseState(new IdleState((MainPhase)gameState));
             });
         }
@@ -220,8 +231,9 @@ public class RoundManager : MonoBehaviour
         {
             AddCardToHand(card);
         }
-        currentDungeon = new Dungeon(currentDungeonLevel, roundNumber);
-        gameState = new MainPhase(this);
+        currentDungeon = _container.Instantiate<Dungeon>();
+        currentDungeon.Initialize(currentDungeonLevel, roundNumber);
+        gameState = _container.Instantiate<MainPhase>();
         gameState.EnterState();
     }
 
@@ -236,9 +248,9 @@ public class RoundManager : MonoBehaviour
     {
         if (gameState is MainPhase)
         {
-            SwitchState(new DrawPhase(this));
-            SwitchState(new EnemyPhase(this));
-            SwitchState(new MainPhase(this));
+            SwitchState(_container.Instantiate<DrawPhase>());
+            SwitchState(_container.Instantiate<EnemyPhase>());
+            SwitchState(_container.Instantiate<MainPhase>());
         }
     }
 
@@ -262,7 +274,7 @@ public class RoundManager : MonoBehaviour
 
     public void AddCardToHand(Card card)
     {
-        SmallCardView newCard = Instantiate(SmallCardViewPrefab, handContent.transform);
+        SmallCardView newCard = _container.InstantiatePrefabForComponent<SmallCardView>(SmallCardViewPrefab, handContent.transform);
         newCard.InitValues(card);
         hand.Add(newCard);
         RectTransform newItemRect = newCard.GetComponent<RectTransform>();
@@ -814,7 +826,7 @@ public class RoundManager : MonoBehaviour
             noCardsText.gameObject.SetActive(false);
             foreach (Card card in displayCards)
             {
-                SmallCardView cardView = Instantiate(SmallCardViewPrefab, cardSection);
+                SmallCardView cardView = _container.InstantiatePrefabForComponent<SmallCardView>(SmallCardViewPrefab, cardSection);
                 cardView.InitValues(card);
             }
         }

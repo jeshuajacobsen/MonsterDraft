@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class Dungeon
 {
@@ -8,7 +9,17 @@ public class Dungeon
     private int guaranteedMonsterTimer = 5;
     private string guaranteedMonster;
 
-    public Dungeon(DungeonLevelData currentDungeonLevel, int roundNumber)
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
+    public void Initialize(DungeonLevelData currentDungeonLevel, int roundNumber)
     {
         this.currentDungeonLevel = currentDungeonLevel;
         cardProbabilities = currentDungeonLevel.GetDungeonData(roundNumber).cardProbabilities;
@@ -21,9 +32,11 @@ public class Dungeon
         if (guaranteedMonsterTimer == 0)
         {
             guaranteedMonsterTimer = 4;
-            return new MonsterCard(guaranteedMonster, GameManager.instance.cardLevels[guaranteedMonster]);
+            var guaranteedMonsterCard = _container.Instantiate<MonsterCard>();
+            guaranteedMonsterCard.Initialize(guaranteedMonster, _gameManager.cardLevels[guaranteedMonster]);
+            return guaranteedMonsterCard;
         }
-        
+
         int totalProbability = 0;
 
         foreach (var probability in cardProbabilities.Values)
@@ -40,19 +53,22 @@ public class Dungeon
             if (randomPoint <= 0f)
             {
                 string cardName = kvp.Key;
-                string type = GameManager.instance.gameData.GetCardType(cardName);
+                string type = _gameManager.gameData.GetCardType(cardName);
                 Card card = null;
 
                 switch (type)
                 {
                     case "Monster":
-                        card = new MonsterCard(cardName, GameManager.instance.cardLevels[cardName]);
+                        card = _container.Instantiate<MonsterCard>();
+                        card.Initialize(cardName, "Monster", _gameManager.cardLevels[cardName]);
                         break;
                     case "Action":
-                        card = new ActionCard(cardName, GameManager.instance.cardLevels[cardName]);
+                        card = _container.Instantiate<ActionCard>();
+                        card.Initialize(cardName, "Action", _gameManager.cardLevels[cardName]);
                         break;
                     case "Treasure":
-                        card = new TreasureCard(cardName, GameManager.instance.cardLevels[cardName]);
+                        card = _container.Instantiate<TreasureCard>();
+                        card.Initialize(cardName, "Treasure", _gameManager.cardLevels[cardName]);
                         break;
                     case "Pass":
                         break;

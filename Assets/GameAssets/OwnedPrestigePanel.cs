@@ -1,11 +1,20 @@
 using UnityEngine;
 using TMPro;
+using Zenject;
 
 public class OwnedPrestigePanel : MonoBehaviour
 {
+    private GameManager _gameManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager)
+    {
+        _gameManager = gameManager;
+    }
+
     void Start()
     {
-        GameManager.instance.OwnedPrestigeChanged.AddListener(UpdatePrestige);
+        _gameManager.OwnedPrestigeChanged.AddListener(UpdatePrestige);
     }
 
     void Update()
@@ -15,6 +24,6 @@ public class OwnedPrestigePanel : MonoBehaviour
 
     public void UpdatePrestige()
     {
-        transform.Find("Text").GetComponent<TextMeshProUGUI>().text = GameManager.instance.PrestigePoints.ToString();
+        transform.Find("Text").GetComponent<TextMeshProUGUI>().text = _gameManager.PrestigePoints.ToString();
     }
 }

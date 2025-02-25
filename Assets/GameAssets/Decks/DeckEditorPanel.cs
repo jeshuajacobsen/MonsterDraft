@@ -2,15 +2,27 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Zenject;
 
 public class DeckEditorPanel : MonoBehaviour
 {
     public List<DeckEditorCardView> unlockedCards;
     public DeckEditorCardView cardViewPrefab;
+
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
     void Start()
     {
         transform.parent.parent.Find("CloseButton").GetComponent<UnityEngine.UI.Button>()
-                .onClick.AddListener(GameManager.instance.CloseDeckEditor);
+                .onClick.AddListener(_gameManager.CloseDeckEditor);
     }
 
     void Update()
@@ -20,73 +32,83 @@ public class DeckEditorPanel : MonoBehaviour
 
     public void OnOpen()
     {
-        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = GameManager.instance.PrestigePoints.ToString();
+        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = _gameManager.PrestigePoints.ToString();
     }
 
     public void FirstTimeSetup()
     {
-        foreach (var cardName in GameManager.instance.gameData.availableDeckEditorCards)
+        foreach (var cardName in _gameManager.gameData.availableDeckEditorCards)
         {
-            DeckEditorCardView cardView = Instantiate(cardViewPrefab, transform);
-            string type = GameManager.instance.gameData.GetCardType(cardName.Key);
-            if(type == "Treasure")
+            DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
+
+            string type = _gameManager.gameData.GetCardType(cardName.Key);
+
+            if (type == "Treasure")
             {
-                cardView.InitValues(new TreasureCard(cardName.Key, GameManager.instance.cardLevels[cardName.Key]), cardName.Value);
+                var treasureCard = _container.Instantiate<TreasureCard>();
+                treasureCard.Initialize(cardName.Key, _gameManager.cardLevels[cardName.Key]);
+                cardView.InitValues(treasureCard, cardName.Value);
             }
-            else if(type == "Monster")
+            else if (type == "Monster")
             {
-                cardView.InitValues(new MonsterCard(cardName.Key, GameManager.instance.cardLevels[cardName.Key]), cardName.Value);
+                var monsterCard = _container.Instantiate<MonsterCard>();
+                monsterCard.Initialize(cardName.Key, _gameManager.cardLevels[cardName.Key]);
+                cardView.InitValues(monsterCard, cardName.Value);
             }
-            else if(type == "Action")
+            else if (type == "Action")
             {
-                cardView.InitValues(new ActionCard(cardName.Key, GameManager.instance.cardLevels[cardName.Key]), cardName.Value);
+                var actionCard = _container.Instantiate<ActionCard>();
+                actionCard.Initialize(cardName.Key, _gameManager.cardLevels[cardName.Key]);
+                cardView.InitValues(actionCard, cardName.Value);
             }
-            int count = GameManager.instance.selectedInitialDeck.cards.Count(card => card.Name == cardName.Key);
+
+            int count = _gameManager.selectedInitialDeck.cards.Count(card => card.Name == cardName.Key);
             cardView.LoadValues(count, count);
             unlockedCards.Add(cardView);
         }
     }
 
     public void LoadCards(SaveData saveData)
+{
+    foreach (Transform child in transform)
     {
-        foreach (Transform child in transform)
-        {
-            Destroy(child.gameObject);
-        }
-        unlockedCards.Clear();
-        foreach (string card in saveData.cardsUsed.Keys)
-        {
-            DeckEditorCardView cardView = Instantiate(cardViewPrefab, transform);
-            string type = GameManager.instance.gameData.GetCardType(card);
-            if(type == "Treasure")
-            {
-                cardView.InitValues(
-                    new TreasureCard(card, GameManager.instance.cardLevels[card]), 
-                    GameManager.instance.gameData.availableDeckEditorCards[card]
-                );
-            }
-            else if(type == "Monster")
-            {
-                cardView.InitValues(
-                    new MonsterCard(card, GameManager.instance.cardLevels[card]), 
-                    GameManager.instance.gameData.availableDeckEditorCards[card]
-                );
-            }
-            else if(type == "Action")
-            {
-                cardView.InitValues(
-                    new ActionCard(card, GameManager.instance.cardLevels[card]), 
-                    GameManager.instance.gameData.availableDeckEditorCards[card]
-                );
-            }
-            cardView.LoadValues(saveData.cardsUsed[card], saveData.cardsBought[card]);
-            unlockedCards.Add(cardView);
-        }
+        Destroy(child.gameObject);
     }
+    unlockedCards.Clear();
+
+    foreach (string card in saveData.cardsUsed.Keys)
+    {
+        DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
+        string type = _gameManager.gameData.GetCardType(card);
+
+        if (type == "Treasure")
+        {
+            var treasureCard = _container.Instantiate<TreasureCard>();
+            treasureCard.Initialize(card, _gameManager.cardLevels[card]);
+            cardView.InitValues(treasureCard, _gameManager.gameData.availableDeckEditorCards[card]);
+        }
+        else if (type == "Monster")
+        {
+            var monsterCard = _container.Instantiate<MonsterCard>();
+            monsterCard.Initialize(card, _gameManager.cardLevels[card]);
+            cardView.InitValues(monsterCard, _gameManager.gameData.availableDeckEditorCards[card]);
+        }
+        else if (type == "Action")
+        {
+            var actionCard = _container.Instantiate<ActionCard>();
+            actionCard.Initialize(card, _gameManager.cardLevels[card]);
+            cardView.InitValues(actionCard, _gameManager.gameData.availableDeckEditorCards[card]);
+        }
+
+        cardView.LoadValues(saveData.cardsUsed[card], saveData.cardsBought[card]);
+        unlockedCards.Add(cardView);
+    }
+}
+
 
     public InitialDeck GetSelectedInitialDeck()
     {
-        InitialDeck initialDeck = new InitialDeck();
+        InitialDeck initialDeck = _container.Instantiate<InitialDeck>();
         List<string> selectedCards = new List<string>();
         foreach (var cardView in unlockedCards)
         {

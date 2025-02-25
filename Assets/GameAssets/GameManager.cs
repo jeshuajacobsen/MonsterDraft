@@ -5,11 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using Newtonsoft.Json;
 using UnityEngine.Events;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-
-    public static GameManager instance;
 
     public GameData gameData = new GameData();
     public InitialDeck selectedInitialDeck;
@@ -57,39 +56,37 @@ public class GameManager : MonoBehaviour
 
     public Dictionary<string, int> cardLevels = new Dictionary<string, int>();
 
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(DiContainer container)
+    {
+        _container = container;
+    }
+
     void Awake()
     {
-
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 
     void Start()
     {
         unlockedDungeonLevels = new List<string>();
         unlockedDungeonLevels.Add("Forest");
-        foreach (string cardName in GameManager.instance.gameData.GetAllMonsterNames())
+        foreach (string cardName in gameData.GetAllMonsterNames())
         {
             cardLevels.Add(cardName, 1);
         }
 
-        foreach (string cardName in GameManager.instance.gameData.GetAllTreasureNames())
+        foreach (string cardName in gameData.GetAllTreasureNames())
         {
             cardLevels.Add(cardName, 1);
         }
 
-        foreach (string cardName in GameManager.instance.gameData.GetAllActionNames())
+        foreach (string cardName in gameData.GetAllActionNames())
         {
             cardLevels.Add(cardName, 1);
         } 
-        selectedInitialDeck = new InitialDeck();
+        selectedInitialDeck = _container.Instantiate<InitialDeck>();
         LoadGame();
     }
 
@@ -167,7 +164,7 @@ public class GameManager : MonoBehaviour
                 PrestigePoints = saveData.PrestigePoints;
                 deckEditorPanel.GetComponent<DeckEditorPanel>().LoadCards(saveData);
                 cardLevels = saveData.cardLevels;
-                selectedInitialDeck = new InitialDeck();
+                selectedInitialDeck = _container.Instantiate<InitialDeck>();
                 selectedInitialDeck.LoadCards(saveData.initialDeck);
             }
             catch (System.Exception ex)
@@ -184,7 +181,7 @@ public class GameManager : MonoBehaviour
 
     private void ResetToDefaultSaveData()
     {
-        selectedInitialDeck = new InitialDeck();
+        selectedInitialDeck = _container.Instantiate<InitialDeck>();
         unlockedDungeonLevels = new List<string> { "Forest" };
         PrestigePoints = 0;
         deckEditorPanel.GetComponent<DeckEditorPanel>().FirstTimeSetup();

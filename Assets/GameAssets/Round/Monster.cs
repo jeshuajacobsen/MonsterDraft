@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using Zenject;
 
 public class Monster : MonoBehaviour
 {
@@ -103,10 +104,26 @@ public class Monster : MonoBehaviour
     private int experienceGiven;
     private int experienceRequired;
 
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
     void Start()
     {
         MainPhase.ExitMainPhase.AddListener(() => actionsUsedThisTurn.Clear());
         transform.Find("EvolveButton").GetComponent<Button>().onClick.AddListener(Evolve);
+
+        MonsterInfoButton infoButton = GetComponentInChildren<MonsterInfoButton>();
+        if (infoButton != null)
+        {
+            _container.Inject(infoButton);
+        }
     }
 
     void Update()
@@ -121,7 +138,8 @@ public class Monster : MonoBehaviour
 
     private void Evolve()
     {
-        MonsterCard monsterCard = new MonsterCard(evolvesTo, GameManager.instance.cardLevels[evolvesTo]);
+        MonsterCard monsterCard = _container.Instantiate<MonsterCard>();
+        monsterCard.Initialize(evolvesTo, _gameManager.cardLevels[evolvesTo]);
         RoundManager.instance.Experience -= experienceRequired;
         this.InitValues(monsterCard, tileOn, team);
     }

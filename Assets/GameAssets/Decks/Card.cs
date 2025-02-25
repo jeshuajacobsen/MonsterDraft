@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Zenject;
 
 public class Card
 {
@@ -12,11 +13,11 @@ public class Card
             for(int i = 0; i < level - 1; i++)
             {
                 if (Type == "Monster")
-                    addedCost += GameManager.instance.gameData.GetBaseMonsterData(Name).levelData[i].coinCostChange;
+                    addedCost += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].coinCostChange;
                 else if (Type == "Treasure")
-                    addedCost += GameManager.instance.gameData.GetTreasureData(Name).levelData[i].coinCostChange;
+                    addedCost += _gameManager.gameData.GetTreasureData(Name).levelData[i].coinCostChange;
                 else if (Type == "Action")
-                    addedCost += GameManager.instance.gameData.GetActionData(Name).levelData[i].coinCostChange;
+                    addedCost += _gameManager.gameData.GetActionData(Name).levelData[i].coinCostChange;
             }
             return _cost + addedCost;
         }
@@ -46,9 +47,9 @@ public class Card
             for(int i = 0; i < level - 1; i++)
             {
                 if (Type == "Treasure")
-                    changedEffects = GameManager.instance.gameData.GetTreasureData(Name).levelData[i].effectChanges;
+                    changedEffects = _gameManager.gameData.GetTreasureData(Name).levelData[i].effectChanges;
                 else if (Type == "Action")
-                    changedEffects = GameManager.instance.gameData.GetActionData(Name).levelData[i].effectChanges;
+                    changedEffects = _gameManager.gameData.GetActionData(Name).levelData[i].effectChanges;
                 
                 if (changedEffects != null)
                 {
@@ -95,9 +96,9 @@ public class Card
             for(int i = 0; i < level - 1; i++)
             {
                 if (Type == "Treasure")
-                    variableChanges = GameManager.instance.gameData.GetTreasureData(Name).levelData[i].effectVariableChanges;
+                    variableChanges = _gameManager.gameData.GetTreasureData(Name).levelData[i].effectVariableChanges;
                 else if (Type == "Action")
-                    variableChanges = GameManager.instance.gameData.GetActionData(Name).levelData[i].effectVariableChanges;
+                    variableChanges = _gameManager.gameData.GetActionData(Name).levelData[i].effectVariableChanges;
                 
                 Dictionary<string, string> modifiedEffectVariables = new Dictionary<string, string>();
                 if (variableChanges != null)
@@ -125,16 +126,27 @@ public class Card
     public int maxLevel = 1;
     public int level = 1;
 
-    public Card(string name, string type, int level)
+    protected GameManager _gameManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager)
+    {
+        _gameManager = gameManager;
+    }
+
+    public void Initialize(string name, string type, int level)
     {
         OnGainEffects = new List<string>();
         Effects = new List<string>();
+        EffectVariables = new Dictionary<string, string>();
+
         Name = name;
         Type = type;
         this.level = level;
+
         if (type == "Monster")
         {
-            BaseMonsterData baseStats = GameManager.instance.gameData.GetBaseMonsterData(name);
+            BaseMonsterData baseStats = _gameManager.gameData.GetBaseMonsterData(name);
             CoinCost = baseStats.CoinCost;
             LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
             maxLevel = baseStats.maxLevel;
@@ -142,7 +154,7 @@ public class Card
         }
         else if (type == "Treasure")
         {
-            TreasureData baseStats = GameManager.instance.gameData.GetTreasureData(name);
+            TreasureData baseStats = _gameManager.gameData.GetTreasureData(name);
             CoinCost = baseStats.CoinCost;
             LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
             OnGainEffects = new List<string>(baseStats.onGainEffects);
@@ -153,7 +165,7 @@ public class Card
         }
         else if (type == "Action")
         {
-            BaseActionData baseStats = GameManager.instance.gameData.GetActionData(name);
+            BaseActionData baseStats = _gameManager.gameData.GetActionData(name);
             CoinCost = baseStats.CoinCost;
             LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
             OnGainEffects = new List<string>(baseStats.onGainEffects);
@@ -162,6 +174,5 @@ public class Card
             EffectVariables = new Dictionary<string, string>(baseStats.effectVariables);
             BuyCardPrestigeCost = baseStats.BuyCardPrestigeCost;
         }
-
     }
 }

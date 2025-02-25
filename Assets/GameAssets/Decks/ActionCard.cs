@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class ActionCard : Card
 {
@@ -8,7 +9,7 @@ public class ActionCard : Card
         get
         {
             string description = _description;
-            List<ActionCardLevelData> levelData = GameManager.instance.gameData.GetActionData(Name).levelData;
+            List<ActionCardLevelData> levelData = _gameManager.gameData.GetActionData(Name).levelData;
             for (int i = 0; i < level - 1; i++)
             {
                 if (!string.IsNullOrEmpty(levelData[i].description))
@@ -32,10 +33,18 @@ public class ActionCard : Card
         }
     }
 
+    private GameManager _gameManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager)
+    {
+        _gameManager = gameManager;
+    }
+
     public string GetColoredDescription()
     {
         string description = _description;
-        List<ActionCardLevelData> levelData = GameManager.instance.gameData.GetActionData(Name).levelData;
+        List<ActionCardLevelData> levelData = _gameManager.gameData.GetActionData(Name).levelData;
         for (int i = 0; i < level - 1; i++)
         {
             if (!string.IsNullOrEmpty(levelData[i].description))
@@ -47,7 +56,7 @@ public class ActionCard : Card
         Dictionary<string, string> variableChanges = new Dictionary<string, string>();
         if (level > 1)
         {
-            variableChanges = GameManager.instance.gameData.GetActionData(Name).levelData[level - 2].effectVariableChanges;
+            variableChanges = _gameManager.gameData.GetActionData(Name).levelData[level - 2].effectVariableChanges;
         }
         if (this.EffectVariables != null)
         {
@@ -67,9 +76,11 @@ public class ActionCard : Card
         return description;
     }
 
-    public ActionCard(string name, int level) : base(name, "Action", level)
+    public void Initialize(string name, int level)
     {
-        BaseActionData baseStats = GameManager.instance.gameData.GetActionData(name);
+        base.Initialize(name, "Action", level);
+
+        BaseActionData baseStats = _gameManager.gameData.GetActionData(name);
         Description = baseStats.Description;
     }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Zenject;
 
 public class RunManager : MonoBehaviour
 {
@@ -17,6 +18,16 @@ public class RunManager : MonoBehaviour
 
     public DungeonLevelData currentDungeonLevel;
     public int currentDungeonIndex = 1;
+
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
 
     void Awake()
     {
@@ -112,7 +123,7 @@ public class RunManager : MonoBehaviour
 
     public void StartRun()
     {
-        runDeck = new RunDeck(GameManager.instance.selectedInitialDeck);
+        runDeck = new RunDeck(_gameManager.selectedInitialDeck);
         currentDungeonIndex = 1;
         betweenRoundPanel.SetActive(false);
         StartRound();
@@ -126,7 +137,7 @@ public class RunManager : MonoBehaviour
 
     public void EndRound(List<Card> gainedCards)
     {   
-        GameManager.instance.PrestigePoints += currentDungeonLevel.GetDungeonData(currentDungeonIndex).PrestigeReward;
+        _gameManager.PrestigePoints += currentDungeonLevel.GetDungeonData(currentDungeonIndex).PrestigeReward;
         currentDungeonIndex++;
         if (currentDungeonIndex <= currentDungeonLevel.dungeons.Count)
         {
@@ -136,21 +147,21 @@ public class RunManager : MonoBehaviour
         } else {
             EndRunWin();
         }
-        GameManager.instance.SaveGame();
+        _gameManager.SaveGame();
         
     }
 
     public void EndRunWin()
     {
-        GameManager.instance.menuPanel.SetActive(true);
+        _gameManager.menuPanel.SetActive(true);
         roundPanel.gameObject.SetActive(false);
-        GameManager.instance.unlockedDungeonLevels.Add(
-            GameManager.instance.gameData.GetNextDungeonLevel(currentDungeonLevel.key));
+        _gameManager.unlockedDungeonLevels.Add(
+            _gameManager.gameData.GetNextDungeonLevel(currentDungeonLevel.key));
     }
 
     public void EndRoundLose()
     {
-        GameManager.instance.menuPanel.SetActive(true);
+        _gameManager.menuPanel.SetActive(true);
         roundPanel.gameObject.SetActive(false);
     }
 
@@ -191,7 +202,8 @@ public class RunManager : MonoBehaviour
 
             if (gainedCards.Count == 0)
             {
-                largeCardViews[i].GetComponent<LargeCardView>().SetCard(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]), new Vector2(0, 0), false);
+                TreasureCard treasureCard = _container.Instantiate<TreasureCard>();
+                largeCardViews[i].GetComponent<LargeCardView>().SetCard(treasureCard, new Vector2(0, 0), false);
             }
             
         }

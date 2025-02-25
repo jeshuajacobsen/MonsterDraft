@@ -19,6 +19,7 @@ public class AutoPlayingMonsterState : CardPlayState
     {
         Debug.Log("Auto Playing Monster State Entered");
         RoundManager.instance.roundPanel.transform.Find("TownPanel").gameObject.SetActive(false);
+        RoundManager.instance.roundPanel.transform.Find("DungeonPanel").gameObject.SetActive(true);
         MarkValidTargets();
         if (gemCost > 0)
         {

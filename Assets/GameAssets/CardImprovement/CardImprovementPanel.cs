@@ -1,52 +1,48 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Zenject;
 
 public class CardImprovementPanel : MonoBehaviour
 {
     public CardImprovementButton CardImprovementButtonPrefab;
+
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
     void Start()
     {
         transform.parent.parent.Find("CloseButton").GetComponent<UnityEngine.UI.Button>()
-                .onClick.AddListener(GameManager.instance.CloseCardImprovementPanel);
-    }
-
-    void Update()
-    {
-        
+                .onClick.AddListener(_gameManager.CloseCardImprovementPanel);
     }
 
     public void OnOpen()
     {
-        foreach (Transform child in transform.Find("MonsterCardPanel"))
+        ClearPanel("MonsterCardPanel");
+        ClearPanel("TreasureCardPanel");
+        ClearPanel("ActionCardPanel");
+
+        foreach (string cardName in _gameManager.gameData.GetAllMonsterNames())
         {
-            Destroy(child.gameObject);
-        }
-        foreach (string cardName in GameManager.instance.gameData.GetAllMonsterNames())
-        {
-            CardImprovementButton cardImprovementButton = Instantiate(CardImprovementButtonPrefab, transform.Find("MonsterCardPanel"));
-            cardImprovementButton.InitValues(new MonsterCard(cardName, GameManager.instance.cardLevels[cardName]));
+            AddCardToPanel("MonsterCardPanel", cardName, "Monster");
         }
 
-        foreach (Transform child in transform.Find("TreasureCardPanel"))
+        foreach (string cardName in _gameManager.gameData.GetAllTreasureNames())
         {
-            Destroy(child.gameObject);
-        }
-        foreach (string cardName in GameManager.instance.gameData.GetAllTreasureNames())
-        {
-            CardImprovementButton cardImprovementButton = Instantiate(CardImprovementButtonPrefab, transform.Find("TreasureCardPanel"));
-            cardImprovementButton.InitValues(new TreasureCard(cardName, GameManager.instance.cardLevels[cardName]));
+            AddCardToPanel("TreasureCardPanel", cardName, "Treasure");
         }
 
-        foreach (Transform child in transform.Find("ActionCardPanel"))
+        foreach (string cardName in _gameManager.gameData.GetAllActionNames())
         {
-            Destroy(child.gameObject);
+            AddCardToPanel("ActionCardPanel", cardName, "Action");
         }
-        foreach (string cardName in GameManager.instance.gameData.GetAllActionNames())
-        {
-            CardImprovementButton cardImprovementButton = Instantiate(CardImprovementButtonPrefab, transform.Find("ActionCardPanel"));
-            cardImprovementButton.InitValues(new ActionCard(cardName, GameManager.instance.cardLevels[cardName]));
-        }  
 
         ScrollRect scrollRect = transform.GetComponentInParent<ScrollRect>();
         if (scrollRect != null)
@@ -54,7 +50,39 @@ public class CardImprovementPanel : MonoBehaviour
             scrollRect.verticalNormalizedPosition = 1f;
         }
 
-        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = GameManager.instance.PrestigePoints.ToString();
-      
+        transform.parent.parent.Find("PrestigePanel/Text").GetComponent<TextMeshProUGUI>().text = _gameManager.PrestigePoints.ToString();
+    }
+
+    private void ClearPanel(string panelName)
+    {
+        foreach (Transform child in transform.Find(panelName))
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void AddCardToPanel(string panelName, string cardName, string cardType)
+    {
+        CardImprovementButton cardImprovementButton = Instantiate(CardImprovementButtonPrefab, transform.Find(panelName));
+
+        if (cardType == "Monster")
+        {
+            var monsterCard = _container.Instantiate<MonsterCard>();
+            monsterCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
+            cardImprovementButton.InitValues(monsterCard);
+        }
+        else if (cardType == "Treasure")
+        {
+            var treasureCard = _container.Instantiate<TreasureCard>();
+            treasureCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
+            cardImprovementButton.InitValues(treasureCard);
+        }
+        else if (cardType == "Action")
+        {
+            var actionCard = _container.Instantiate<ActionCard>();
+            actionCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
+            cardImprovementButton.InitValues(actionCard);
+        }
+        cardImprovementButton.transform.GetComponent<Button>().onClick.AddListener(() => _gameManager.OpenSelectedCardImprovementPanel(cardImprovementButton.card));
     }
 }

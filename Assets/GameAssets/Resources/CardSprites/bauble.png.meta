@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bauble_0: 1564380436212139970
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

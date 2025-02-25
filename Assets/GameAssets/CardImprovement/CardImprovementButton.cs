@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Zenject;
 
 public class CardImprovementButton : MonoBehaviour
 {
 
-    private Card card;
+    public Card card;
+
     void Start()
     {
-        transform.GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
     void Update()
@@ -16,16 +17,11 @@ public class CardImprovementButton : MonoBehaviour
         
     }
 
-    public void OnClick()
-    {
-        GameManager.instance.OpenSelectedCardImprovementPanel(card);
-    }
-
     public void InitValues(Card card)
     {
         this.card = card;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
         transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
-        transform.Find("LevelText").GetComponent<TextMeshProUGUI>().text = "Level: " + GameManager.instance.cardLevels[card.Name] + "/" + card.maxLevel.ToString();
+        transform.Find("LevelText").GetComponent<TextMeshProUGUI>().text = "Level: " + card.level + "/" + card.maxLevel.ToString();
     }
 }

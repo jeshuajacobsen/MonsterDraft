@@ -2,11 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
+using Zenject;
 
 public class BoostButton : MonoBehaviour
 {
     [SerializeField] private string boostName;
     [SerializeField] private int gemCost;
+
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
     void Start()
     {
         transform.GetComponent<Button>().onClick.AddListener(OnClick);
@@ -19,7 +31,7 @@ public class BoostButton : MonoBehaviour
 
     private void OnClick()
     {
-        if (GameManager.instance.Gems < gemCost)
+        if (_gameManager.Gems < gemCost)
         {
             return;
         }
@@ -54,10 +66,11 @@ public class BoostButton : MonoBehaviour
             }
             else
             {
-                string monsterName = GameManager.instance.gameData.GetRandomMonsterName(new List<string>(), "Common");
-                MonsterCard card = new MonsterCard(monsterName, GameManager.instance.cardLevels[monsterName]);
+                string monsterName = _gameManager.gameData.GetRandomMonsterName(new List<string>(), "Common");
+                var monsterCard = _container.Instantiate<MonsterCard>();
+                monsterCard.Initialize(monsterName, _gameManager.cardLevels[monsterName]);
                 yield return new WaitForEndOfFrame();
-                RoundManager.instance.gameState.SwitchPhaseState(new AutoPlayingMonsterState((MainPhase)RoundManager.instance.gameState, card, gemCost));
+                RoundManager.instance.gameState.SwitchPhaseState(new AutoPlayingMonsterState((MainPhase)RoundManager.instance.gameState, monsterCard, gemCost));
             }
         }
         else if (boostName == "Coins")
@@ -79,6 +92,6 @@ public class BoostButton : MonoBehaviour
             RoundManager.instance.Mana += 5;
         }
 
-        GameManager.instance.Gems -= gemCost;
+        _gameManager.Gems -= gemCost;
     }
 }

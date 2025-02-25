@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Zenject;
 
 public class StockPile : MonoBehaviour
 {
@@ -13,37 +14,47 @@ public class StockPile : MonoBehaviour
     private string cardType;
     public Card card;
 
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
     void Start()
     {
         transform.Find("BuyButton").GetComponent<Button>().onClick.AddListener(BuyCard);
     }
 
-    
-    void Update()
-    {
-        
-    }
-
     public void InitValues(string name, int stockLeft, string cardType)
     {
         this.cardType = cardType;
-        if (this.cardType == "Monster")
+        switch (this.cardType)
         {
-            card = new MonsterCard(name, GameManager.instance.cardLevels[name]);
+            case "Monster":
+                card = _container.Instantiate<MonsterCard>();
+                ((MonsterCard)card).Initialize(name, _gameManager.cardLevels[name]);
+                break;
+            case "Treasure":
+                card = _container.Instantiate<TreasureCard>();
+                ((TreasureCard)card).Initialize(name, _gameManager.cardLevels[name]);
+                break;
+            case "Action":
+                card = _container.Instantiate<ActionCard>();
+                ((ActionCard)card).Initialize(name, _gameManager.cardLevels[name]);
+                break;
         }
-        else if (this.cardType == "Treasure")
-        {
-            card = new TreasureCard(name, GameManager.instance.cardLevels[name]);
-        }
-        else if (this.cardType == "Action")
-        {
-            card = new ActionCard(name, GameManager.instance.cardLevels[name]);
-        }
+
         this.Name = name;
+
         if (transform.Find("NameText") != null)
         {
             transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = name;
         }
+
         this.StockLeft = stockLeft;
         transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = stockLeft.ToString();
         this.Cost = this.card.CoinCost;
@@ -63,38 +74,41 @@ public class StockPile : MonoBehaviour
                 return;
             }
         }
+
         if (RoundManager.instance.Coins >= Cost)
         {
             RoundManager.instance.Coins -= Cost;
 
-            if (cardType == "Monster")
-            {
-                Card newCard = new MonsterCard(Name, GameManager.instance.cardLevels[Name]);
-                RoundManager.instance.discardPile.AddCard(newCard);
-                RoundManager.instance.cardsGainedThisRound.Add(newCard);
-            }
-            else if (cardType == "Treasure")
-            {
-                Card newCard = new TreasureCard(Name, GameManager.instance.cardLevels[Name]);
-                RoundManager.instance.discardPile.AddCard(newCard);
-                RoundManager.instance.cardsGainedThisRound.Add(newCard);
-            }
-            else if (cardType == "Action")
-            {
-                ActionCard newCard = new ActionCard(Name, GameManager.instance.cardLevels[Name]);
-                RoundManager.instance.discardPile.AddCard(newCard);
-                RoundManager.instance.cardsGainedThisRound.Add(newCard);
+            Card newCard = null;
 
-                if (newCard.OnGainEffects.Count > 0)
-                {
-                    MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
-                    mainPhase.gainedCard = newCard;
-                    mainPhase.SwitchPhaseState(new ResolvingOnGainEffectState(mainPhase));
-                }
+            switch (cardType)
+            {
+                case "Monster":
+                    newCard = _container.Instantiate<MonsterCard>();
+                    ((MonsterCard)newCard).Initialize(Name, _gameManager.cardLevels[Name]);
+                    break;
+                case "Treasure":
+                    newCard = _container.Instantiate<TreasureCard>();
+                    ((TreasureCard)newCard).Initialize(Name, _gameManager.cardLevels[Name]);
+                    break;
+                case "Action":
+                    newCard = _container.Instantiate<ActionCard>();
+                    ((ActionCard)newCard).Initialize(Name, _gameManager.cardLevels[Name]);
+                    break;
             }
+
+            RoundManager.instance.discardPile.AddCard(newCard);
+            RoundManager.instance.cardsGainedThisRound.Add(newCard);
+
+            if (newCard is ActionCard actionCard && actionCard.OnGainEffects.Count > 0)
+            {
+                MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
+                mainPhase.gainedCard = actionCard;
+                mainPhase.SwitchPhaseState(new ResolvingOnGainEffectState(mainPhase));
+            }
+
             StockLeft--;
             transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = StockLeft.ToString();
         }
-        
     }
 }

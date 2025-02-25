@@ -1,15 +1,11 @@
 using UnityEngine;
 
-public abstract class GameState : MonoBehaviour
+public abstract class GameState
 {
-
-
-    protected RoundManager roundManager;
     public CardPlayState currentState;
 
-    public GameState(RoundManager roundManager)
+    public GameState()
     {
-        this.roundManager = roundManager;
     }
 
     public abstract void EnterState();

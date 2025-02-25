@@ -1,66 +1,94 @@
 using System.Collections.Generic;
+using Zenject;
 
-public class InitialDeck : Deck
+public class InitialDeck : Deck, IInitializable
 {
-    public InitialDeck()
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
+
+    // Runs after injection is complete
+    public void Initialize()
     {
         cards = new List<Card>();
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Copper", GameManager.instance.cardLevels["Copper"]));
-        cards.Add(new TreasureCard("Mana Vial", GameManager.instance.cardLevels["Mana Vial"]));
-        cards.Add(new TreasureCard("Mana Vial", GameManager.instance.cardLevels["Mana Vial"]));
-        cards.Add(new TreasureCard("Mana Vial", GameManager.instance.cardLevels["Mana Vial"]));
-        cards.Add(new TreasureCard("Mana Vial", GameManager.instance.cardLevels["Mana Vial"]));
-        cards.Add(new TreasureCard("Mana Vial", GameManager.instance.cardLevels["Mana Vial"]));
-        cards.Add(new MonsterCard("Zaple", GameManager.instance.cardLevels["Zaple"]));
-        //cards.Add(new MonsterCard("Zaple"));
-        cards.Add(new ActionCard("Fireball", GameManager.instance.cardLevels["Fireball"]));
-        //cards.Add(new ActionCard("Shield"));
-        cards.Add(new ActionCard("Heal", GameManager.instance.cardLevels["Heal"]));
-        //cards.Add(new ActionCard("Preparation"));
-        //cards.Add(new ActionCard("Research"));
-        //cards.Add(new ActionCard("Throne Room"));
-        //cards.Add(new ActionCard("Forge"));
-        //cards.Add(new ActionCard("Vault"));
-        //cards.Add(new ActionCard("Bank"));
-        //cards.Add(new ActionCard("Development"));
-        //cards.Add(new MonsterCard("Borble"));
-        //cards.Add(new MonsterCard("Owisp"));
-        //cards.Add(new MonsterCard("Leafree"));
-        //cards.Add(new MonsterCard("Squrl"));
+
+        AddTreasureCard("Copper", 7);
+        AddTreasureCard("Mana Vial", 5);
+        AddMonsterCard("Zaple", 1);
+        AddActionCard("Fireball", 1);
+        AddActionCard("Heal", 1);
+    }
+
+    private void AddTreasureCard(string cardName, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            var treasureCard = _container.Instantiate<TreasureCard>();
+            treasureCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
+            cards.Add(treasureCard);
+        }
+    }
+
+    private void AddMonsterCard(string cardName, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            var monsterCard = _container.Instantiate<MonsterCard>();
+            monsterCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
+            cards.Add(monsterCard);
+        }
+    }
+
+    private void AddActionCard(string cardName, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            var actionCard = _container.Instantiate<ActionCard>();
+            actionCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
+            cards.Add(actionCard);
+        }
     }
 
     public void LoadCards(List<string> cards)
     {
         this.cards = new List<Card>();
-        foreach(string card in cards)
+
+        foreach (string card in cards)
         {
-            string type = GameManager.instance.gameData.GetCardType(card);
-            if(type == "Treasure")
+            string type = _gameManager.gameData.GetCardType(card);
+
+            if (type == "Treasure")
             {
-                this.cards.Add(new TreasureCard(card, GameManager.instance.cardLevels[card]));
+                var treasureCard = _container.Instantiate<TreasureCard>();
+                treasureCard.Initialize(card, _gameManager.cardLevels[card]);
+                this.cards.Add(treasureCard);
             }
-            else if(type == "Monster")
+            else if (type == "Monster")
             {
-                this.cards.Add(new MonsterCard(card, GameManager.instance.cardLevels[card]));
+                var monsterCard = _container.Instantiate<MonsterCard>();
+                monsterCard.Initialize(card, _gameManager.cardLevels[card]);
+                this.cards.Add(monsterCard);
             }
-            else if(type == "Action")
+            else if (type == "Action")
             {
-                this.cards.Add(new ActionCard(card, GameManager.instance.cardLevels[card]));
+                var actionCard = _container.Instantiate<ActionCard>();
+                actionCard.Initialize(card, _gameManager.cardLevels[card]);
+                this.cards.Add(actionCard);
             }
         }
     }
 
     public void ResetLevels()
     {
-        foreach(Card card in cards)
+        foreach (Card card in cards)
         {
-            card.level = GameManager.instance.cardLevels[card.Name];
+            card.level = _gameManager.cardLevels[card.Name];
         }
     }
 }

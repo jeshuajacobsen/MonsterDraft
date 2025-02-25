@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Zenject;
 
 public class DeckEditorCardView : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public class DeckEditorCardView : MonoBehaviour
     public int usingCardCount = 0;
     public int boughtCardCount = 0;
     private int cardLimit = 0;
+
+    private GameManager _gameManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager)
+    {
+        _gameManager = gameManager;
+    }
 
     void Start()
     {
@@ -56,10 +65,10 @@ public class DeckEditorCardView : MonoBehaviour
 
     public void BuyCard()
     {
-        if (boughtCardCount < cardLimit && GameManager.instance.PrestigePoints >= card.BuyCardPrestigeCost)
+        if (boughtCardCount < cardLimit && _gameManager.PrestigePoints >= card.BuyCardPrestigeCost)
         {
             boughtCardCount++;
-            GameManager.instance.PrestigePoints -= card.BuyCardPrestigeCost;
+            _gameManager.PrestigePoints -= card.BuyCardPrestigeCost;
             transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
         }
     }

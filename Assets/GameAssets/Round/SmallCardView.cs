@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Zenject;
 
 public class SmallCardView : MonoBehaviour
 {
@@ -17,6 +18,16 @@ public class SmallCardView : MonoBehaviour
     private Transform originalParent;
     private Canvas dragCanvas;
     private Canvas originalCanvas;
+
+    private GameManager _gameManager;
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(GameManager gameManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _container = container;
+    }
 
     void Start()
     {
@@ -35,6 +46,12 @@ public class SmallCardView : MonoBehaviour
         }
 
         originalCanvas = GetComponentInParent<Canvas>();
+
+        InfoButton infoButton = GetComponentInChildren<InfoButton>();
+        if (infoButton != null)
+        {
+            _container.Inject(infoButton);
+        }
     }
 
     void Update()
@@ -141,5 +158,10 @@ public class SmallCardView : MonoBehaviour
         }
         //transform.Find("CardCost").GetComponent<TextMesh>().text = card.cost.ToString();
         //transform.Find("CardDescription").GetComponent<TextMesh>().text = card.Description;
+    }
+
+    public void DestroyCardView()
+    {
+        Destroy(gameObject);
     }
 }
