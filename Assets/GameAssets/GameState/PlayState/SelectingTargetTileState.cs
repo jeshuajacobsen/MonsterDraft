@@ -9,10 +9,11 @@ public class SelectingTargetTileState : CardPlayState
     private Card card;
     
 
-    public SelectingTargetTileState(MainPhase mainPhase, Card card) : base(mainPhase)
+    public SelectingTargetTileState Initialize(Card card)
     {
         this.card = card;
         validTargets = new List<Tile>();
+        return this;
     }
 
     public override void EnterState()
@@ -53,7 +54,7 @@ public class SelectingTargetTileState : CardPlayState
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
                 {
                     mainPhase.selectedTile = validTargets[i];
-                    mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
                     break;
                 }
             }

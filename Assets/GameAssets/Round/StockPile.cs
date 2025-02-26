@@ -15,12 +15,14 @@ public class StockPile : MonoBehaviour
     public Card card;
 
     private GameManager _gameManager;
+    private RoundManager _roundManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
     {
         _gameManager = gameManager;
+        _roundManager = roundManager;
         _container = container;
     }
 
@@ -29,7 +31,7 @@ public class StockPile : MonoBehaviour
         transform.Find("BuyButton").GetComponent<Button>().onClick.AddListener(BuyCard);
     }
 
-    public void InitValues(string name, int stockLeft, string cardType)
+    public void Initialize(string name, int stockLeft, string cardType)
     {
         this.cardType = cardType;
         switch (this.cardType)
@@ -64,20 +66,20 @@ public class StockPile : MonoBehaviour
 
     private void BuyCard()
     {
-        if (RoundManager.instance.isGainingCard)
+        if (_roundManager.isGainingCard)
         {
-            MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
+            MainPhase mainPhase = (MainPhase)_roundManager.gameState;
             if ((mainPhase.currentState as GainingCardState).MeetsRestrictions(card))
             {
                 (mainPhase.currentState as GainingCardState).GainCard(card);
-                RoundManager.instance.cardsGainedThisRound.Add(card);
+                _roundManager.cardsGainedThisRound.Add(card);
                 return;
             }
         }
 
-        if (RoundManager.instance.Coins >= Cost)
+        if (_roundManager.Coins >= Cost)
         {
-            RoundManager.instance.Coins -= Cost;
+            _roundManager.Coins -= Cost;
 
             Card newCard = null;
 
@@ -97,14 +99,14 @@ public class StockPile : MonoBehaviour
                     break;
             }
 
-            RoundManager.instance.discardPile.AddCard(newCard);
-            RoundManager.instance.cardsGainedThisRound.Add(newCard);
+            _roundManager.discardPile.AddCard(newCard);
+            _roundManager.cardsGainedThisRound.Add(newCard);
 
             if (newCard is ActionCard actionCard && actionCard.OnGainEffects.Count > 0)
             {
-                MainPhase mainPhase = (MainPhase)RoundManager.instance.gameState;
+                MainPhase mainPhase = (MainPhase)_roundManager.gameState;
                 mainPhase.gainedCard = actionCard;
-                mainPhase.SwitchPhaseState(new ResolvingOnGainEffectState(mainPhase));
+                mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingOnGainEffectState>());
             }
 
             StockLeft--;

@@ -1,17 +1,29 @@
 using System.Collections.Generic;
+using Zenject;
 
 public class RoundDeck : Deck
 {
 
-    public RoundDeck(RunDeck runDeck)
+    private RoundManager _roundManager;
+    private RunManager _runManager;
+
+    [Inject]
+    public void Construct(RoundManager roundManager, RunManager runManager)
     {
-        cards = new List<Card>(runDeck.cards);
+        _roundManager = roundManager;
+        _runManager = runManager;
+    }
+
+    public RoundDeck Initialize()
+    {
+        cards = new List<Card>(_runManager.runDeck.cards);
+        return this;
     }
 
     public List<Card> DrawHand()
     {
         List<Card> hand = new List<Card>();
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
             hand.Add(DrawCard());
         }
@@ -36,7 +48,7 @@ public class RoundDeck : Deck
 
     public void ShuffleDiscardIntoDeck()
     {
-        foreach (Card card in RoundManager.instance.discardPile.cards)
+        foreach (Card card in _roundManager.discardPile.cards)
         {
             cards.Add(card);
         }
@@ -47,7 +59,7 @@ public class RoundDeck : Deck
             cards[i] = cards[j];
             cards[j] = temp;
         }
-        RoundManager.instance.discardPile.cards.Clear();
+        _roundManager.discardPile.cards.Clear();
     }
 
     public void Discard(Card card)
@@ -57,7 +69,7 @@ public class RoundDeck : Deck
         {
             cards.Remove(cardToRemove);
         }
-        RoundManager.instance.discardPile.cards.Add(card);
+        _roundManager.discardPile.cards.Add(card);
     }
 
     public void Trash(Card card)

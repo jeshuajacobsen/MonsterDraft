@@ -14,7 +14,7 @@ public class DungeonData
         switch (name)
         {
             case "Forest1":
-                cardProbabilities.Add("Pass", 45);
+                cardProbabilities.Add("Pass", 30);
                 cardProbabilities.Add("Fireball", 5);
                 cardProbabilities.Add("Zaple", 20);
                 cardProbabilities.Add("Owisp", 5);
@@ -24,7 +24,7 @@ public class DungeonData
                 PrestigeReward = 100;
                 break;
             case "Forest2":
-                cardProbabilities.Add("Pass", 50);
+                cardProbabilities.Add("Pass", 30);
                 cardProbabilities.Add("Fireball", 5);
                 cardProbabilities.Add("Zaple", 20);
                 cardProbabilities.Add("Owisp", 10);
@@ -34,7 +34,7 @@ public class DungeonData
                 PrestigeReward = 120;
                 break;
             case "Forest3":
-                cardProbabilities.Add("Pass", 50);
+                cardProbabilities.Add("Pass", 25);
                 cardProbabilities.Add("Fireball", 10);
                 cardProbabilities.Add("Zaple", 20);
                 cardProbabilities.Add("Owisp", 20);
@@ -44,7 +44,7 @@ public class DungeonData
                 PrestigeReward = 130;
                 break;
             case "Forest4":
-                cardProbabilities.Add("Pass", 40);
+                cardProbabilities.Add("Pass", 25);
                 cardProbabilities.Add("Fireball", 10);
                 cardProbabilities.Add("Zaple", 20);
                 cardProbabilities.Add("Owisp", 20);
@@ -54,7 +54,7 @@ public class DungeonData
                 PrestigeReward = 150;
                 break;
             case "Forest5":
-                cardProbabilities.Add("Pass", 30);
+                cardProbabilities.Add("Pass", 20);
                 cardProbabilities.Add("Fireball", 10);
                 cardProbabilities.Add("Zaple", 20);
                 cardProbabilities.Add("Owisp", 20);

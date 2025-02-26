@@ -69,19 +69,19 @@ public class CardImprovementPanel : MonoBehaviour
         {
             var monsterCard = _container.Instantiate<MonsterCard>();
             monsterCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
-            cardImprovementButton.InitValues(monsterCard);
+            cardImprovementButton.Initialize(monsterCard);
         }
         else if (cardType == "Treasure")
         {
             var treasureCard = _container.Instantiate<TreasureCard>();
             treasureCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
-            cardImprovementButton.InitValues(treasureCard);
+            cardImprovementButton.Initialize(treasureCard);
         }
         else if (cardType == "Action")
         {
             var actionCard = _container.Instantiate<ActionCard>();
             actionCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
-            cardImprovementButton.InitValues(actionCard);
+            cardImprovementButton.Initialize(actionCard);
         }
         cardImprovementButton.transform.GetComponent<Button>().onClick.AddListener(() => _gameManager.OpenSelectedCardImprovementPanel(cardImprovementButton.card));
     }

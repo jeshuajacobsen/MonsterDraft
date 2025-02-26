@@ -31,7 +31,7 @@ public class VisualEffect
         }
     }
 
-    public void InitValues(GameObject effect, Vector2 startPosition, Tile target)
+    public void Initialize(GameObject effect, Vector2 startPosition, Tile target)
     {
         effect.gameObject.SetActive(true);
         

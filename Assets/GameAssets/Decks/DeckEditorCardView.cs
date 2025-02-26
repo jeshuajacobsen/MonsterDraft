@@ -35,7 +35,7 @@ public class DeckEditorCardView : MonoBehaviour
 
     }
 
-    public void InitValues(Card card, int cardLimit)
+    public void Initialize(Card card, int cardLimit)
     {
         this.card = card;
         this.cardLimit = cardLimit;

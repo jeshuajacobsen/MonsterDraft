@@ -19,7 +19,7 @@ public class FloatyNumber : MonoBehaviour
         }
     }
 
-    public void InitValues(int text, Vector2 startPosition, bool isDamage)
+    public void Initialize(int text, Vector2 startPosition, bool isDamage)
     {
         transform.position = startPosition;
         transform.Find("Text").GetComponent<TextMeshProUGUI>().text = text + "";

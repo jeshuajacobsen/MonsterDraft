@@ -139,7 +139,7 @@ public class SmallCardView : MonoBehaviour
         rectTransform.localScale = new Vector3(1 / scaleFactor.x, 1 / scaleFactor.y, 1 / scaleFactor.z);
     }
 
-    public void InitValues(Card card)
+    public void Initialize(Card card)
     {
         this.card = card;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;

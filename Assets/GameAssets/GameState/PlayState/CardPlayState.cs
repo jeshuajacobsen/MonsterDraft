@@ -1,12 +1,19 @@
 using UnityEngine;
+using Zenject;
 
-public abstract class CardPlayState : MonoBehaviour
+public abstract class CardPlayState
 {
     protected MainPhase mainPhase;
 
-    public CardPlayState(MainPhase mainPhase)
+    protected RoundManager _roundManager;
+    protected DiContainer _container;
+
+    [Inject]
+    public void Construct(RoundManager roundManager, DiContainer container)
     {
-        this.mainPhase = mainPhase;
+        _roundManager = roundManager;
+        mainPhase = (MainPhase)_roundManager.gameState;
+        _container = container;
     }
 
     public abstract void EnterState();

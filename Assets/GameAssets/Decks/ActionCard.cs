@@ -33,14 +33,6 @@ public class ActionCard : Card
         }
     }
 
-    private GameManager _gameManager;
-
-    [Inject]
-    public void Construct(GameManager gameManager)
-    {
-        _gameManager = gameManager;
-    }
-
     public string GetColoredDescription()
     {
         string description = _description;

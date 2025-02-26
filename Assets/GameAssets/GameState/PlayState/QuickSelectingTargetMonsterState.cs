@@ -9,10 +9,11 @@ public class QuickSelectingTargetMonsterState : CardPlayState
     private SmallCardView cardView;
     
 
-    public QuickSelectingTargetMonsterState(MainPhase mainPhase, SmallCardView cardView) : base(mainPhase)
+    public QuickSelectingTargetMonsterState Initialize(SmallCardView cardView)
     {
         this.cardView = cardView;
         validTargets = new List<Tile>();
+        return this;
     }
 
     public override void EnterState()
@@ -73,7 +74,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
                     {
                         for (int tile = 1; tile <= 7; tile++)
                         {
-                            Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                            Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                             if (tileTransform != null)
                             {
                                 Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -91,7 +92,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
                     {
                         for (int tile = 1; tile <= 7; tile++)
                         {
-                            Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                            Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                             if (tileTransform != null)
                             {
                                 Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -110,7 +111,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
 
     public void HandleCardDrop(SmallCardView cardView, Vector2 dropPosition)
     {
-        RectTransform parentRect = RoundManager.instance.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
+        RectTransform parentRect = _roundManager.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
         bool isInsideHand = RectTransformUtility.RectangleContainsScreenPoint(
             parentRect,
             dropPosition,

@@ -8,11 +8,12 @@ public class ResolvingSkillEffectState : CardPlayState
     Monster skillUser;
     List<Tile> targets = new List<Tile>();
 
-    public ResolvingSkillEffectState(MainPhase mainPhase, SkillData skill, Monster skillUser, List<Tile> targets) : base(mainPhase) 
+    public ResolvingSkillEffectState Initialize(SkillData skill, Monster skillUser, List<Tile> targets) 
     { 
         this.skill = skill;
         this.skillUser = skillUser;
         this.targets = targets;
+        return this;
     }
 
     public override void EnterState()
@@ -58,13 +59,13 @@ public class ResolvingSkillEffectState : CardPlayState
                 {
                     if (effectParts[7] == "Ally")
                     {
-                        foreach (var ally in RoundManager.instance.GetAllAllies())
+                        foreach (var ally in _roundManager.GetAllAllies())
                         {
                             ally.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                         }
                     } else if (effectParts[7] == "Enemy")
                     {
-                        foreach (var enemy in RoundManager.instance.GetAllEnemies())
+                        foreach (var enemy in _roundManager.GetAllEnemies())
                         {
                             enemy.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                         }
@@ -75,7 +76,7 @@ public class ResolvingSkillEffectState : CardPlayState
             }
         }
         
-        mainPhase.SwitchPhaseState(new IdleState(mainPhase));
+        mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public override void ExitState()

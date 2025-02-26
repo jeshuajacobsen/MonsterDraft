@@ -9,18 +9,19 @@ public class SelectingCardsState : CardPlayState
     private string restriction;
     private List<SmallCardView> selectedCards = new List<SmallCardView>();
     
-    public SelectingCardsState(MainPhase mainPhase, string numberToSelect, string restriction) : base(mainPhase)
+    public SelectingCardsState Initialize(string numberToSelect, string restriction)
     {
         this.restriction = restriction;
         this.numberToSelect = numberToSelect;
+        return this;
     }
 
     public override void EnterState()
     {
         Debug.Log("Selecting cards State Entered");
-        RoundManager.instance.SetupDoneButton();
-        RoundManager.instance.messageText.text = "Select " + numberToSelect + " cards";
-        RoundManager.instance.messageText.gameObject.SetActive(true);
+        _roundManager.SetupDoneButton();
+        _roundManager.messageText.text = "Select " + numberToSelect + " cards";
+        _roundManager.messageText.gameObject.SetActive(true);
     }
 
     public override void HandleInput()
@@ -30,7 +31,7 @@ public class SelectingCardsState : CardPlayState
 
     public override void UpdateState()
     {
-        RoundManager roundManager = RoundManager.instance;
+        RoundManager roundManager = _roundManager;
 
         bool pointerUp = false;
         Vector2 pointerPosition = Vector2.zero;
@@ -117,12 +118,12 @@ public class SelectingCardsState : CardPlayState
     public override void ExitState()
     {
         Debug.Log("Exiting Selecting cards State");
-        RoundManager.instance.CleanupDoneButton();
+        _roundManager.CleanupDoneButton();
         selectedCards.ForEach(cardView => {
             cardView.GetComponent<Image>().color = Color.white;
         });
         mainPhase.selectedCards = selectedCards;
-        RoundManager.instance.messageText.text = "";
-        RoundManager.instance.messageText.gameObject.SetActive(false);
+        _roundManager.messageText.text = "";
+        _roundManager.messageText.gameObject.SetActive(false);
     }
 }

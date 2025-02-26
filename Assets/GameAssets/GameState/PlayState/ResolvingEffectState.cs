@@ -5,10 +5,6 @@ using System.Collections.Generic;
 public class ResolvingEffectState : CardPlayState
 {
 
-    public ResolvingEffectState(MainPhase mainPhase) : base(mainPhase) 
-    { 
-    }
-
     public override void EnterState()
     {
         Debug.Log("Resolving Effect State Entered");
@@ -30,7 +26,7 @@ public class ResolvingEffectState : CardPlayState
             string[] effectParts = mainPhase.playedCard.Effects[i].Split(' ');
             if (effectParts[0] == "Actions")
             {
-                RoundManager.instance.Actions += int.Parse(effectParts[1]);
+                _roundManager.Actions += int.Parse(effectParts[1]);
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0]  == "Coins") 
             {
@@ -38,7 +34,7 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[2] == "Times")
                     {
-                        RoundManager.instance.Coins += mainPhase.selectedCards.Count * int.Parse(effectParts[3]);
+                        _roundManager.Coins += mainPhase.selectedCards.Count * int.Parse(effectParts[3]);
                     }
                 } else {
                     int coins = int.Parse(effectParts[1]);
@@ -49,7 +45,7 @@ public class ResolvingEffectState : CardPlayState
                             coins *= mainPhase.treasuresPlayed;
                         }
                     }
-                    RoundManager.instance.Coins += coins;
+                    _roundManager.Coins += coins;
                 }
                 mainPhase.playedActionCardStep++;
                 
@@ -60,20 +56,20 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[3] == "Ally")
                     {
-                        amount *= RoundManager.instance.GetAllAllies().Count;
-                        RoundManager.instance.Mana += amount;
+                        amount *= _roundManager.GetAllAllies().Count;
+                        _roundManager.Mana += amount;
                     } else if (effectParts[3] == "Coins/2")
                     {
-                        amount = RoundManager.instance.Coins / 2;
-                        RoundManager.instance.Mana += amount;
+                        amount = _roundManager.Coins / 2;
+                        _roundManager.Mana += amount;
                     }
                 } else {
-                    RoundManager.instance.Mana += amount;
+                    _roundManager.Mana += amount;
                 }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Experience")
             {
-                RoundManager.instance.Experience += int.Parse(effectParts[1]);
+                _roundManager.Experience += int.Parse(effectParts[1]);
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Draw")
             {
@@ -82,12 +78,12 @@ public class ResolvingEffectState : CardPlayState
                     int x = mainPhase.selectedCards.Count;
                     for (int j = 0; j < x; j++)
                     {
-                        RoundManager.instance.AddCardToHand(RoundManager.instance.roundDeck.DrawCard());
+                        _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
                     }
                 } else {
                     for (int j = 0; j < int.Parse(effectParts[1]); j++)
                     {
-                        RoundManager.instance.AddCardToHand(RoundManager.instance.roundDeck.DrawCard());
+                        _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
                     }
                 }
                 mainPhase.playedActionCardStep++;
@@ -96,13 +92,13 @@ public class ResolvingEffectState : CardPlayState
                 mainPhase.playedActionCardStep++;
                 if (effectParts[1] == "Cards")
                 {
-                    mainPhase.SwitchPhaseState(new SelectingCardsState(mainPhase, effectParts[2], "None"));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<SelectingCardsState>().Initialize(effectParts[2], "None"));
                 } else if (effectParts[1] == "Treasure")
                 {
-                    mainPhase.SwitchPhaseState(new SelectingCardsState(mainPhase, effectParts[2], "Treasure"));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<SelectingCardsState>().Initialize(effectParts[2], "Treasure"));
                 } else if (effectParts[1] == "Action")
                 {
-                    mainPhase.SwitchPhaseState(new SelectingCardsState(mainPhase, effectParts[2], "Action"));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<SelectingCardsState>().Initialize(effectParts[2], "Action"));
                 }
                 return;
             } else if (effectParts[0] == "Discard")
@@ -112,17 +108,17 @@ public class ResolvingEffectState : CardPlayState
                     int x = mainPhase.selectedCards.Count;
                     for (int j = 0; j < x; j++)
                     {
-                        RoundManager.instance.discardPile.AddCard(mainPhase.selectedCards[j].card);
-                        RoundManager.instance.RemoveCardFromHand(mainPhase.selectedCards[j]);
-                        Destroy(mainPhase.selectedCards[j].gameObject);
+                        _roundManager.discardPile.AddCard(mainPhase.selectedCards[j].card);
+                        _roundManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
+                        _roundManager.DestroyCard(mainPhase.selectedCards[j]);
                     }
                 } else if (effectParts[1] == "Selected") 
                 {
                     for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                     {
-                        RoundManager.instance.discardPile.AddCard(mainPhase.selectedCards[j].card);
-                        RoundManager.instance.RemoveCardFromHand(mainPhase.selectedCards[j]);
-                        Destroy(mainPhase.selectedCards[j].gameObject);
+                        _roundManager.discardPile.AddCard(mainPhase.selectedCards[j].card);
+                        _roundManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
+                        _roundManager.DestroyCard(mainPhase.selectedCards[j]);
                     }
                 }
                 
@@ -133,8 +129,8 @@ public class ResolvingEffectState : CardPlayState
                 {
                     for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                     {
-                        RoundManager.instance.RemoveCardFromHand(mainPhase.selectedCards[j]);
-                        Destroy(mainPhase.selectedCards[j].gameObject);
+                        _roundManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
+                        _roundManager.DestroyCard(mainPhase.selectedCards[j]);
                     }
                 }
                 
@@ -163,7 +159,7 @@ public class ResolvingEffectState : CardPlayState
                                     cost += mainPhase.selectedCards[0].card.CoinCost;
                                     cost += int.Parse(effectParts[6]);
                                     bool cancelable = mainPhase.playedActionCardStep == 1;
-                                    mainPhase.SwitchPhaseState(new GainingCardState(mainPhase, restriction, cost, cancelable));
+                                    mainPhase.SwitchPhaseState(_container.Instantiate<GainingCardState>().Initialize(restriction, cost, cancelable));
                                     return;
                                 }
                             }
@@ -177,7 +173,7 @@ public class ResolvingEffectState : CardPlayState
                         }
                         bool cancelable = mainPhase.playedActionCardStep == 1;
                         mainPhase.SwitchPhaseState(
-                            new GainingCardState(mainPhase, restriction, mainPhase.savedValue + additionalCost, cancelable));
+                            _container.Instantiate<GainingCardState>().Initialize(restriction, mainPhase.savedValue + additionalCost, cancelable));
                         return;
                     }
                 }
@@ -199,7 +195,7 @@ public class ResolvingEffectState : CardPlayState
             } else if (effectParts[0] == "Target")
             {
                 mainPhase.playedActionCardStep++;
-                mainPhase.SwitchPhaseState(new SelectingTargetMonsterState(mainPhase, mainPhase.playedCard));
+                mainPhase.SwitchPhaseState(_container.Instantiate<SelectingTargetMonsterState>().Initialize(mainPhase.playedCard));
                 return;
             } else if (effectParts[0] == "Damage")
             {
@@ -234,13 +230,13 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[7] == "Ally")
                     {
-                        foreach (var ally in RoundManager.instance.GetAllAllies())
+                        foreach (var ally in _roundManager.GetAllAllies())
                         {
                             ally.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                         }
                     } else if (effectParts[7] == "Enemy")
                     {
-                        foreach (var enemy in RoundManager.instance.GetAllEnemies())
+                        foreach (var enemy in _roundManager.GetAllEnemies())
                         {
                             enemy.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                         }
@@ -271,12 +267,12 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[2] == "Copper")
                     {
-                        for (int j = RoundManager.instance.discardPile.cards.Count - 1; j >= 0; j--)
+                        for (int j = _roundManager.discardPile.cards.Count - 1; j >= 0; j--)
                         {
-                            var card = RoundManager.instance.discardPile.cards[j];
+                            var card = _roundManager.discardPile.cards[j];
                             if (card.Name == "Copper")
                             {
-                                RoundManager.instance.discardPile.RemoveCard(card);
+                                _roundManager.discardPile.RemoveCard(card);
                                 mainPhase.foundCards.Add(card);
                             }
                         }
@@ -289,7 +285,7 @@ public class ResolvingEffectState : CardPlayState
                         Card nextCard = FindNextCardInDeck(effectParts[3]);
                         if (nextCard == null)
                         {
-                            RoundManager.instance.roundDeck.ShuffleDiscardIntoDeck();
+                            _roundManager.roundDeck.ShuffleDiscardIntoDeck();
                             nextCard = FindNextCardInDeck(effectParts[3]);
                         }
                         mainPhase.foundCards.Add(nextCard);
@@ -304,7 +300,7 @@ public class ResolvingEffectState : CardPlayState
                     {
                         foreach (var card in mainPhase.foundCards)
                         {
-                            RoundManager.instance.AddCardToHand(card);
+                            _roundManager.AddCardToHand(card);
                         }
                     }
                 }
@@ -330,10 +326,10 @@ public class ResolvingEffectState : CardPlayState
                                         {
                                             options.Add("Play");
                                             options.Add("DrawRevealed");
-                                            mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                                            mainPhase.SwitchPhaseState(_container.Instantiate<SelectingOptionState>().Initialize(options, mainPhase.foundCards));
                                         } else {
                                             options.Add("DrawRevealed");
-                                            mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));                                        
+                                            mainPhase.SwitchPhaseState(_container.Instantiate<SelectingOptionState>().Initialize(options, mainPhase.foundCards));                                        
                                         }
                                         mainPhase.playedActionCardStep++;
                                         return;
@@ -348,7 +344,7 @@ public class ResolvingEffectState : CardPlayState
                             options.Add(effectParts[j]);
                         }
                         mainPhase.playedActionCardStep++;
-                        mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options, mainPhase.foundCards));
+                        mainPhase.SwitchPhaseState(_container.Instantiate<SelectingOptionState>().Initialize(options, mainPhase.foundCards));
                         return;
                     }
                 }
@@ -361,12 +357,12 @@ public class ResolvingEffectState : CardPlayState
                 if (effectParts[1] == "SkillsCost")
                 {
                     int amount = int.Parse(effectParts[2]);
-                    RoundManager.instance.persistentEffects.Add(
+                    _roundManager.persistentEffects.Add(
                         new PersistentEffect("SkillsCost", amount, "Skills cost " + amount, int.Parse(effectParts[4])));
                 } else if (effectParts[1] == "AdditionalSkills")
                 {
                     int amount = int.Parse(effectParts[2]);
-                    RoundManager.instance.persistentEffects.Add(
+                    _roundManager.persistentEffects.Add(
                         new PersistentEffect("AdditionalSkills", amount, "Monsters can use " + amount + " extra skills", int.Parse(effectParts[4])));
                 }
                 mainPhase.playedActionCardStep++;
@@ -381,7 +377,7 @@ public class ResolvingEffectState : CardPlayState
             {
                 if (effectParts[1] == "Fireball")
                 {
-                    RoundManager.instance.AddVisualEffect("Fireball", mainPhase.selectedTile);
+                    _roundManager.AddVisualEffect("Fireball", mainPhase.selectedTile);
                 }
                 mainPhase.playedActionCardStep++;
             }
@@ -392,11 +388,11 @@ public class ResolvingEffectState : CardPlayState
 
     private Card FindNextCardInDeck(string cardType)
     {
-        for (int i = 0; i < RoundManager.instance.roundDeck.cards.Count; i++)
+        for (int i = 0; i < _roundManager.roundDeck.cards.Count; i++)
         {
-            if (RoundManager.instance.roundDeck.cards[i].Type == cardType)
+            if (_roundManager.roundDeck.cards[i].Type == cardType)
             {
-                return RoundManager.instance.roundDeck.cards[i];
+                return _roundManager.roundDeck.cards[i];
             }
         }
         return null;

@@ -7,11 +7,13 @@ using Zenject;
 public class MonsterInfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private GameManager _gameManager;
+    private RoundManager _roundManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(GameManager gameManager, RoundManager roundManager)
     {
         _gameManager = gameManager;
+        _roundManager = roundManager;
     }
 
     void Start()
@@ -27,7 +29,7 @@ public class MonsterInfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (RoundManager.instance.largeMonsterView1 != null)
+        if (_roundManager.largeMonsterView1 != null)
         {
             Monster monster = GetComponentInParent<Monster>();
             BaseMonsterData currentMonster = _gameManager.gameData.GetBaseMonsterData(monster.name);
@@ -37,8 +39,8 @@ public class MonsterInfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
             if (string.IsNullOrEmpty(monster.evolvesFrom) && string.IsNullOrEmpty(monster.evolvesTo))
             {
-                RoundManager.instance.largeMonsterView1.SetMonster(monster, eventData.position);
-                RoundManager.instance.largeMonsterView1.gameObject.SetActive(true);
+                _roundManager.largeMonsterView1.SetMonster(monster, eventData.position);
+                _roundManager.largeMonsterView1.gameObject.SetActive(true);
                 return;
             }
 
@@ -47,41 +49,41 @@ public class MonsterInfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
                 BaseMonsterData evolvesTo = _gameManager.gameData.GetBaseMonsterData(monster.evolvesTo);
                 BaseMonsterData evolvesFrom = _gameManager.gameData.GetBaseMonsterData(monster.evolvesFrom);
                 
-                RoundManager.instance.largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
-                RoundManager.instance.largeMonsterView1.gameObject.SetActive(true);
-                RoundManager.instance.largeMonsterView2.SetMonster(monster, secondCardPosition, false);
-                RoundManager.instance.largeMonsterView2.gameObject.SetActive(true);
-                RoundManager.instance.largeMonsterView3.SetMonsterFromBaseData(evolvesTo, thirdCardPosition);
-                RoundManager.instance.largeMonsterView3.gameObject.SetActive(true);
+                _roundManager.largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
+                _roundManager.largeMonsterView1.gameObject.SetActive(true);
+                _roundManager.largeMonsterView2.SetMonster(monster, secondCardPosition, false);
+                _roundManager.largeMonsterView2.gameObject.SetActive(true);
+                _roundManager.largeMonsterView3.SetMonsterFromBaseData(evolvesTo, thirdCardPosition);
+                _roundManager.largeMonsterView3.gameObject.SetActive(true);
                 return;
             }
             
             if (!string.IsNullOrEmpty(monster.evolvesTo))
             {
                 BaseMonsterData evolvesTo = _gameManager.gameData.GetBaseMonsterData(monster.evolvesTo);
-                RoundManager.instance.largeMonsterView1.SetMonster(monster, firstCardPosition, false);
-                RoundManager.instance.largeMonsterView1.gameObject.SetActive(true);
-                RoundManager.instance.largeMonsterView2.SetMonsterFromBaseData(evolvesTo, secondCardPosition);
-                RoundManager.instance.largeMonsterView2.gameObject.SetActive(true);
+                _roundManager.largeMonsterView1.SetMonster(monster, firstCardPosition, false);
+                _roundManager.largeMonsterView1.gameObject.SetActive(true);
+                _roundManager.largeMonsterView2.SetMonsterFromBaseData(evolvesTo, secondCardPosition);
+                _roundManager.largeMonsterView2.gameObject.SetActive(true);
                 if (!string.IsNullOrEmpty(evolvesTo.evolvesTo))
                 {
                     BaseMonsterData evolvesTo2 = _gameManager.gameData.GetBaseMonsterData(evolvesTo.evolvesTo);
-                    RoundManager.instance.largeMonsterView3.SetMonsterFromBaseData(evolvesTo2, thirdCardPosition);
-                    RoundManager.instance.largeMonsterView3.gameObject.SetActive(true);
+                    _roundManager.largeMonsterView3.SetMonsterFromBaseData(evolvesTo2, thirdCardPosition);
+                    _roundManager.largeMonsterView3.gameObject.SetActive(true);
                 }
             }
             else if (!string.IsNullOrEmpty(monster.evolvesFrom))
             {
                 BaseMonsterData evolvesFrom = _gameManager.gameData.GetBaseMonsterData(monster.evolvesFrom);
-                RoundManager.instance.largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
-                RoundManager.instance.largeMonsterView1.gameObject.SetActive(true);
-                RoundManager.instance.largeMonsterView2.SetMonster(monster, secondCardPosition, false);
-                RoundManager.instance.largeMonsterView2.gameObject.SetActive(true);
+                _roundManager.largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
+                _roundManager.largeMonsterView1.gameObject.SetActive(true);
+                _roundManager.largeMonsterView2.SetMonster(monster, secondCardPosition, false);
+                _roundManager.largeMonsterView2.gameObject.SetActive(true);
                 if (!string.IsNullOrEmpty(evolvesFrom.evolvesFrom))
                 {
                     BaseMonsterData evolvesFrom2 = _gameManager.gameData.GetBaseMonsterData(evolvesFrom.evolvesFrom);
-                    RoundManager.instance.largeMonsterView3.SetMonsterFromBaseData(evolvesFrom2, thirdCardPosition);
-                    RoundManager.instance.largeMonsterView3.gameObject.SetActive(true);
+                    _roundManager.largeMonsterView3.SetMonsterFromBaseData(evolvesFrom2, thirdCardPosition);
+                    _roundManager.largeMonsterView3.gameObject.SetActive(true);
                 }
             }
             
@@ -91,8 +93,8 @@ public class MonsterInfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        RoundManager.instance.largeMonsterView1.gameObject.SetActive(false);
-        RoundManager.instance.largeMonsterView2.gameObject.SetActive(false);
-        RoundManager.instance.largeMonsterView3.gameObject.SetActive(false);
+        _roundManager.largeMonsterView1.gameObject.SetActive(false);
+        _roundManager.largeMonsterView2.gameObject.SetActive(false);
+        _roundManager.largeMonsterView3.gameObject.SetActive(false);
     }
 }

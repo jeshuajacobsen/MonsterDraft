@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class ResolvingOnGainEffectState : CardPlayState
 {
-    public ResolvingOnGainEffectState(MainPhase mainPhase) : base(mainPhase) 
-    {
-    }
 
     public override void EnterState()
     {
@@ -35,7 +32,7 @@ public class ResolvingOnGainEffectState : CardPlayState
                     options.Add(effectParts[j] + " " + effectParts[j + 1]);
                 }
                 mainPhase.playedActionCardStep++;
-                mainPhase.SwitchPhaseState(new SelectingOptionState(mainPhase, options));
+                mainPhase.SwitchPhaseState(_container.Instantiate<SelectingOptionState>().Initialize(options));
                 return;
             }
         }

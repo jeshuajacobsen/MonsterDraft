@@ -2,12 +2,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using Zenject;
 
 public class OptionButton : MonoBehaviour
 {
     string effect;
     List<Card> cards;
     GameState mainPhase;
+
+    private RoundManager _roundManager;
+
+    [Inject]
+    public void Construct(RoundManager roundManager)
+    {
+        _roundManager = roundManager;
+    }
 
     void Start()
     {
@@ -19,7 +28,7 @@ public class OptionButton : MonoBehaviour
         
     }
 
-    public void InitValues(string effect, List<Card> cards, GameState mainPhase)
+    public void Initialize(string effect, List<Card> cards, GameState mainPhase)
     {
         this.effect = effect;
         this.cards = cards;
@@ -55,27 +64,27 @@ public class OptionButton : MonoBehaviour
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Coins")
         {
-            RoundManager.instance.Coins += int.Parse(effectParts[1]);
+            _roundManager.Coins += int.Parse(effectParts[1]);
         } else if (effectParts[0] == "Draw")
         {
             for (int i = 0; i < int.Parse(effectParts[1]); i++)
             {
-                RoundManager.instance.AddCardToHand(RoundManager.instance.roundDeck.DrawCard());
+                _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
             }
         } else if (effectParts[0] == "Mana")
         {
-            RoundManager.instance.Mana += int.Parse(effectParts[1]);
+            _roundManager.Mana += int.Parse(effectParts[1]);
         } else if (effectParts[0] == "Trash")
         {
-            RoundManager.instance.TrashCardsFromDeck(this.cards);
+            _roundManager.TrashCardsFromDeck(this.cards);
         } else if (effectParts[0] == "Discard")
         {
-            RoundManager.instance.DiscardCardsFromDeck(this.cards);
+            _roundManager.DiscardCardsFromDeck(this.cards);
         } else if (effectParts[0] == "DrawRevealed")
         {
             foreach (Card card in cards)
             {
-                RoundManager.instance.AddCardToHand(card);
+                _roundManager.AddCardToHand(card);
             }
         } else if (effectParts[0] == "Play")
         {

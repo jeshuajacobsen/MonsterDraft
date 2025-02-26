@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Zenject;
 
 public class MonsterOptionButton : MonoBehaviour
 {
     public string option;
     private Monster monster;
     
+    private RoundManager _roundManager;
+
+    [Inject]
+    public void Construct(RoundManager roundManager)
+    {
+        _roundManager = roundManager;
+    }
+
     void Start()
     {
         transform.GetComponent<Button>().onClick.AddListener(OnClick);
@@ -21,13 +30,13 @@ public class MonsterOptionButton : MonoBehaviour
     }
 
 //TODO: the monsterOptionsPanel does some checks. I should combine them here.
-    public void InitValues(Monster monster, string option)
+    public void Initialize(Monster monster, string option)
     {
         this.monster = monster;
         this.option = option;
 
         int additionalSkills = 0;
-        foreach (var effect in RoundManager.instance.persistentEffects)
+        foreach (var effect in _roundManager.persistentEffects)
         {
             if (effect.type == "AdditionalSkills")
             {
@@ -43,10 +52,10 @@ public class MonsterOptionButton : MonoBehaviour
             SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
             skillDirections.SetDirections(monster.skill1.directions);
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-            if (RoundManager.instance.Mana >= monster.skill1.ManaCost && 
+            if (_roundManager.Mana >= monster.skill1.ManaCost && 
                 monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
-                if (RoundManager.instance.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
+                if (_roundManager.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
                 {
                     transform.GetComponent<Button>().interactable = true;
                 }
@@ -61,10 +70,10 @@ public class MonsterOptionButton : MonoBehaviour
             SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
             skillDirections.SetDirections(monster.skill2.directions);
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-            if (RoundManager.instance.Mana >= monster.skill2.ManaCost && 
+            if (_roundManager.Mana >= monster.skill2.ManaCost && 
                 monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
-                if (RoundManager.instance.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
+                if (_roundManager.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
                 {
                     transform.GetComponent<Button>().interactable = true;
                 }
@@ -82,13 +91,13 @@ public class MonsterOptionButton : MonoBehaviour
         if (option == "Skill1")
         {
 
-            RoundManager.instance.SelectSkill(monster, monster.skill1);
-            RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
+            _roundManager.SelectSkill(monster, monster.skill1);
+            _roundManager.monsterOptionPanel.gameObject.SetActive(false);
         }
         else if (option == "Skill2")
         {
-            RoundManager.instance.SelectSkill(monster, monster.skill2);
-            RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
+            _roundManager.SelectSkill(monster, monster.skill2);
+            _roundManager.monsterOptionPanel.gameObject.SetActive(false);
         }
     }
 }

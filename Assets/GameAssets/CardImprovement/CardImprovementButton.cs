@@ -17,7 +17,7 @@ public class CardImprovementButton : MonoBehaviour
         
     }
 
-    public void InitValues(Card card)
+    public void Initialize(Card card)
     {
         this.card = card;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;

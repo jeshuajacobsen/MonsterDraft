@@ -20,12 +20,14 @@ public class RunManager : MonoBehaviour
     public int currentDungeonIndex = 1;
 
     private GameManager _gameManager;
+    private RoundManager _roundManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
     {
         _gameManager = gameManager;
+        _roundManager = roundManager;
         _container = container;
     }
 
@@ -129,10 +131,11 @@ public class RunManager : MonoBehaviour
         StartRound();
     }
 
+//TODO check if I can get rid of this dependency
     public void StartRound()
     {
         roundPanel.gameObject.SetActive(true);
-        RoundManager.instance.StartRound(currentDungeonLevel, currentDungeonIndex);
+        _roundManager.StartRound(currentDungeonLevel, currentDungeonIndex);
     }
 
     public void EndRound(List<Card> gainedCards)
@@ -203,6 +206,7 @@ public class RunManager : MonoBehaviour
             if (gainedCards.Count == 0)
             {
                 TreasureCard treasureCard = _container.Instantiate<TreasureCard>();
+                treasureCard.Initialize("Copper", _gameManager.cardLevels["Copper"]);
                 largeCardViews[i].GetComponent<LargeCardView>().SetCard(treasureCard, new Vector2(0, 0), false);
             }
             

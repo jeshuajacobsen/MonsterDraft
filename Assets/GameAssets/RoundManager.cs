@@ -7,7 +7,6 @@ using Zenject;
 
 public class RoundManager : MonoBehaviour
 {
-    public static RoundManager instance;
     public GameObject roundPanel;
     public GameObject gemStorePanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
@@ -98,15 +97,6 @@ public class RoundManager : MonoBehaviour
     void Awake()
     {
 
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 
     public void Start()
@@ -140,11 +130,14 @@ public class RoundManager : MonoBehaviour
         visualEffects.RemoveAll(effect => effect.done);
         try
         {
-            gameState.UpdateState();
+            if (gameState != null)
+            {
+                gameState.UpdateState();
+            }
         }
         catch (Exception e)
         {
-            //Debug.Log(e);
+            Debug.Log(e);
         }
     }
 
@@ -170,7 +163,7 @@ public class RoundManager : MonoBehaviour
         {
             cancelButton.onClick.AddListener(() => {
                 _gameManager.Gems += gemCost;
-                gameState.SwitchPhaseState(new IdleState((MainPhase)gameState));
+                gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
             });
         }
     }
@@ -187,9 +180,9 @@ public class RoundManager : MonoBehaviour
     {
         if (gameState is AutoPlayingMonsterState)
         {
-            gameState.SwitchPhaseState(new IdleState((MainPhase)gameState));
+            gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
         } else {
-            gameState.SwitchPhaseState(new ResolvingEffectState((MainPhase)gameState));
+            gameState.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
         }
     }
 
@@ -225,7 +218,7 @@ public class RoundManager : MonoBehaviour
         roundPanel.transform.Find("TownPanel").GetComponent<TownPanel>().StartRound(new List<string> {});
         DiscardHand();
         discardPile.cards.Clear();
-        roundDeck = new RoundDeck(RunManager.instance.runDeck);
+        roundDeck = _container.Instantiate<RoundDeck>().Initialize();
         List<Card> newHand = roundDeck.DrawHand();
         foreach (Card card in newHand)
         {
@@ -275,7 +268,7 @@ public class RoundManager : MonoBehaviour
     public void AddCardToHand(Card card)
     {
         SmallCardView newCard = _container.InstantiatePrefabForComponent<SmallCardView>(SmallCardViewPrefab, handContent.transform);
-        newCard.InitValues(card);
+        newCard.Initialize(card);
         hand.Add(newCard);
         RectTransform newItemRect = newCard.GetComponent<RectTransform>();
 
@@ -379,7 +372,7 @@ public class RoundManager : MonoBehaviour
         Mana -= skill.ManaCost;
         int damage = DamageDealtToMonster(tile.monster, monster, skill);
         SkillVisualEffect skillEffect = Instantiate(SkillVisualEffectPrefab, roundPanel.transform);
-        skillEffect.InitValues(monster.tileOn.transform.position, tile.transform.position, skill.attackVisualEffect);
+        skillEffect.Initialize(monster.tileOn.transform.position, tile.transform.position, skill.attackVisualEffect);
  
         skillEffect.reachedTarget.AddListener(() => {
             skillEffect.reachedTarget.RemoveAllListeners();
@@ -397,7 +390,7 @@ public class RoundManager : MonoBehaviour
         {
             int damage = DamageDealtToMonster(target.monster, monster, skill);
             SkillVisualEffect skillEffect = Instantiate(SkillVisualEffectPrefab, roundPanel.transform);
-            skillEffect.InitValues(monster.tileOn.transform.position, target.transform.position, skill.attackVisualEffect);
+            skillEffect.Initialize(monster.tileOn.transform.position, target.transform.position, skill.attackVisualEffect);
     
             skillEffect.reachedTarget.AddListener(() => {
                 skillEffect.reachedTarget.RemoveAllListeners();
@@ -418,6 +411,7 @@ public class RoundManager : MonoBehaviour
         if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
         {
             RunManager.instance.EndRound(cardsGainedThisRound);
+            cardsGainedThisRound.Clear();
         }
     }
     
@@ -426,7 +420,7 @@ public class RoundManager : MonoBehaviour
     {
         if(skill.ManaCost <= Mana)
         {
-            gameState.SwitchPhaseState(new SelectingSkillTargetState((MainPhase)gameState, monster, skill));
+            gameState.SwitchPhaseState(_container.Instantiate<SelectingSkillTargetState>().Initialize(monster, skill));
         }
     }
 
@@ -750,6 +744,7 @@ public class RoundManager : MonoBehaviour
         return enemies;
     }
 
+//TODO fix this fireball animation
     public VisualEffect AddVisualEffect(string effectName, Tile target)
     {
         if (effectName == "Fireball")
@@ -757,10 +752,10 @@ public class RoundManager : MonoBehaviour
             if (target.monster.team == "Enemy")
             {
                 VisualEffect effect = new VisualEffect();
-                effect.InitValues(RoundManager.instance.fireballPanel, 
+                effect.Initialize(fireballPanel, 
                                   new Vector2(-1700, Screen.height / 2 + 600), 
                                   target);
-                RoundManager.instance.fireballPanel.transform.rotation = Quaternion.Euler(0, 0, 90f);
+                fireballPanel.transform.rotation = Quaternion.Euler(0, 0, 90f);
                 visualEffects.Add(effect);
                 effect.reachedTarget.AddListener(() => {
                     effect.reachedTarget.RemoveAllListeners();
@@ -769,10 +764,10 @@ public class RoundManager : MonoBehaviour
             } else
             {
                 VisualEffect effect = new VisualEffect();
-                effect.InitValues(RoundManager.instance.fireballPanel, 
+                effect.Initialize(fireballPanel, 
                                   new Vector2(1700, Screen.height / 2  + 600), 
                                   target);
-                RoundManager.instance.fireballPanel.transform.rotation = Quaternion.Euler(0, 180f, 90f);
+                fireballPanel.transform.rotation = Quaternion.Euler(0, 180f, 90f);
                 visualEffects.Add(effect);
                 effect.reachedTarget.AddListener(() => {
                     effect.reachedTarget.RemoveAllListeners();
@@ -786,13 +781,13 @@ public class RoundManager : MonoBehaviour
     public void AddFloatyNumber(int number, Tile target, bool isDamage)
     {
         FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, target.transform);
-        floatyNumber.InitValues(number, target.transform.position, isDamage);
+        floatyNumber.Initialize(number, target.transform.position, isDamage);
     }
 
     public void AddFloatyNumberOverBase(int number, bool overEnemyBase, bool isDamage)
     {
         FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, overEnemyBase ? EnemyBase.transform : PlayerBase.transform);
-        floatyNumber.InitValues(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
+        floatyNumber.Initialize(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
     }
 
     public void SetupOptionPanel(List<string> options, List<Card> displayCards)
@@ -813,7 +808,7 @@ public class RoundManager : MonoBehaviour
         foreach (string option in options)
         {
             OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
-            optionButton.InitValues(option, displayCards, gameState);
+            optionButton.Initialize(option, displayCards, gameState);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
         }
         if (displayCards.Count == 0)
@@ -827,7 +822,7 @@ public class RoundManager : MonoBehaviour
             foreach (Card card in displayCards)
             {
                 SmallCardView cardView = _container.InstantiatePrefabForComponent<SmallCardView>(SmallCardViewPrefab, cardSection);
-                cardView.InitValues(card);
+                cardView.Initialize(card);
             }
         }
     }
@@ -851,7 +846,7 @@ public class RoundManager : MonoBehaviour
         foreach (string option in options)
         {
             OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
-            optionButton.InitValues(option, new List<Card>(), gameState);
+            optionButton.Initialize(option, new List<Card>(), gameState);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
         }
     }
@@ -879,11 +874,16 @@ public class RoundManager : MonoBehaviour
         {
             if (((MainPhase)gameState).playedCard != null)
             {
-                gameState.SwitchPhaseState(new ResolvingEffectState((MainPhase)gameState));
+                gameState.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
             } else {
-                gameState.SwitchPhaseState(new ResolvingOnGainEffectState((MainPhase)gameState));
+                gameState.SwitchPhaseState(_container.Instantiate<ResolvingOnGainEffectState>());
             }
         }
        
+    }
+
+    public void DestroyCard(SmallCardView card)
+    {
+        Destroy(card.gameObject);
     }
 }

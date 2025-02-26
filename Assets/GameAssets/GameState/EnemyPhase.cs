@@ -7,15 +7,6 @@ public class EnemyPhase : GameState
     public EnemyPhase() : base() { }
 
     static int StartPadding = 2;
-    private GameManager _gameManager;
-    private DiContainer _container;
-
-    [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
-    {
-        _gameManager = gameManager;
-        _container = container;
-    }
 
     public override void EnterState()
     {
@@ -26,25 +17,25 @@ public class EnemyPhase : GameState
         {
             for (int i = 1; i <= 7; i++)
             {
-                Tile tile = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                 if (tile.monster != null && tile.monster.team == "Enemy")
                 {
                     Monster currentMonster = tile.monster;
-                    if (RoundManager.instance.EnemyCanMove(tile.monster))
+                    if (_roundManager.EnemyCanMove(tile.monster))
                     {
-                        RoundManager.instance.MoveEnemyMonster(tile.monster);
+                        _roundManager.MoveEnemyMonster(tile.monster);
                     }
                     bool usedSkill = false;
-                    if (RoundManager.instance.EnemyCanUseSkill(currentMonster, currentMonster.skill1))
+                    if (_roundManager.EnemyCanUseSkill(currentMonster, currentMonster.skill1))
                     {
                         Debug.Log("Enemy using skill 1");
                         usedSkill = true;
-                        RoundManager.instance.EnemyUseSkill(currentMonster, currentMonster.skill1);
+                        _roundManager.EnemyUseSkill(currentMonster, currentMonster.skill1);
                     }
-                    if (!usedSkill && RoundManager.instance.EnemyCanUseSkill(currentMonster, currentMonster.skill2))
+                    if (!usedSkill && _roundManager.EnemyCanUseSkill(currentMonster, currentMonster.skill2))
                     {
                         Debug.Log("Enemy using skill 2");
-                        RoundManager.instance.EnemyUseSkill(currentMonster, currentMonster.skill2);
+                        _roundManager.EnemyUseSkill(currentMonster, currentMonster.skill2);
                     }
                 }
             }
@@ -55,7 +46,7 @@ public class EnemyPhase : GameState
             StartPadding--;
             return;
         }
-        Card card = RoundManager.instance.currentDungeon.DrawCard();
+        Card card = _roundManager.currentDungeon.DrawCard();
         if (card != null)
         {
             card.level = 1;
@@ -68,7 +59,7 @@ public class EnemyPhase : GameState
             {
                 for (int i = 6; i <= 7; i++)
                 {
-                    Tile tile = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                    Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                     if (tile.monster == null)
                     {
                         openTiles.Add(tile);
@@ -93,7 +84,7 @@ public class EnemyPhase : GameState
                     {
                         for (int i = 1; i <= 7; i++)
                         {
-                            Tile tile = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                            Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                             if (tile.monster != null && tile.monster.team == "Ally")
                             {
                                 targets.Add(tile.monster);
@@ -107,7 +98,7 @@ public class EnemyPhase : GameState
                     {
                         for (int i = 1; i <= 7; i++)
                         {
-                            Tile tile = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                            Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                             if (tile.monster != null && tile.monster.team == "Enemy")
                             {
                                 targets.Add(tile.monster);
@@ -134,7 +125,7 @@ public class EnemyPhase : GameState
                     {
                         visualEffect.reachedTarget.AddListener(() => {
                             target.Health -= int.Parse(effectParts[1]);
-                            RoundManager.instance.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
+                            _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                         });
                     } else {
                         target.Health -= int.Parse(effectParts[1]);
@@ -167,7 +158,7 @@ public class EnemyPhase : GameState
                 {
                     if (effectParts[1] == "Fireball")
                     {
-                        visualEffect = RoundManager.instance.AddVisualEffect("Fireball", target.tileOn);
+                        visualEffect = _roundManager.AddVisualEffect("Fireball", target.tileOn);
                     }
                 }
             }
@@ -195,8 +186,8 @@ public class EnemyPhase : GameState
 
     private void PlayMonsterCardOnTile(MonsterCard card, Tile tile)
     {
-        Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(RoundManager.instance.MonsterPrefab, tile.transform);
-        newMonster.InitValues(card, tile, "Enemy");
+        Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(_roundManager.MonsterPrefab, tile.transform);
+        newMonster.Initialize(card, tile, "Enemy");
         tile.monster = newMonster;
     }
 

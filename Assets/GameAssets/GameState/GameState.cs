@@ -1,8 +1,21 @@
 using UnityEngine;
+using Zenject;
 
 public abstract class GameState
 {
     public CardPlayState currentState;
+
+    protected GameManager _gameManager;
+    protected DiContainer _container;
+    protected RoundManager _roundManager;
+
+    [Inject]
+    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
+    {
+        _gameManager = gameManager;
+        _roundManager = roundManager;
+        _container = container;
+    }
 
     public GameState()
     {

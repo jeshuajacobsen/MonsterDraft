@@ -31,7 +31,7 @@ public class TreasureData
             case "Copper":
                 this.Description = "+{CoinGeneration} Coins";
                 this.CoinGeneration = 20;
-                this.CoinCost = 10;
+                this.CoinCost = 20;
                 LevelUpPrestigeCost = 200;
                 BuyCardPrestigeCost = 200;
                 levelData.Add(new TreasureCardLevelData(2, 0, 1));
@@ -47,7 +47,7 @@ public class TreasureData
             case "Silver":
                 this.Description = "+{CoinGeneration} Coins";
                 this.CoinGeneration = 40;
-                this.CoinCost = 40;
+                this.CoinCost = 50;
                 LevelUpPrestigeCost = 500;
                 BuyCardPrestigeCost = 500;
                 levelData.Add(new TreasureCardLevelData(4, 0, 2));
@@ -63,7 +63,7 @@ public class TreasureData
             case "Gold":
                 this.Description = "+{CoinGeneration} Coins";
                 this.CoinGeneration = 70;
-                this.CoinCost = 100;
+                this.CoinCost = 110;
                 LevelUpPrestigeCost = 2000;
                 BuyCardPrestigeCost = 2000;
                 levelData.Add(new TreasureCardLevelData(7, 0, 3));
@@ -79,7 +79,7 @@ public class TreasureData
             case "Platinum":
                 this.Description = "+{CoinGeneration} Coins";
                 this.CoinGeneration = 130;
-                this.CoinCost = 170;
+                this.CoinCost = 180;
                 LevelUpPrestigeCost = 10000;
                 BuyCardPrestigeCost = 10000;
                 levelData.Add(new TreasureCardLevelData(13, 0, 5));
@@ -95,7 +95,7 @@ public class TreasureData
             case "Mana Vial":
                 this.Description = "+{ManaGeneration} Mana";
                 this.ManaGeneration = 20;
-                this.CoinCost = 10;
+                this.CoinCost = 20;
                 LevelUpPrestigeCost = 200;
                 BuyCardPrestigeCost = 200;
                 levelData.Add(new TreasureCardLevelData(0, 2, 1));
@@ -111,7 +111,7 @@ public class TreasureData
             case "Mana Potion":
                 this.Description = "+{ManaGeneration} Mana";
                 this.ManaGeneration = 50;
-                this.CoinCost = 50;
+                this.CoinCost = 60;
                 LevelUpPrestigeCost = 900;
                 BuyCardPrestigeCost = 900;
                 levelData.Add(new TreasureCardLevelData(0, 5, 3));
@@ -127,7 +127,7 @@ public class TreasureData
             case "Mana Crystal":
                 this.Description = "+{ManaGeneration} Mana";
                 this.ManaGeneration = 100;
-                this.CoinCost = 130;
+                this.CoinCost = 140;
                 LevelUpPrestigeCost = 3000;
                 BuyCardPrestigeCost = 3000;
                 levelData.Add(new TreasureCardLevelData(0, 10, 4));
@@ -143,7 +143,7 @@ public class TreasureData
             case "Mana Gem":
                 this.Description = "+{ManaGeneration} Mana";
                 this.ManaGeneration = 180;
-                this.CoinCost = 240;
+                this.CoinCost = 250;
                 LevelUpPrestigeCost = 15000;
                 BuyCardPrestigeCost = 15000;
                 levelData.Add(new TreasureCardLevelData(0, 18, 8));
@@ -159,7 +159,7 @@ public class TreasureData
             case "Bauble":
                 this.Description = "Gain mana equal to half your current coins.";
                 this.effects.Add("Mana 10 Per Coins/2");
-                this.CoinCost = 60;
+                this.CoinCost = 70;
                 this.LevelUpPrestigeCost = 200;
                 levelData.Add(new TreasureCardLevelData(0, 4, 3, null, null, "Gain mana equal to half your current coins. \n +{ManaGeneration} Mana"));
                 levelData.Add(new TreasureCardLevelData(0, 4, 3));
@@ -176,7 +176,7 @@ public class TreasureData
                 this.CoinGeneration = 20;
                 this.effects.Add("Search Deck Next Treasure");
                 this.effects.Add("Found Option Trash Discard");
-                this.CoinCost = 40;
+                this.CoinCost = 50;
                 this.LevelUpPrestigeCost = 200;
                 this.effectVariables.Add("numberOfTimes", "treasure card");
 
@@ -196,7 +196,7 @@ public class TreasureData
             case "Investments":
                 this.Description = "Gain {coinAmount} coins for each treasure card you've played this turn including this card.";
                 this.effects.Add("Coins {coinAmount} Per Treasure Played");
-                this.CoinCost = 50;
+                this.CoinCost = 60;
                 this.LevelUpPrestigeCost = 200;
                 this.effectVariables.Add("coinAmount", "10");
 
@@ -238,7 +238,7 @@ public class TreasureData
             case "Evolution Stone":
                 this.Description = "Gain {expAmount} experience points.";
                 this.effects.Add("Experience {expAmount}");
-                this.CoinCost = 40;
+                this.CoinCost = 50;
                 this.LevelUpPrestigeCost = 100;
                 this.effectVariables.Add("expAmount", "10");
 

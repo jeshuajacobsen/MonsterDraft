@@ -10,20 +10,21 @@ public class GainingCardState : CardPlayState
     private List<SmallCardView> selectedCards = new List<SmallCardView>();
     private bool cancelable;
     
-    public GainingCardState(MainPhase mainPhase, string restriction, int cost, bool cancelable = true) : base(mainPhase)
+    public GainingCardState Initialize(string restriction, int cost, bool cancelable = true)
     {
         this.restriction = restriction;
         this.cost = cost;
         this.cancelable = cancelable;
+        return this;
     }
 
     public override void EnterState()
     {
         Debug.Log("Gaining card State Entered");
-        RoundManager.instance.isGainingCard = true;
-        RoundManager.instance.messageText.text = "Select a " + (restriction == "None" ? "" : restriction) +" card to gain costing up to " + cost + " coins";
-        RoundManager.instance.messageText.gameObject.SetActive(true);
-        RoundManager.instance.SetupDoneButton(cancelable);
+        _roundManager.isGainingCard = true;
+        _roundManager.messageText.text = "Select a " + (restriction == "None" ? "" : restriction) +" card to gain costing up to " + cost + " coins";
+        _roundManager.messageText.gameObject.SetActive(true);
+        _roundManager.SetupDoneButton(cancelable);
     }
 
     public override void HandleInput()
@@ -58,16 +59,16 @@ public class GainingCardState : CardPlayState
 
     public void GainCard(Card card)
     {
-        RoundManager.instance.discardPile.AddCard(card);
-        mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
+        _roundManager.discardPile.AddCard(card);
+        mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
     }
 
     public override void ExitState()
     {
         Debug.Log("Exiting Gaining card State");
-        RoundManager.instance.isGainingCard = false;
-        RoundManager.instance.messageText.text = "";
-        RoundManager.instance.messageText.gameObject.SetActive(false);
-        RoundManager.instance.CleanupDoneButton();
+        _roundManager.isGainingCard = false;
+        _roundManager.messageText.text = "";
+        _roundManager.messageText.gameObject.SetActive(false);
+        _roundManager.CleanupDoneButton();
     }
 }

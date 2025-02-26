@@ -33,14 +33,14 @@ public class Monster : MonoBehaviour
             {
                 if (team == "Enemy")
                 {
-                    RoundManager.instance.Experience += this.experienceGiven;
+                    _roundManager.Experience += this.experienceGiven;
                 }
                 tileOn.monster = null;
-                if (RoundManager.instance.largeMonsterView1.monster == this)
+                if (_roundManager.largeMonsterView1.monster == this)
                 {
-                    RoundManager.instance.largeMonsterView1.gameObject.SetActive(false);
-                    RoundManager.instance.largeMonsterView2.gameObject.SetActive(false);
-                    RoundManager.instance.largeMonsterView3.gameObject.SetActive(false);
+                    _roundManager.largeMonsterView1.gameObject.SetActive(false);
+                    _roundManager.largeMonsterView2.gameObject.SetActive(false);
+                    _roundManager.largeMonsterView3.gameObject.SetActive(false);
                 }
                 Destroy(gameObject);
             }
@@ -105,12 +105,14 @@ public class Monster : MonoBehaviour
     private int experienceRequired;
 
     private GameManager _gameManager;
+    private RoundManager _roundManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
     {
         _gameManager = gameManager;
+        _roundManager = roundManager;
         _container = container;
     }
 
@@ -128,7 +130,7 @@ public class Monster : MonoBehaviour
 
     void Update()
     {
-        if (team == "Ally" && !string.IsNullOrEmpty(evolvesTo) && RoundManager.instance.Experience >= experienceRequired)
+        if (team == "Ally" && !string.IsNullOrEmpty(evolvesTo) && _roundManager.Experience >= experienceRequired)
         {
             transform.Find("EvolveButton").gameObject.SetActive(true);
         } else {
@@ -140,11 +142,11 @@ public class Monster : MonoBehaviour
     {
         MonsterCard monsterCard = _container.Instantiate<MonsterCard>();
         monsterCard.Initialize(evolvesTo, _gameManager.cardLevels[evolvesTo]);
-        RoundManager.instance.Experience -= experienceRequired;
-        this.InitValues(monsterCard, tileOn, team);
+        _roundManager.Experience -= experienceRequired;
+        this.Initialize(monsterCard, tileOn, team);
     }
 
-    public void InitValues(MonsterCard monsterCard, Tile tile, string team)
+    public void Initialize(MonsterCard monsterCard, Tile tile, string team)
     {
         this.team = team;
         if (team == "Enemy")

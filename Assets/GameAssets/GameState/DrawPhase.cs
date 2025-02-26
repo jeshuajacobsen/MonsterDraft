@@ -6,29 +6,19 @@ public class DrawPhase : GameState
 {
     public DrawPhase() : base() { }
 
-    private GameManager _gameManager;
-    private DiContainer _container;
-
-    [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
-    {
-        _gameManager = gameManager;
-        _container = container;
-    }
-
     public override void EnterState()
     {
         Debug.Log("Entering Draw Phase");
-        RoundManager.instance.DiscardHand();
+        _roundManager.DiscardHand();
         for (int i = 0; i < 5; i++)
         {
-            RoundManager.instance.AddCardToHand(RoundManager.instance.roundDeck.DrawCard());
+            _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
         }
         for (int row = 1; row <= 3; row++)
         {
             for (int tile = 1; tile <= 7; tile++)
             {
-                Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                 Tile tileComponent = tileTransform.GetComponent<Tile>();
                 if (tileComponent.monster != null)
                 {

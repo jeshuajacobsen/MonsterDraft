@@ -32,7 +32,7 @@ public class BaseActionData
                 effects.Add("Animate Fireball");
                 effects.Add("Damage {DamageDealt}");
                 Description = "Deals {DamageDealt} damage to an enemy.";
-                CoinCost = 20;
+                CoinCost = 30;
                 LevelUpPrestigeCost = 200;
                 BuyCardPrestigeCost = 200;
                 effectVariables.Add("DamageDealt", "30");
@@ -146,7 +146,7 @@ public class BaseActionData
                 effects.Add("Actions {actionAmount}");
                 effects.Add("Draw {drawAmount}");
                 Description = "+{actionAmount} actions\n +{drawAmount} card";
-                CoinCost = 40;
+                CoinCost = 50;
                 LevelUpPrestigeCost = 300;
                 effectVariables.Add("actionAmount", "2");
                 effectVariables.Add("drawAmount", "1");
@@ -169,7 +169,7 @@ public class BaseActionData
             case "Research":
                 effects.Add("Draw {drawAmount}");
                 Description = "+{drawAmount} cards";
-                CoinCost = 60;
+                CoinCost = 70;
                 LevelUpPrestigeCost = 300;
                 effectVariables.Add("drawAmount", "3");
 
@@ -213,7 +213,7 @@ public class BaseActionData
                 effects.Add("Trash Selected");
                 effects.Add("Gain Treasure Costing Selected Cost Plus {costIncrease}");
                 Description = "Trash a treasure card to gain a treasure card costing up to {costIncrease} more.";
-                CoinCost = 60;
+                CoinCost = 70;
                 LevelUpPrestigeCost = 300;
                 effectVariables.Add("costIncrease", "40");
 
@@ -245,7 +245,7 @@ public class BaseActionData
                 effects.Add("Actions 1");
                 effects.Add("Draw 1");
                 Description = "+{coinAmount} coins\n +{actionAmount} action\n +{drawAmount} card.";
-                CoinCost = 60;
+                CoinCost = 70;
                 LevelUpPrestigeCost = 400;
                 effectVariables.Add("coinAmount", "20");
                 effectVariables.Add("actionAmount", "1");
@@ -274,7 +274,7 @@ public class BaseActionData
                 effects.Add("Select Action 1");
                 effects.Add("Play Selected {playTimes}");
                 Description = "Play an action card {playTimes} times.";
-                CoinCost = 40;
+                CoinCost = 50;
                 LevelUpPrestigeCost = 500;
                 effectVariables.Add("playTimes", "2");
 
@@ -311,7 +311,7 @@ public class BaseActionData
                 effects.Add("Discard x");
                 effects.Add("Coins x Times {coinAmount}");
                 Description = "+{drawAmount} cards\n Discard any number of cards then gain {coinAmount} coins per card discarded.";
-                CoinCost = 80;
+                CoinCost = 90;
                 LevelUpPrestigeCost = 500;
                 effectVariables.Add("drawAmount", "2");
                 effectVariables.Add("coinAmount", "20");
@@ -333,7 +333,7 @@ public class BaseActionData
                 effects.Add("Search Discard {coinType}");
                 effects.Add("Found Into Hand");
                 Description = "Put all {coinType} cards from your discard pile into your hand.";
-                CoinCost = 40;
+                CoinCost = 50;
                 LevelUpPrestigeCost = 600;
                 effectVariables.Add("coinType", "Copper");
 
@@ -349,7 +349,7 @@ public class BaseActionData
                 effects.Add("Trash Selected");
                 effects.Add("Gain Card Costing Selected Cost Plus {coinAmount}");
                 Description = "Trash a card. Gain a card costing up to {coinAmount} more.";
-                CoinCost = 50;
+                CoinCost = 60;
                 LevelUpPrestigeCost = 500;
                 effectVariables.Add("coinAmount", "40");
 
@@ -372,7 +372,7 @@ public class BaseActionData
                 effects.Add("Mana {manaAmount} Per Ally Monster");
                 effects.Add("Buff Attack Plus {attackAmount} Duration 1 All Ally");
                 Description = "Gain {manaAmount} mana for each Ally monster in play. All Ally monsters gain +{attackAmount} attack this turn.";
-                CoinCost = 120;
+                CoinCost = 130;
                 LevelUpPrestigeCost = 600;
                 effectVariables.Add("manaAmount", "20");
                 effectVariables.Add("attackAmount", "30");
@@ -401,7 +401,7 @@ public class BaseActionData
                 effects.Add("Animate Fireball");
                 effects.Add("Damage {damageDealt}");
                 Description = "Deals {damageDealt} damage to an enemy.";
-                CoinCost = 60;
+                CoinCost = 70;
                 LevelUpPrestigeCost = 300;
                 effectVariables.Add("damageDealt", "60");
 
@@ -477,7 +477,7 @@ public class BaseActionData
                 this.Description = "For the rest of the turn, monster skills cost {costReduction} less but no less than 0. Your monsters can use {additionalSkills} additional skills.";
                 this.effects.Add("PersistentEffect SkillsCost -{costReduction} Duration 1");
                 this.effects.Add("PersistentEffect AdditionalSkills {additionalSkills} Duration 1");
-                CoinCost = 150;
+                CoinCost = 160;
                 LevelUpPrestigeCost = 600;
                 effectVariables.Add("costReduction", "20");
                 effectVariables.Add("additionalSkills", "1");
@@ -523,7 +523,7 @@ public class BaseActionData
                     + "If it costs {costLimit} or less mana, you may put it into play otherwise put it into your hand.";
                 this.effects.Add("Search Deck Next Monster");
                 this.effects.Add("Found Option If Cost {costLimit} Mana Less Play Else Hand");
-                CoinCost = 80;
+                CoinCost = 90;
                 LevelUpPrestigeCost = 600;
                 effectVariables.Add("costLimit", "40");
 
@@ -547,7 +547,7 @@ public class BaseActionData
                 this.effects.Add("Select Cards {trashAmount}");
                 this.effects.Add("Trash Selected");
                 this.effects.Add("Draw {drawAmount}");
-                CoinCost = 50;
+                CoinCost = 60;
                 LevelUpPrestigeCost = 500;
                 effectVariables.Add("trashAmount", "1");
                 effectVariables.Add("drawAmount", "1");

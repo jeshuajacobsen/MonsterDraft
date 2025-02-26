@@ -10,12 +10,14 @@ public class BoostButton : MonoBehaviour
     [SerializeField] private int gemCost;
 
     private GameManager _gameManager;
+    private RoundManager _roundManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
     {
         _gameManager = gameManager;
+        _roundManager = roundManager;
         _container = container;
     }
 
@@ -48,7 +50,7 @@ public class BoostButton : MonoBehaviour
             {
                 for (int tile = 1; tile <= 2; tile++)
                 {
-                    Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                    Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                     if (tileTransform != null)
                     {
                         Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -70,26 +72,26 @@ public class BoostButton : MonoBehaviour
                 var monsterCard = _container.Instantiate<MonsterCard>();
                 monsterCard.Initialize(monsterName, _gameManager.cardLevels[monsterName]);
                 yield return new WaitForEndOfFrame();
-                RoundManager.instance.gameState.SwitchPhaseState(new AutoPlayingMonsterState((MainPhase)RoundManager.instance.gameState, monsterCard, gemCost));
+                _roundManager.gameState.SwitchPhaseState(_container.Instantiate<AutoPlayingMonsterState>().Initialize(monsterCard, gemCost));
             }
         }
         else if (boostName == "Coins")
         {
-            RoundManager.instance.Coins += 5;
+            _roundManager.Coins += 5;
         }
         else if (boostName == "Draw")
         {
-            Card drawnCard = RoundManager.instance.roundDeck.DrawCard();
+            Card drawnCard = _roundManager.roundDeck.DrawCard();
             if (drawnCard == null)
             {
                 // TODO: Add message about not enough cards in deck.
                 yield break;
             }
-            RoundManager.instance.AddCardToHand(drawnCard);
+            _roundManager.AddCardToHand(drawnCard);
         }
         else if (boostName == "Mana")
         {
-            RoundManager.instance.Mana += 5;
+            _roundManager.Mana += 5;
         }
 
         _gameManager.Gems -= gemCost;

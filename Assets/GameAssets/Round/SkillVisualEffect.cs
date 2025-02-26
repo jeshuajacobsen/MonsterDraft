@@ -72,7 +72,7 @@ public class SkillVisualEffect : MonoBehaviour
         }
     }
 
-    public void InitValues(Vector2 startPosition, Vector2 targetPosition, string attackVisualEffect)
+    public void Initialize(Vector2 startPosition, Vector2 targetPosition, string attackVisualEffect)
     {
         this.attackVisualEffect = attackVisualEffect;
         this.startPosition = startPosition;

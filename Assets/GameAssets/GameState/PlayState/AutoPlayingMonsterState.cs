@@ -9,24 +9,25 @@ public class AutoPlayingMonsterState : CardPlayState
     private MonsterCard card;
     private int gemCost;
 
-    public AutoPlayingMonsterState(MainPhase mainPhase, MonsterCard card, int gemCost = 0) : base(mainPhase)
+    public AutoPlayingMonsterState Initialize(MonsterCard card, int gemCost = 0)
     {
         this.validTargets = new List<Tile>();
         this.card = card;
         this.gemCost = gemCost;
+        return this;
     }
     public override void EnterState()
     {
         Debug.Log("Auto Playing Monster State Entered");
-        RoundManager.instance.roundPanel.transform.Find("TownPanel").gameObject.SetActive(false);
-        RoundManager.instance.roundPanel.transform.Find("DungeonPanel").gameObject.SetActive(true);
+        _roundManager.roundPanel.transform.Find("TownPanel").gameObject.SetActive(false);
+        _roundManager.roundPanel.transform.Find("DungeonPanel").gameObject.SetActive(true);
         MarkValidTargets();
         if (gemCost > 0)
         {
-            RoundManager.instance.roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
-            RoundManager.instance.SetupBoostCancelButton(gemCost);
+            _roundManager.roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
+            _roundManager.SetupBoostCancelButton(gemCost);
         } else {
-            RoundManager.instance.SetupDoneButton(false);
+            _roundManager.SetupDoneButton(false);
         }
     }
 
@@ -62,7 +63,7 @@ public class AutoPlayingMonsterState : CardPlayState
         Debug.Log("Exiting playing monster state");
         validTargets.ForEach(tile => tile.GetComponent<Image>().color = Color.white);
         validTargets.Clear();
-        RoundManager.instance.CleanupDoneButton();
+        _roundManager.CleanupDoneButton();
     }
 
     public void MarkValidTargets()
@@ -72,7 +73,7 @@ public class AutoPlayingMonsterState : CardPlayState
         {
             for (int tile = 1; tile <= 2; tile++)
             {
-                Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                 if (tileTransform != null)
                 {
                     Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -97,7 +98,7 @@ public class AutoPlayingMonsterState : CardPlayState
             ))
             {
                 mainPhase.AutoPlayMonsterCard(card, validTargets[i]);
-                mainPhase.SwitchPhaseState(new IdleState(mainPhase));
+                mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
             }
         }
     }

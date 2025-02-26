@@ -10,7 +10,7 @@ using Zenject;
 public class GameManager : MonoBehaviour
 {
 
-    public GameData gameData = new GameData();
+    public GameData gameData;
     public InitialDeck selectedInitialDeck;
 
     public GameObject menuPanel;
@@ -70,6 +70,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        gameData = _container.Instantiate<GameData>().Initialize();
+
         unlockedDungeonLevels = new List<string>();
         unlockedDungeonLevels.Add("Forest");
         foreach (string cardName in gameData.GetAllMonsterNames())

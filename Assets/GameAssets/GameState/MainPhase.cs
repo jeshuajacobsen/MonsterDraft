@@ -10,10 +10,6 @@ public class MainPhase : GameState
     public Camera mainCamera;
     public static UnityEvent ExitMainPhase = new UnityEvent();
 
-    public MainPhase() : base() {
-        currentState = new IdleState(this);
-    }
-
     private List<Tile> validTargets = new List<Tile>();
     public int playedActionCardStep = 0;
     public List<SmallCardView> selectedCards = new List<SmallCardView>();
@@ -28,24 +24,14 @@ public class MainPhase : GameState
     public int savedValue;
     public List<Card> foundCards = new List<Card>();
 
-    private GameManager _gameManager;
-    private DiContainer _container;
-
-    [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
-    {
-        _gameManager = gameManager;
-        _container = container;
-    }
-
     public override void EnterState()
     {
         Debug.Log("Entering Main Phase");
-        RoundManager.instance.Actions = 1;
-        RoundManager.instance.Mana = 0;
-        RoundManager.instance.Coins = 0;
+        _roundManager.Actions = 1;
+        _roundManager.Mana = 0;
+        _roundManager.Coins = 0;
         mainCamera = Camera.main;
-        currentState = new IdleState(this);
+        currentState = _container.Instantiate<IdleState>();
         currentState.EnterState();
         MoveMonstersForward();
         DecrementBuffDurations();
@@ -57,7 +43,7 @@ public class MainPhase : GameState
         {
             for (int tile = 1; tile <= 7; tile++)
             {
-                Tile tileComponent = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}").GetComponent<Tile>();
+                Tile tileComponent = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}").GetComponent<Tile>();
                 if (tileComponent.monster != null)
                 {
                     List<MonsterBuff> buffsToRemove = new List<MonsterBuff>();
@@ -84,10 +70,10 @@ public class MainPhase : GameState
         {
             for (int i = 7; i >= 1; i--)
             {
-                Tile tile = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
-                if (tile.monster != null && tile.monster.team == "Ally" && RoundManager.instance.CanMoveMonster(tile.monster))
+                Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                if (tile.monster != null && tile.monster.team == "Ally" && _roundManager.CanMoveMonster(tile.monster))
                 {
-                    RoundManager.instance.MoveMonster(tile.monster);
+                    _roundManager.MoveMonster(tile.monster);
                 }
             }
         }
@@ -101,11 +87,11 @@ public class MainPhase : GameState
     public bool IsInsideOptionPanel(Vector3 position)
     {
         bool isInsideOptionPanel = RectTransformUtility.RectangleContainsScreenPoint(
-            RoundManager.instance.monsterOptionPanel.GetComponent<RectTransform>(),
+            _roundManager.monsterOptionPanel.GetComponent<RectTransform>(),
             position,
             mainCamera
         );
-        if (RoundManager.instance.monsterOptionPanel.gameObject.activeSelf && isInsideOptionPanel)
+        if (_roundManager.monsterOptionPanel.gameObject.activeSelf && isInsideOptionPanel)
         {
             return true;
         }
@@ -116,21 +102,21 @@ public class MainPhase : GameState
     {
         for(int i = 1; i <= 7; i++)
         {
-            RoundManager.instance.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
-            RoundManager.instance.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
-            RoundManager.instance.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
+            _roundManager.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
+            _roundManager.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
+            _roundManager.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
         }
     }
 
     public override void ExitState()
     {
         Debug.Log("Exiting Main Phase");
-        RoundManager.instance.Actions = 0;
-        RoundManager.instance.DiscardHand();
-        RoundManager.instance.Mana = 0;
-        RoundManager.instance.Coins = 0;
+        _roundManager.Actions = 0;
+        _roundManager.DiscardHand();
+        _roundManager.Mana = 0;
+        _roundManager.Coins = 0;
         List<PersistentEffect> effectsToRemove = new List<PersistentEffect>();
-        foreach (var effect in RoundManager.instance.persistentEffects)
+        foreach (var effect in _roundManager.persistentEffects)
         {
             effect.duration--;
             if (effect.duration <= 0)
@@ -140,7 +126,7 @@ public class MainPhase : GameState
         }
         foreach (var effect in effectsToRemove)
         {
-            RoundManager.instance.persistentEffects.Remove(effect);
+            _roundManager.persistentEffects.Remove(effect);
         }
         currentState.ExitState();
         ExitMainPhase.Invoke();
@@ -151,7 +137,7 @@ public class MainPhase : GameState
         if (card is MonsterCard)
         {
             MonsterCard monsterCard = (MonsterCard)card;
-            if (monsterCard.ManaCost > RoundManager.instance.Mana)
+            if (monsterCard.ManaCost > _roundManager.Mana)
             {
                 return false;
             }
@@ -159,7 +145,7 @@ public class MainPhase : GameState
             {
                 for (int tile = 1; tile <= 7; tile++)
                 {
-                    Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                    Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                     if (tileTransform != null && tileTransform.GetComponent<Collider2D>().bounds.Contains(position))
                     {
                         return true;
@@ -170,7 +156,7 @@ public class MainPhase : GameState
         if (card is ActionCard)
         {
             ActionCard actionCard = (ActionCard)card;
-            if (RoundManager.instance.Actions > 0)
+            if (_roundManager.Actions > 0)
             {
                 return true;
             }
@@ -189,15 +175,15 @@ public class MainPhase : GameState
         playedCard = null;
         if (!autoPlaying)
         {
-            for (int j = 0; j < RoundManager.instance.hand.Count; j++)
+            for (int j = 0; j < _roundManager.hand.Count; j++)
             {
-                if (RoundManager.instance.hand[j].isDragging)
+                if (_roundManager.hand[j].isDragging)
                 {
-                    RoundManager.instance.hand[j].CancelPlay();
+                    _roundManager.hand[j].CancelPlay();
                 }
             }
         }
-        SwitchPhaseState(new IdleState(this));
+        SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public void CancelFullPlay()
@@ -205,35 +191,35 @@ public class MainPhase : GameState
         playedActionCardStep = 0;
         if (!autoPlaying)
         {
-            RoundManager.instance.AddCardToHand(playedCard);
+            _roundManager.AddCardToHand(playedCard);
         }
         playedCard = null;
-        SwitchPhaseState(new IdleState(this));
+        SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public void FinishPlay()
     {
         if (!autoPlaying && playedCard is ActionCard)
         {
-            RoundManager.instance.Actions--;
+            _roundManager.Actions--;
         }
         playedActionCardStep = 0;
         playedCard = null;
-        ScrollRect scrollRect = RoundManager.instance.handContent.transform.GetComponentInParent<ScrollRect>();
+        ScrollRect scrollRect = _roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
-        SwitchPhaseState(new IdleState(this));
+        SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public void FinishOnGain()
     {
         gainedCard = null;
-        SwitchPhaseState(new IdleState(this));
+        SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public void RemoveCard(SmallCardView cardView)
     {
-        RoundManager.instance.discardPile.AddCard(cardView.card);
-        RoundManager.instance.RemoveCardFromHand(cardView);
+        _roundManager.discardPile.AddCard(cardView.card);
+        _roundManager.RemoveCardFromHand(cardView);
         if (cardView != null)
         {
             cardView.DestroyCardView();
@@ -243,16 +229,16 @@ public class MainPhase : GameState
     public void PlayTreasureCard(TreasureCard treasureCard)
     {
         treasuresPlayed++;
-        RoundManager.instance.Coins += treasureCard.CoinGeneration;
-        RoundManager.instance.Mana += treasureCard.ManaGeneration;
-        ScrollRect scrollRect = RoundManager.instance.handContent.transform.GetComponentInParent<ScrollRect>();
+        _roundManager.Coins += treasureCard.CoinGeneration;
+        _roundManager.Mana += treasureCard.ManaGeneration;
+        ScrollRect scrollRect = _roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
         if (treasureCard.Effects.Count > 0)
         {
             playedCard = treasureCard;
-            SwitchPhaseState(new ResolvingEffectState(this));
+            SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
         } else {
-            SwitchPhaseState(new IdleState(this));
+            SwitchPhaseState(_container.Instantiate<IdleState>());
         }
     }
 
@@ -263,8 +249,8 @@ public class MainPhase : GameState
 
     private void PlayMonster(MonsterCard monsterCard, Tile target)
     {
-        Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(RoundManager.instance.MonsterPrefab, target.transform);
-        newMonster.InitValues(monsterCard, target, "Ally");
+        Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(_roundManager.MonsterPrefab, target.transform);
+        newMonster.Initialize(monsterCard, target, "Ally");
         target.monster = newMonster;
     }
 
@@ -273,7 +259,7 @@ public class MainPhase : GameState
         VisualEffect visualEffect = null;
         if (cardView.card is MonsterCard)
         {
-            RoundManager.instance.Mana -= ((MonsterCard)cardView.card).ManaCost;
+            _roundManager.Mana -= ((MonsterCard)cardView.card).ManaCost;
             PlayMonster((MonsterCard)cardView.card, target);
         }
         else if (cardView.card is ActionCard)
@@ -288,7 +274,7 @@ public class MainPhase : GameState
                     {
                         visualEffect.reachedTarget.AddListener(() => {
                             target.monster.Health -= int.Parse(effectParts[1]);
-                            RoundManager.instance.AddFloatyNumber(int.Parse(effectParts[1]), target, true);
+                            _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target, true);
                         });
                     } else {
                         target.monster.Health -= int.Parse(effectParts[1]);
@@ -324,7 +310,7 @@ public class MainPhase : GameState
                 {
                     if (effectParts[1] == "Fireball")
                     {
-                        visualEffect = RoundManager.instance.AddVisualEffect("Fireball", target);
+                        visualEffect = _roundManager.AddVisualEffect("Fireball", target);
                         playedActionCardStep++;
                     }
                 } else if (effectParts[0] == "Destroy")
@@ -338,7 +324,7 @@ public class MainPhase : GameState
             return;
         }
         RemoveCard(cardView);
-        SwitchPhaseState(new IdleState(this));
+        SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public void AutoPlayMonsterCard(MonsterCard monsterCard, Tile target)
@@ -350,8 +336,8 @@ public class MainPhase : GameState
     {
         if (tile.monster != null && !tile.monster.IsOnInfoButton(pointerPosition))
         {
-            RoundManager.instance.monsterOptionPanel.SetActive(true);
-            RoundManager.instance.monsterOptionPanel
+            _roundManager.monsterOptionPanel.SetActive(true);
+            _roundManager.monsterOptionPanel
                 .GetComponent<MonsterOptionsPanel>()
                 .SetActiveTile(tile, pointerPosition);
         }
@@ -375,11 +361,11 @@ public class MainPhase : GameState
     public void CancelButton()
     {
         CancelFullPlay();
-        RoundManager.instance.doneButton.gameObject.SetActive(false);
-        RoundManager.instance.cancelButton.gameObject.SetActive(false);
+        _roundManager.doneButton.gameObject.SetActive(false);
+        _roundManager.cancelButton.gameObject.SetActive(false);
         if (playedCard != null)
         {
-            RoundManager.instance.AddCardToHand(playedCard);
+            _roundManager.AddCardToHand(playedCard);
             playedCard = null;
         }
     }

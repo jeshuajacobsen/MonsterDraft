@@ -8,10 +8,10 @@ public class ToFieldState : CardPlayState
     private SmallCardView cardView;
     
 
-    public ToFieldState(MainPhase mainPhase, SmallCardView cardView) : base(mainPhase)
+    public ToFieldState Initialize(SmallCardView cardView)
     {
         this.cardView = cardView;
-        
+        return this;
     }
 
     public override void EnterState()
@@ -59,7 +59,7 @@ public class ToFieldState : CardPlayState
 
     public void HandleCardDrop(SmallCardView cardView, Vector2 dropPosition)
     {
-        RectTransform parentRect = RoundManager.instance.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
+        RectTransform parentRect = _roundManager.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
 
         bool isInsideHand = RectTransformUtility.RectangleContainsScreenPoint(
             parentRect,
@@ -83,7 +83,7 @@ public class ToFieldState : CardPlayState
         {   
             mainPhase.playedCard = cardView.card;
             mainPhase.RemoveCard(cardView);
-            mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
+            mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
             return;
         }
         else

@@ -9,10 +9,11 @@ public class SelectingTargetMonsterState : CardPlayState
     private Card card;
     
 
-    public SelectingTargetMonsterState(MainPhase mainPhase, Card card) : base(mainPhase)
+    public SelectingTargetMonsterState Initialize(Card card)
     {
         this.card = card;
         validTargets = new List<Tile>();
+        return this;
     }
 
     public override void EnterState()
@@ -20,8 +21,8 @@ public class SelectingTargetMonsterState : CardPlayState
         Debug.Log("Quick Selecting Monster Tile State Entered");
         MarkValidTargets(card as ActionCard);
         //mainPhase.playedActionCardStep++;
-        RoundManager.instance.messageText.text = "Select target for " + card.Name;
-        RoundManager.instance.messageText.gameObject.SetActive(true);
+        _roundManager.messageText.text = "Select target for " + card.Name;
+        _roundManager.messageText.gameObject.SetActive(true);
     }
 
     public override void HandleInput()
@@ -58,7 +59,7 @@ public class SelectingTargetMonsterState : CardPlayState
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
                 {
                     mainPhase.selectedTile = validTargets[i];
-                    mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
                     // If you only want to select a single tile, break after setting state
                     break;
                 }
@@ -86,7 +87,7 @@ public class SelectingTargetMonsterState : CardPlayState
                 {
                     for (int tile = 1; tile <= 7; tile++)
                     {
-                        Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                        Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                         if (tileTransform != null)
                         {
                             Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -104,7 +105,7 @@ public class SelectingTargetMonsterState : CardPlayState
                 {
                     for (int tile = 1; tile <= 7; tile++)
                     {
-                        Transform tileTransform = RoundManager.instance.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                        Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                         if (tileTransform != null)
                         {
                             Tile tileComponent = tileTransform.GetComponent<Tile>();

@@ -1,10 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class MonsterOptionsPanel : MonoBehaviour
 {
     private Tile activeTile;
+
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(DiContainer container)
+    {
+        _container = container;
+    }
 
     [SerializeField] private MonsterOptionButton monsterOptionButtonPrefab;
     void Start()
@@ -27,7 +36,7 @@ public class MonsterOptionsPanel : MonoBehaviour
         }
         
         // MonsterOptionButton optionButton = Instantiate(monsterOptionButtonPrefab, transform);
-        // optionButton.InitValues(activeTile.monster, "Movement");
+        // optionButton.Initialize(activeTile.monster, "Movement");
 
 
         // if (activeTile.monster.team == "Enemy" || activeTile.monster.actionsUsedThisTurn.Contains("Movement") || !RoundManager.instance.CanMoveMonster(activeTile.monster))
@@ -36,16 +45,16 @@ public class MonsterOptionsPanel : MonoBehaviour
         //     optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
         // }
 
-        MonsterOptionButton optionButton = Instantiate(monsterOptionButtonPrefab, transform);
-        optionButton.InitValues(activeTile.monster, "Skill1");
+        MonsterOptionButton optionButton = _container.InstantiatePrefabForComponent<MonsterOptionButton>(monsterOptionButtonPrefab, transform);
+        optionButton.Initialize(activeTile.monster, "Skill1");
         if (activeTile.monster.team == "Enemy")
         {
             Debug.Log("Skill1 used");
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;
         }
 
-        optionButton = Instantiate(monsterOptionButtonPrefab, transform);
-        optionButton.InitValues(activeTile.monster, "Skill2");
+        optionButton = _container.InstantiatePrefabForComponent<MonsterOptionButton>(monsterOptionButtonPrefab, transform);
+        optionButton.Initialize(activeTile.monster, "Skill2");
         if (activeTile.monster.team == "Enemy")
         {
             optionButton.transform.GetComponent<UnityEngine.UI.Button>().interactable = false;

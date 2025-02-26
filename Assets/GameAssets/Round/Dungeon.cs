@@ -6,7 +6,7 @@ public class Dungeon
 {
     private DungeonLevelData currentDungeonLevel;
     private Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
-    private int guaranteedMonsterTimer = 5;
+    private int guaranteedMonsterTimer = 3;
     private string guaranteedMonster;
 
     private GameManager _gameManager;

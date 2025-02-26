@@ -96,14 +96,6 @@ public class MonsterCard : Card
     public int experienceGiven;
     public int experienceRequired;
 
-    private GameManager _gameManager;
-
-    [Inject]
-    public void Construct(GameManager gameManager)
-    {
-        _gameManager = gameManager;
-    }
-
     public void Initialize(string name, int level)
     {
         base.Initialize(name, "Monster", level);

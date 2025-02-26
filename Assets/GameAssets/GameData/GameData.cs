@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using System.Linq;
+using Zenject;
 
 public class GameData 
 {
@@ -13,7 +14,15 @@ public class GameData
     private Dictionary<string, DungeonLevelData> _dungeonData;
     public Dictionary<string, int> availableDeckEditorCards;
 
-    public GameData()
+    private DiContainer _container;
+
+    [Inject]
+    public void Construct(DiContainer container)
+    {
+        _container = container;
+    }
+
+    public GameData Initialize()
     {
         _baseMonsterData = new Dictionary<string, BaseMonsterData>
         {
@@ -82,42 +91,43 @@ public class GameData
         _skills = new Dictionary<string, SkillData>
         {
             //Basic
-            { "Zap", new SkillData("Zap") },
-            { "Bubble", new SkillData("Bubble") },
-            { "Leaf", new SkillData("Leaf") },
-            { "Spark", new SkillData("Spark") },
-            { "Wrap", new SkillData("Wrap") },
-            { "Goo", new SkillData("Goo") },
-            { "Chill", new SkillData("Chill") },
-            { "Bite", new SkillData("Bite") },
+            { "Zap", _container.Instantiate<SkillData>().Initialize("Zap") },
+            { "Bubble", _container.Instantiate<SkillData>().Initialize("Bubble") },
+            { "Leaf", _container.Instantiate<SkillData>().Initialize("Leaf") },
+            { "Spark", _container.Instantiate<SkillData>().Initialize("Spark") },
+            { "Wrap", _container.Instantiate<SkillData>().Initialize("Wrap") },
+            { "Goo", _container.Instantiate<SkillData>().Initialize("Goo") },
+            { "Chill", _container.Instantiate<SkillData>().Initialize("Chill") },
+            { "Bite", _container.Instantiate<SkillData>().Initialize("Bite") },
 
-            //Intermidiate
-            { "Shock", new SkillData("Shock") },
-            { "Burn", new SkillData("Burn") },
-            { "Wave", new SkillData("Wave") },
-            { "Growth", new SkillData("Growth") },
-            { "Poison Sting", new SkillData("Poison Sting") },
-            { "Slime Ball", new SkillData("Slime Ball")},
-            { "Ice Shard", new SkillData("Ice Shard") },
-            { "Drain", new SkillData("Drain") },
+            //Intermediate
+            { "Shock", _container.Instantiate<SkillData>().Initialize("Shock") },
+            { "Burn", _container.Instantiate<SkillData>().Initialize("Burn") },
+            { "Wave", _container.Instantiate<SkillData>().Initialize("Wave") },
+            { "Growth", _container.Instantiate<SkillData>().Initialize("Growth") },
+            { "Poison Sting", _container.Instantiate<SkillData>().Initialize("Poison Sting") },
+            { "Slime Ball", _container.Instantiate<SkillData>().Initialize("Slime Ball") },
+            { "Ice Shard", _container.Instantiate<SkillData>().Initialize("Ice Shard") },
+            { "Drain", _container.Instantiate<SkillData>().Initialize("Drain") },
 
             //Advanced
-            { "Lightning", new SkillData("Lightning") },
-            { "Heat Wave", new SkillData("Heat Wave") },
-            { "Solar Beam", new SkillData("Solar Beam") },
-            { "Water Jet", new SkillData("Water Jet") },
-            { "Multiply", new SkillData("Multiply") },
-            { "Freeze", new SkillData("Freeze") },
-            { "Nightmare", new SkillData("NightMare") },
-            
+            { "Lightning", _container.Instantiate<SkillData>().Initialize("Lightning") },
+            { "Heat Wave", _container.Instantiate<SkillData>().Initialize("Heat Wave") },
+            { "Solar Beam", _container.Instantiate<SkillData>().Initialize("Solar Beam") },
+            { "Water Jet", _container.Instantiate<SkillData>().Initialize("Water Jet") },
+            { "Multiply", _container.Instantiate<SkillData>().Initialize("Multiply") },
+            { "Freeze", _container.Instantiate<SkillData>().Initialize("Freeze") },
+            { "Nightmare", _container.Instantiate<SkillData>().Initialize("Nightmare") },
+
             //Expert
-            { "Thunder Bolt", new SkillData("Thunder Bolt") },
-            { "Inferno", new SkillData("Inferno") },
-            { "Poison Ivy", new SkillData("Poison Ivy") },
-            { "Aqua Blast", new SkillData("Aqua Blast") },
-            { "Slime Storm", new SkillData("Slime Storm") },
-            { "Blizzard", new SkillData("Blizzard") }
+            { "Thunder Bolt", _container.Instantiate<SkillData>().Initialize("Thunder Bolt") },
+            { "Inferno", _container.Instantiate<SkillData>().Initialize("Inferno") },
+            { "Poison Ivy", _container.Instantiate<SkillData>().Initialize("Poison Ivy") },
+            { "Aqua Blast", _container.Instantiate<SkillData>().Initialize("Aqua Blast") },
+            { "Slime Storm", _container.Instantiate<SkillData>().Initialize("Slime Storm") },
+            { "Blizzard", _container.Instantiate<SkillData>().Initialize("Blizzard") }
         };
+
 
         _dungeonData = new Dictionary<string, DungeonLevelData>
         {
@@ -147,6 +157,8 @@ public class GameData
             { "Heal", 2 },
             { "Shield", 2 }
         };
+
+        return this;
     }
 
     public BaseMonsterData GetBaseMonsterData(string name)

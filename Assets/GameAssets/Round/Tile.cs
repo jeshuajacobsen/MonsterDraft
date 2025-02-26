@@ -3,11 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Zenject;
+
 public class Tile : MonoBehaviour
 {
     public Monster monster;
     private Camera mainCamera;
     public DungeonRow dungeonRow;
+
+    private RoundManager _roundManager;
+
+    [Inject]
+    public void Construct(RoundManager roundManager)
+    {
+        _roundManager = roundManager;
+    }
+
 
     void Start()
     {
@@ -43,7 +54,7 @@ public class Tile : MonoBehaviour
 
             Vector2 worldPosition2D = new Vector2(worldPosition3D.x, worldPosition3D.y);
 
-            RoundManager.instance.gameState.SelectTile(this, pointerPosition);
+            _roundManager.gameState.SelectTile(this, pointerPosition);
         }
     }
 
@@ -56,7 +67,7 @@ public class Tile : MonoBehaviour
             Collider2D collider = GetComponent<Collider2D>();
             if (collider != null && collider.OverlapPoint(touchPosition))
             {
-                RoundManager.instance.gameState.SelectTile(this, touchPosition);
+                _roundManager.gameState.SelectTile(this, touchPosition);
             }
         }
     }

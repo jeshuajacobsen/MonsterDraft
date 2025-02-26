@@ -5,7 +5,6 @@ using System;
 
 public class IdleState : CardPlayState
 {
-    public IdleState(MainPhase mainPhase) : base(mainPhase) { }
 
     public override void EnterState()
     {
@@ -23,10 +22,10 @@ public class IdleState : CardPlayState
             {
                 MonsterCard monsterCard = (MonsterCard)mainPhase.cardsToAutoPlay[0];
                 mainPhase.cardsToAutoPlay.RemoveAt(0);
-                mainPhase.SwitchPhaseState(new AutoPlayingMonsterState(mainPhase, monsterCard));
+                mainPhase.SwitchPhaseState(_container.Instantiate<AutoPlayingMonsterState>().Initialize(monsterCard));
             } else {
                 mainPhase.cardsToAutoPlay.RemoveAt(0);
-                mainPhase.SwitchPhaseState(new ResolvingEffectState(mainPhase));
+                mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
             }
         } else {
             mainPhase.autoPlaying = false;
@@ -63,9 +62,9 @@ public class IdleState : CardPlayState
             }
             else
             {
-                RoundManager.instance.monsterOptionPanel.gameObject.SetActive(false);
+                _roundManager.monsterOptionPanel.gameObject.SetActive(false);
 
-                foreach (var cardView in RoundManager.instance.hand)
+                foreach (var cardView in _roundManager.hand)
                 {
                     cardView.HandleMouseDown(pointerPosition);
 
@@ -76,20 +75,20 @@ public class IdleState : CardPlayState
                             if (actionCard.StartsWithTarget())
                             {
                                 mainPhase.playedActionCardStep++;
-                                mainPhase.SwitchPhaseState(new QuickSelectingTargetMonsterState(mainPhase, cardView));
+                                mainPhase.SwitchPhaseState(_container.Instantiate<QuickSelectingTargetMonsterState>().Initialize(cardView));
                             }
                             else
                             {
-                                mainPhase.SwitchPhaseState(new ToFieldState(mainPhase, cardView));
+                                mainPhase.SwitchPhaseState(_container.Instantiate<ToFieldState>().Initialize(cardView));
                             }
                         }
                         else if (cardView.card is MonsterCard)
                         {
-                            mainPhase.SwitchPhaseState(new QuickSelectingMonsterTileState(mainPhase, cardView));
+                            mainPhase.SwitchPhaseState(_container.Instantiate<QuickSelectingMonsterTileState>().Initialize(cardView));
                         }
                         else if (cardView.card is TreasureCard)
                         {
-                            mainPhase.SwitchPhaseState(new ToFieldState(mainPhase, cardView));
+                            mainPhase.SwitchPhaseState(_container.Instantiate<ToFieldState>().Initialize(cardView));
                         }
                         break;
                     }

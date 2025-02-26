@@ -9,17 +9,19 @@ public class SelectingOptionState : CardPlayState
     private List<Card> displayCards;
     private bool showCards = false;
     
-    public SelectingOptionState(MainPhase mainPhase, List<string> options) : base(mainPhase)
+    public SelectingOptionState Initialize(List<string> options)
     {
         this.options = options;
         this.displayCards = new List<Card>();
+        return this;
     }
 
-    public SelectingOptionState(MainPhase mainPhase, List<string> options, List<Card> displayCards) : base(mainPhase)
+    public SelectingOptionState Initialize(List<string> options, List<Card> displayCards)
     {
         this.options = options;
         this.displayCards = displayCards;
         this.showCards = true;
+        return this;
     }
 
     public override void EnterState()
@@ -27,11 +29,11 @@ public class SelectingOptionState : CardPlayState
         Debug.Log("Selecting option State Entered");
         if (this.showCards)
         {
-            RoundManager.instance.SetupOptionPanel(this.options, this.displayCards);
+            _roundManager.SetupOptionPanel(this.options, this.displayCards);
         }
         else
         {
-            RoundManager.instance.SetupOptionPanel(this.options);
+            _roundManager.SetupOptionPanel(this.options);
         }
     }
 
@@ -47,6 +49,6 @@ public class SelectingOptionState : CardPlayState
     public override void ExitState()
     {
         Debug.Log("Exiting Selecting option State");
-        RoundManager.instance.SelectingOptionPanel.SetActive(false);;
+        _roundManager.SelectingOptionPanel.SetActive(false);;
     }
 }

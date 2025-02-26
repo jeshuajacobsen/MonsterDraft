@@ -10,11 +10,12 @@ public class SelectingSkillTargetState : CardPlayState
     private SkillData skill;
     
 
-    public SelectingSkillTargetState(MainPhase mainPhase, Monster monster, SkillData skill) : base(mainPhase)
+    public SelectingSkillTargetState Initialize(Monster monster, SkillData skill)
     {
         validTargets = new List<Tile>();
         this.monster = monster;
         this.skill = skill;
+        return this;
     }
 
     public override void EnterState()
@@ -51,35 +52,35 @@ public class SelectingSkillTargetState : CardPlayState
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
 
             bool isInEnemyBase = RectTransformUtility.RectangleContainsScreenPoint(
-                RoundManager.instance.EnemyBase.transform.GetComponent<RectTransform>(),
+                _roundManager.EnemyBase.transform.GetComponent<RectTransform>(),
                 pointerPosition,
                 mainPhase.mainCamera
             );
 
             if (tileIndex + skill.Range > 7 && isInEnemyBase)
             {
-                RoundManager.instance.UseSkillOnBase(monster, skill);
+                _roundManager.UseSkillOnBase(monster, skill);
                 if (skill.effects.Count > 0)
                 {
-                    mainPhase.SwitchPhaseState(new ResolvingSkillEffectState(mainPhase, skill, monster, null));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, null));
                 }
                 else
                 {
-                    mainPhase.SwitchPhaseState(new IdleState(mainPhase));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
                 }
                 return;
             }
 
             if (skill.attacksAllInRange)
             {
-                RoundManager.instance.UseAreaSkill(monster, skill, validTargets);
+                _roundManager.UseAreaSkill(monster, skill, validTargets);
                 if (skill.effects.Count > 0)
                 {
-                    mainPhase.SwitchPhaseState(new ResolvingSkillEffectState(mainPhase, skill, monster, validTargets));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, validTargets));
                 }
                 else
                 {
-                    mainPhase.SwitchPhaseState(new IdleState(mainPhase));
+                    mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
                 }
                 return;
             }
@@ -94,20 +95,20 @@ public class SelectingSkillTargetState : CardPlayState
 
                 if (isInTile)
                 {
-                    RoundManager.instance.UseSkill(monster, skill, tile);
+                    _roundManager.UseSkill(monster, skill, tile);
                     if (skill.effects.Count > 0)
                     {
-                        mainPhase.SwitchPhaseState(new ResolvingSkillEffectState(mainPhase, skill, monster, new List<Tile>{tile}));
+                        mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, new List<Tile>{tile}));
                     }
                     else
                     {
-                        mainPhase.SwitchPhaseState(new IdleState(mainPhase));
+                        mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
                     }
                     return;
                 }
             }
 
-            mainPhase.SwitchPhaseState(new IdleState(mainPhase));
+            mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
         }
     }
 
@@ -120,7 +121,7 @@ public class SelectingSkillTargetState : CardPlayState
 
    public void MarkValidTargets()
     {
-        validTargets = RoundManager.instance.GetValidTargets(monster, skill);
+        validTargets = _roundManager.GetValidTargets(monster, skill);
         if (skill.directions == "")
         {
             validTargets.Add(monster.tileOn);

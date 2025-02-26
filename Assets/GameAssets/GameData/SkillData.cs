@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using Zenject;
 public class SkillData
 {
     private int _manaCost;
@@ -7,7 +8,7 @@ public class SkillData
         get
         {
             int costChange = 0;
-            foreach (var effect in RoundManager.instance.persistentEffects)
+            foreach (var effect in _roundManager.persistentEffects)
             {
                 if (effect.type == "SkillsCost")
                 {
@@ -32,7 +33,15 @@ public class SkillData
 
     public string attackVisualEffect = "Lightning";
 
-    public SkillData(string name)
+    private RoundManager _roundManager;
+
+    [Inject]
+    public void Construct(RoundManager roundManager)
+    {
+        _roundManager = roundManager;
+    }
+
+    public SkillData Initialize(string name)
     {
         this.name = name;
         this.Description = "";
@@ -253,5 +262,6 @@ public class SkillData
                 attacksAllInRange = true;
                 break;
         }
+        return this;
     }
 }
