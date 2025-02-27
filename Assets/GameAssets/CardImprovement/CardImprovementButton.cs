@@ -8,6 +8,14 @@ public class CardImprovementButton : MonoBehaviour
 
     public Card card;
 
+    private SpriteManager _spriteManager;
+
+    [Inject]
+    public void Construct(SpriteManager spriteManager)
+    {
+        _spriteManager = spriteManager;
+    }
+
     void Start()
     {
     }
@@ -21,7 +29,7 @@ public class CardImprovementButton : MonoBehaviour
     {
         this.card = card;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
+        transform.Find("Image").GetComponent<Image>().sprite = _spriteManager.GetSprite(card.Name);
         transform.Find("LevelText").GetComponent<TextMeshProUGUI>().text = "Level: " + card.level + "/" + card.maxLevel.ToString();
     }
 }

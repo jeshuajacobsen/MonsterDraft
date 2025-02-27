@@ -106,13 +106,15 @@ public class Monster : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private SpriteManager _spriteManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, SpriteManager spriteManager, DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _spriteManager = spriteManager;
         _container = container;
     }
 
@@ -151,14 +153,14 @@ public class Monster : MonoBehaviour
         this.team = team;
         if (team == "Enemy")
         {
-            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite("EnemyBackground");
+            transform.Find("TeamBackground").GetComponent<Image>().sprite = _spriteManager.GetSprite("EnemyBackground");
         } else {
-            transform.Find("TeamBackground").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite("PlayerBackground");
+            transform.Find("TeamBackground").GetComponent<Image>().sprite = _spriteManager.GetSprite("PlayerBackground");
         }
         this.tileOn = tile;
         this.tileOn.monster = this;
         this.name = monsterCard.Name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(this.name);
+        transform.Find("Image").GetComponent<Image>().sprite = _spriteManager.GetSprite(this.name);
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = this.name;
         this.MaxHealth = monsterCard.Health;
         this.Health = monsterCard.Health;

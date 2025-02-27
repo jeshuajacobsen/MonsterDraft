@@ -256,7 +256,7 @@ public class MainPhase : GameState
 
     public void PlayCardWithTarget(SmallCardView cardView, Tile target)
     {
-        VisualEffect visualEffect = null;
+        CardVisualEffect visualEffect = null;
         if (cardView.card is MonsterCard)
         {
             _roundManager.Mana -= ((MonsterCard)cardView.card).ManaCost;
@@ -278,6 +278,7 @@ public class MainPhase : GameState
                         });
                     } else {
                         target.monster.Health -= int.Parse(effectParts[1]);
+                        _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target, true);
                     }
                     playedActionCardStep++;
                 } else if (effectParts[0] == "Heal")
@@ -310,7 +311,7 @@ public class MainPhase : GameState
                 {
                     if (effectParts[1] == "Fireball")
                     {
-                        visualEffect = _roundManager.AddVisualEffect("Fireball", target);
+                        visualEffect = _roundManager.AddCardVisualEffect("Fireball", target);
                         playedActionCardStep++;
                     }
                 } else if (effectParts[0] == "Destroy")

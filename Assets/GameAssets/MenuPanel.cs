@@ -9,11 +9,15 @@ public class MenuPanel : MonoBehaviour
 {
     DungeonLevelData dungeonLevelData;
     private GameManager _gameManager;
+    private RunManager _runManager;
+    private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(GameManager gameManager, RunManager runManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
+        _runManager = runManager;
+        _spriteManager = spriteManager;
     }
 
     void Start()
@@ -35,8 +39,8 @@ public class MenuPanel : MonoBehaviour
     public void SetDungeonLevel(string dungeonLevel)
     {
         dungeonLevelData = _gameManager.gameData.DungeonData(dungeonLevel);
-        RunManager.instance.currentDungeonLevel = dungeonLevelData;
-        transform.Find("LevelImage").GetComponent<Image>().sprite = SpriteManager.instance.GetLevelSprite(dungeonLevelData.selectedLevelSprite);
+        _runManager.currentDungeonLevel = dungeonLevelData;
+        transform.Find("LevelImage").GetComponent<Image>().sprite = _spriteManager.GetLevelSprite(dungeonLevelData.selectedLevelSprite);
         transform.Find("DungeonLevelName").GetComponent<TextMeshProUGUI>().text = dungeonLevelData.name;
         if (_gameManager.gameData.GetPreviousDungeonLevel(dungeonLevelData.key) == null)
         {

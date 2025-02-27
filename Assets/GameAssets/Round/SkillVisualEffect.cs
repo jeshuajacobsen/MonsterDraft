@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.Animations;
+using Zenject;
 
 public class SkillVisualEffect : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class SkillVisualEffect : MonoBehaviour
     public Vector2 desiredSize = new Vector2(1000, 150);
 
     [Header("Movement speed of the sprite")]
-    public float moveSpeed = 10f;
+    public float moveSpeed = 1000f;
 
     public UnityEvent reachedTarget;
 
@@ -30,12 +31,14 @@ public class SkillVisualEffect : MonoBehaviour
     private string attackVisualEffect;
     private float timeout = 0;
 
+    public class Factory : PlaceholderFactory<SkillVisualEffect> { }
+
     void Awake()
     {
         
     }
 
-    void Update()
+    public void Update()
     {
 
         float step = moveSpeed * Time.deltaTime;

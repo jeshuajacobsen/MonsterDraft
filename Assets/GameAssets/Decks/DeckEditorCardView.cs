@@ -16,11 +16,13 @@ public class DeckEditorCardView : MonoBehaviour
     private int cardLimit = 0;
 
     private GameManager _gameManager;
+    private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(GameManager gameManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
+        _spriteManager = spriteManager;
     }
 
     void Start()
@@ -40,7 +42,7 @@ public class DeckEditorCardView : MonoBehaviour
         this.card = card;
         this.cardLimit = cardLimit;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
-        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
+        transform.Find("CardImage").GetComponent<Image>().sprite = _spriteManager.GetSprite(card.Name);
         transform.Find("CardCountText").GetComponent<TextMeshProUGUI>().text = usingCardCount.ToString() + "/" + boughtCardCount.ToString();
         transform.Find("PrestigeCostText").GetComponent<TextMeshProUGUI>().text = card.BuyCardPrestigeCost.ToString();
     }

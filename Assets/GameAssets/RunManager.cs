@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Zenject;
+using UnityEngine.Events;
 
 public class RunManager : MonoBehaviour
 {
-    public static RunManager instance;
     
     public RunDeck runDeck;
 
@@ -19,6 +19,8 @@ public class RunManager : MonoBehaviour
     public DungeonLevelData currentDungeonLevel;
     public int currentDungeonIndex = 1;
 
+    public UnityEvent<DungeonLevelData, int> startRoundEvent = new UnityEvent<DungeonLevelData, int>();
+
     private GameManager _gameManager;
     private RoundManager _roundManager;
     private DiContainer _container;
@@ -31,22 +33,9 @@ public class RunManager : MonoBehaviour
         _container = container;
     }
 
-    void Awake()
-    {
-
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     public void Start()
     {
+        _gameManager.startRunEvent.AddListener(StartRun);
         doneButton.onClick.AddListener(PickCard);
     }
 
@@ -135,7 +124,7 @@ public class RunManager : MonoBehaviour
     public void StartRound()
     {
         roundPanel.gameObject.SetActive(true);
-        _roundManager.StartRound(currentDungeonLevel, currentDungeonIndex);
+        startRoundEvent.Invoke(currentDungeonLevel, currentDungeonIndex);
     }
 
     public void EndRound(List<Card> gainedCards)

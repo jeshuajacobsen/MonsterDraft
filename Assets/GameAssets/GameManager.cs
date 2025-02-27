@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
 
     public Dictionary<string, int> cardLevels = new Dictionary<string, int>();
 
+    public UnityEvent startRunEvent = new UnityEvent();
+
     private DiContainer _container;
 
     [Inject]
@@ -100,7 +102,7 @@ public class GameManager : MonoBehaviour
     public void StartRun()
     {
         menuPanel.SetActive(false); 
-        RunManager.instance.StartRun();
+        startRunEvent.Invoke();
     }
 
     public void OpenDeckEditor()

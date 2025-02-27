@@ -21,6 +21,7 @@ public class ResolvingEffectState : CardPlayState
 
     private void ResolveEffects()
     {
+        CardVisualEffect visualEffect = null;
         for (int i = mainPhase.playedActionCardStep; i < mainPhase.playedCard.Effects.Count; i++)
         {
             string[] effectParts = mainPhase.playedCard.Effects[i].Split(' ');
@@ -200,7 +201,17 @@ public class ResolvingEffectState : CardPlayState
             } else if (effectParts[0] == "Damage")
             {
                 int damage = int.Parse(effectParts[1]);
-                mainPhase.selectedTile.monster.Health -= damage;
+                
+                if (visualEffect != null)
+                {
+                    visualEffect.reachedTarget.AddListener(() => {
+                        mainPhase.selectedTile.monster.Health -= damage;
+                        _roundManager.AddFloatyNumber(damage, mainPhase.selectedTile, true);
+                    });
+                } else {
+                    mainPhase.selectedTile.monster.Health -= damage;
+                    _roundManager.AddFloatyNumber(damage, mainPhase.selectedTile, true);
+                }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Heal")
             {
@@ -377,7 +388,7 @@ public class ResolvingEffectState : CardPlayState
             {
                 if (effectParts[1] == "Fireball")
                 {
-                    _roundManager.AddVisualEffect("Fireball", mainPhase.selectedTile);
+                    visualEffect = _roundManager.AddCardVisualEffect("Fireball", mainPhase.selectedTile);
                 }
                 mainPhase.playedActionCardStep++;
             }

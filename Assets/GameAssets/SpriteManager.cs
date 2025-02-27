@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class SpriteManager : MonoBehaviour
 {
-    public static SpriteManager instance;
 
     [System.Serializable]
     public class SpriteEntry
@@ -22,16 +21,8 @@ public class SpriteManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            InitializeSpriteDictionary();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+
+        InitializeSpriteDictionary();
     }
 
     private void InitializeSpriteDictionary()

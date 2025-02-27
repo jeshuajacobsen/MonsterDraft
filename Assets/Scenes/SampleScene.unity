@@ -1575,7 +1575,6 @@ MonoBehaviour:
   SelectingOptionPanel: {fileID: 1147202719}
   MonsterPrefab: {fileID: 6279707494984726908, guid: 0402c08ef8937b7449d5fd014fea9f3f, type: 3}
   floatyNumberPrefab: {fileID: 6881235438777132051, guid: b16fac3cac5a8f64aad7e4b67cacf25d, type: 3}
-  gameState: {fileID: 0}
   discardPile: {fileID: 1544393471}
   draggableLayer:
     serializedVersion: 2
@@ -4440,7 +4439,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3cc1729574a9b64ba96ccb4ad260f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1551016604}
 --- !u!114 &464253457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4454,7 +4452,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 464253456}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -14468,6 +14467,9 @@ MonoBehaviour:
   betweenRoundPanel: {fileID: 48160604}
   doneButton: {fileID: 952676748}
   currentDungeonIndex: 1
+  startRoundEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1232887079
 Transform:
   m_ObjectHideFlags: 0
@@ -18178,6 +18180,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OwnedGemsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  startRunEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1551016605

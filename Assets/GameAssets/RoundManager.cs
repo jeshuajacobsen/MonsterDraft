@@ -10,7 +10,6 @@ public class RoundManager : MonoBehaviour
     public GameObject roundPanel;
     public GameObject gemStorePanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
-    [SerializeField] private SkillVisualEffect SkillVisualEffectPrefab;
     [SerializeField] private OptionButton optionButtonPrefab;
     public GameObject handContent;
     public GameObject DungeonPanel;
@@ -79,18 +78,28 @@ public class RoundManager : MonoBehaviour
     public List<Card> cardsGainedThisRound = new List<Card>();
     public DungeonLevelData currentDungeonLevel;
 
-    public List<VisualEffect> effects;
-    public GameObject fireballPanel;
-    public List<VisualEffect> visualEffects = new List<VisualEffect>();
+    public List<SkillVisualEffect> skillVisualEffects;
+    public List<CardVisualEffect> cardVisualEffects = new List<CardVisualEffect>();
     public List<PersistentEffect> persistentEffects = new List<PersistentEffect>();
 
     private GameManager _gameManager;
+    private RunManager _runManager;
     private DiContainer _container;
 
+    private SkillVisualEffect.Factory _skillVisualEffectFactory;
+    private CardVisualEffect.Factory _cardVisualEffectFactory;
+
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, 
+                          RunManager runManager, 
+                          SkillVisualEffect.Factory skillVisualEffectFactory,
+                          CardVisualEffect.Factory cardVisualEffectFactory,
+                          DiContainer container)
     {
         _gameManager = gameManager;
+        _runManager = runManager;
+        _skillVisualEffectFactory = skillVisualEffectFactory;
+        _cardVisualEffectFactory = cardVisualEffectFactory;
         _container = container;
     }
 
@@ -101,6 +110,7 @@ public class RoundManager : MonoBehaviour
 
     public void Start()
     {
+        _runManager.startRoundEvent.AddListener(StartRound);
         roundPanel.transform.Find("BoostMenuButton").GetComponent<Button>().onClick.AddListener(() => {
             if (roundPanel.transform.Find("BoostsPanel").gameObject.activeSelf)
             {
@@ -123,11 +133,18 @@ public class RoundManager : MonoBehaviour
 
     public void Update()
     {
-        foreach (var visualEffect in visualEffects)
+        foreach (var visualEffect in skillVisualEffects)
         {
             visualEffect.Update();
         }
-        visualEffects.RemoveAll(effect => effect.done);
+        skillVisualEffects.RemoveAll(effect => effect == null || !effect.gameObject.activeSelf);
+
+        foreach (var visualEffect in cardVisualEffects)
+        {
+            visualEffect.Update();
+        }
+        cardVisualEffects.RemoveAll(effect => effect == null || !effect.gameObject.activeSelf);
+
         try
         {
             if (gameState != null)
@@ -371,9 +388,9 @@ public class RoundManager : MonoBehaviour
     {
         Mana -= skill.ManaCost;
         int damage = DamageDealtToMonster(tile.monster, monster, skill);
-        SkillVisualEffect skillEffect = Instantiate(SkillVisualEffectPrefab, roundPanel.transform);
+        SkillVisualEffect skillEffect = _skillVisualEffectFactory.Create();
         skillEffect.Initialize(monster.tileOn.transform.position, tile.transform.position, skill.attackVisualEffect);
- 
+
         skillEffect.reachedTarget.AddListener(() => {
             skillEffect.reachedTarget.RemoveAllListeners();
             tile.monster.Health -= damage;
@@ -389,7 +406,7 @@ public class RoundManager : MonoBehaviour
         foreach (Tile target in targets)
         {
             int damage = DamageDealtToMonster(target.monster, monster, skill);
-            SkillVisualEffect skillEffect = Instantiate(SkillVisualEffectPrefab, roundPanel.transform);
+            SkillVisualEffect skillEffect = _skillVisualEffectFactory.Create();
             skillEffect.Initialize(monster.tileOn.transform.position, target.transform.position, skill.attackVisualEffect);
     
             skillEffect.reachedTarget.AddListener(() => {
@@ -410,7 +427,7 @@ public class RoundManager : MonoBehaviour
 
         if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
         {
-            RunManager.instance.EndRound(cardsGainedThisRound);
+            _runManager.EndRound(cardsGainedThisRound);
             cardsGainedThisRound.Clear();
         }
     }
@@ -450,7 +467,7 @@ public class RoundManager : MonoBehaviour
                 monster.actionsUsedThisTurn.Add(skill.name);
                 if (PlayerBase.GetComponent<PlayerBase>().Health <= 0)
                 {
-                    RunManager.instance.EndRoundLose();
+                    _runManager.EndRoundLose();
                 }
                 break;
             }
@@ -745,34 +762,30 @@ public class RoundManager : MonoBehaviour
     }
 
 //TODO fix this fireball animation
-    public VisualEffect AddVisualEffect(string effectName, Tile target)
+    public CardVisualEffect AddCardVisualEffect(string effectName, Tile target)
     {
+        CardVisualEffect cardEffect = _cardVisualEffectFactory.Create();
+        
         if (effectName == "Fireball")
         {
             if (target.monster.team == "Enemy")
             {
-                VisualEffect effect = new VisualEffect();
-                effect.Initialize(fireballPanel, 
-                                  new Vector2(-1700, Screen.height / 2 + 600), 
-                                  target);
-                fireballPanel.transform.rotation = Quaternion.Euler(0, 0, 90f);
-                visualEffects.Add(effect);
-                effect.reachedTarget.AddListener(() => {
-                    effect.reachedTarget.RemoveAllListeners();
+                cardEffect.Initialize(new Vector2(-1700, Screen.height / 2 + 600), target.transform.position, effectName);
+                cardEffect.transform.rotation = Quaternion.Euler(0, 0, 90f);
+                cardVisualEffects.Add(cardEffect);
+                cardEffect.reachedTarget.AddListener(() => {
+                    cardEffect.reachedTarget.RemoveAllListeners();
                 });
-                return effect;
+                return cardEffect;
             } else
             {
-                VisualEffect effect = new VisualEffect();
-                effect.Initialize(fireballPanel, 
-                                  new Vector2(1700, Screen.height / 2  + 600), 
-                                  target);
-                fireballPanel.transform.rotation = Quaternion.Euler(0, 180f, 90f);
-                visualEffects.Add(effect);
-                effect.reachedTarget.AddListener(() => {
-                    effect.reachedTarget.RemoveAllListeners();
+                cardEffect.Initialize(new Vector2(1700, Screen.height / 2 + 600), target.transform.position, effectName);
+                cardEffect.transform.rotation = Quaternion.Euler(0, 180f, 90f);
+                cardVisualEffects.Add(cardEffect);
+                cardEffect.reachedTarget.AddListener(() => {
+                    cardEffect.reachedTarget.RemoveAllListeners();
                 });
-                return effect;
+                return cardEffect;
             }
         }
         return null;
@@ -807,7 +820,7 @@ public class RoundManager : MonoBehaviour
         }
         foreach (string option in options)
         {
-            OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
+            OptionButton optionButton = _container.InstantiatePrefabForComponent<OptionButton>(optionButtonPrefab, buttonSection);
             optionButton.Initialize(option, displayCards, gameState);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
         }
@@ -845,7 +858,7 @@ public class RoundManager : MonoBehaviour
         }
         foreach (string option in options)
         {
-            OptionButton optionButton = Instantiate(optionButtonPrefab, buttonSection);
+            OptionButton optionButton = _container.InstantiatePrefabForComponent<OptionButton>(optionButtonPrefab, buttonSection);
             optionButton.Initialize(option, new List<Card>(), gameState);
             optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
         }

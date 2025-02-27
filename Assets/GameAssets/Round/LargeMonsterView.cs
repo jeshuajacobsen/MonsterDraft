@@ -12,11 +12,13 @@ public class LargeMonsterView : MonoBehaviour
     public Monster monster; 
 
     private GameManager _gameManager;
+    private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(GameManager gameManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
+        _spriteManager = spriteManager;
     }
 
     void Start()
@@ -35,7 +37,7 @@ public class LargeMonsterView : MonoBehaviour
         this.monster = monster;
         // Basic UI updates
         transform.Find("MonsterName").GetComponent<TextMeshProUGUI>().text = monster.name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(monster.name);
+        transform.Find("Image").GetComponent<Image>().sprite = _spriteManager.GetSprite(monster.name);
         
         transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = monster.ManaCost.ToString();
         transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = monster.Attack.ToString();
@@ -77,7 +79,7 @@ public class LargeMonsterView : MonoBehaviour
     public void SetMonsterFromBaseData(BaseMonsterData monster, Vector2 pointerPosition)
     {
         transform.Find("MonsterName").GetComponent<TextMeshProUGUI>().text = monster.name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(monster.name);
+        transform.Find("Image").GetComponent<Image>().sprite = _spriteManager.GetSprite(monster.name);
         
         transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().text = monster.ManaCost.ToString();
         transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().text = monster.Attack.ToString();

@@ -113,9 +113,9 @@ public class EnemyPhase : GameState
                 return;
             }
 
+            CardVisualEffect visualEffect = null;
             int damageDealt = 0;
             Monster target = targets[Random.Range(0, targets.Count)];
-            VisualEffect visualEffect = null;
             for (int i = 1; i < actionCard.Effects.Count; i++)
             {
                 string[] effectParts = actionCard.Effects[i].Split(' ');
@@ -124,12 +124,15 @@ public class EnemyPhase : GameState
                     if (visualEffect != null)
                     {
                         visualEffect.reachedTarget.AddListener(() => {
+                            visualEffect.reachedTarget.RemoveAllListeners();
                             target.Health -= int.Parse(effectParts[1]);
                             _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                         });
                     } else {
                         target.Health -= int.Parse(effectParts[1]);
+                        _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                     }
+                    
                 } else if (effectParts[0] == "Heal")
                 {
                     int heal = int.Parse(effectParts[1]);
@@ -158,7 +161,7 @@ public class EnemyPhase : GameState
                 {
                     if (effectParts[1] == "Fireball")
                     {
-                        visualEffect = _roundManager.AddVisualEffect("Fireball", target.tileOn);
+                        visualEffect = _roundManager.AddCardVisualEffect("Fireball", target.tileOn);
                     }
                 }
             }

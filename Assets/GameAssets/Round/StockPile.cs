@@ -16,13 +16,15 @@ public class StockPile : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private SpriteManager _spriteManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, SpriteManager spriteManager, DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _spriteManager = spriteManager;
         _container = container;
     }
 
@@ -61,7 +63,7 @@ public class StockPile : MonoBehaviour
         transform.Find("QuantityBackgroundImage").Find("QuantityText").GetComponent<TextMeshProUGUI>().text = stockLeft.ToString();
         this.Cost = this.card.CoinCost;
         transform.Find("CostBackgroundImage").Find("CostText").GetComponent<TextMeshProUGUI>().text = this.Cost.ToString();
-        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(name);
+        transform.Find("CardImage").GetComponent<Image>().sprite = _spriteManager.GetSprite(name);
     }
 
     private void BuyCard()

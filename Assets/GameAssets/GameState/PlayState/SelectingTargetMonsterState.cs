@@ -35,32 +35,27 @@ public class SelectingTargetMonsterState : CardPlayState
         bool pointerDown = false;
         Vector2 pointerPosition = Vector2.zero;
 
-        // 1) Check for mouse click
         if (Input.GetMouseButtonDown(0))
         {
             pointerDown = true;
             pointerPosition = Input.mousePosition;
         }
-        // 2) Check for touch begin
         else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             pointerDown = true;
             pointerPosition = Input.GetTouch(0).position;
         }
 
-        // 3) If pointer went down, do the selection check
         if (pointerDown)
         {
             for (int i = 0; i < validTargets.Count; i++)
             {
                 RectTransform targetRect = validTargets[i].GetComponent<RectTransform>();
 
-                // If pointer is over this tile's RectTransform
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
                 {
                     mainPhase.selectedTile = validTargets[i];
                     mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
-                    // If you only want to select a single tile, break after setting state
                     break;
                 }
             }

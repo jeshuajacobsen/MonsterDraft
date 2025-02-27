@@ -20,13 +20,15 @@ public class SmallCardView : MonoBehaviour
     private Canvas originalCanvas;
 
     private GameManager _gameManager;
+    private SpriteManager _spriteManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, SpriteManager spriteManager, DiContainer container)
     {
         _gameManager = gameManager;
         _container = container;
+        _spriteManager = spriteManager;
     }
 
     void Start()
@@ -143,7 +145,7 @@ public class SmallCardView : MonoBehaviour
     {
         this.card = card;
         transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = card.Name;
-        transform.Find("CardImage").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
+        transform.Find("CardImage").GetComponent<Image>().sprite = _spriteManager.GetSprite(card.Name);
         if (card is MonsterCard)
         {
             transform.Find("CardTypeText").GetComponent<TextMeshProUGUI>().text = "Monster";

@@ -12,11 +12,13 @@ public class LargeCardView : MonoBehaviour
     public Card card;
 
     private GameManager _gameManager;
+    private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(GameManager gameManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
+        _spriteManager = spriteManager;
     }
 
     void Start()
@@ -34,7 +36,7 @@ public class LargeCardView : MonoBehaviour
     {
         this.card = card;
         transform.Find("CardName").GetComponent<TextMeshProUGUI>().text = card.Name;
-        transform.Find("Image").GetComponent<Image>().sprite = SpriteManager.instance.GetSprite(card.Name);
+        transform.Find("Image").GetComponent<Image>().sprite = _spriteManager.GetSprite(card.Name);
         transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().text = card.CoinCost.ToString();
 
         RectTransform rectTransform = GetComponent<RectTransform>();
