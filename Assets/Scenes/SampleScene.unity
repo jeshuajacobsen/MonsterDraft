@@ -1566,13 +1566,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundPanel: {fileID: 1603265254}
-  gemStorePanel: {fileID: 1125455585}
   SmallCardViewPrefab: {fileID: 7487615780272366053, guid: 5a74fd9e6f218f3438ef5f2888dea81c, type: 3}
-  SkillVisualEffectPrefab: {fileID: 4848713655441817405, guid: 0414cb7bbe543c044ab33cdba18a1c50, type: 3}
-  optionButtonPrefab: {fileID: 2296903141565680520, guid: c27ba5bb4921dbe4b8bd59c1f825e890, type: 3}
   handContent: {fileID: 751029101}
-  DungeonPanel: {fileID: 777580240}
-  SelectingOptionPanel: {fileID: 1147202719}
   MonsterPrefab: {fileID: 6279707494984726908, guid: 0402c08ef8937b7449d5fd014fea9f3f, type: 3}
   floatyNumberPrefab: {fileID: 6881235438777132051, guid: b16fac3cac5a8f64aad7e4b67cacf25d, type: 3}
   discardPile: {fileID: 1544393471}
@@ -1584,7 +1579,6 @@ MonoBehaviour:
   dungeonRow2: {fileID: 1283951561}
   dungeonRow3: {fileID: 1331802458}
   DeckDiscardPanel: {fileID: 739858336}
-  monsterOptionPanel: {fileID: 619538268}
   EnemyBase: {fileID: 546164430}
   PlayerBase: {fileID: 327850610}
   largeMonsterView1: {fileID: 606385593}
@@ -1594,7 +1588,8 @@ MonoBehaviour:
   cancelButton: {fileID: 794702217}
   isGainingCard: 0
   messageText: {fileID: 669442317}
-  fireballPanel: {fileID: 1537645601}
+  skillVisualEffects: []
+  cardVisualEffects: []
 --- !u!4 &129315357
 Transform:
   m_ObjectHideFlags: 0
@@ -1818,7 +1813,6 @@ GameObject:
   - component: {fileID: 154570384}
   - component: {fileID: 154570383}
   - component: {fileID: 154570382}
-  - component: {fileID: 154570385}
   m_Layer: 5
   m_Name: DungeonButton
   m_TagString: Untagged
@@ -1928,19 +1922,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 154570380}
   m_CullTransparentMesh: 1
---- !u!114 &154570385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 154570380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f5be20193bef064b9781d090f8c7351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tabName: Dungeon
 --- !u!224 &170375970 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4640191048356271102, guid: faf52364e0da86e44a85e9fa3f2c3969, type: 3}
@@ -4439,6 +4420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3cc1729574a9b64ba96ccb4ad260f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillVisualEffectPrefab: {fileID: 4848713655441817405, guid: 0414cb7bbe543c044ab33cdba18a1c50, type: 3}
+  cardVisualEffectPrefab: {fileID: 2216814549277630331, guid: 4af774bf740683c4cb562ee92624332c, type: 3}
 --- !u!114 &464253457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13390,6 +13373,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159311338}
   m_CullTransparentMesh: 1
+--- !u!1 &1178267206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1178267208}
+  - component: {fileID: 1178267207}
+  m_Layer: 5
+  m_Name: RoundUIManger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1178267207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178267206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b18ce2d1c1502445bffb3794a5369fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 519420031}
+  roundPanel: {fileID: 1603265254}
+  gemStorePanel: {fileID: 1125455585}
+  boostsPanel: {fileID: 1672232274}
+  dungeonPanel: {fileID: 777580240}
+  townPanel: {fileID: 1458482066}
+  selectingOptionPanel: {fileID: 1147202719}
+  monsterOptionPanel: {fileID: 619538268}
+  turnOptionsPanel: {fileID: 414696987}
+  DeckDiscardPanel: {fileID: 739858336}
+  doneButton: {fileID: 1543829577}
+  cancelButton: {fileID: 794702217}
+  messageText: {fileID: 669442317}
+  optionButtonPrefab: {fileID: 2296903141565680520, guid: c27ba5bb4921dbe4b8bd59c1f825e890, type: 3}
+  SmallCardViewPrefab: {fileID: 7487615780272366053, guid: 5a74fd9e6f218f3438ef5f2888dea81c, type: 3}
+--- !u!224 &1178267208
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178267206}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -10.6382, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1178270882
 GameObject:
   m_ObjectHideFlags: 0
@@ -17451,104 +17497,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532458661}
   m_CullTransparentMesh: 1
---- !u!1 &1537645601
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1537645602}
-  - component: {fileID: 1537645605}
-  - component: {fileID: 1537645604}
-  - component: {fileID: 1537645603}
-  m_Layer: 5
-  m_Name: Fireball
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1537645602
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537645601}
-  m_LocalRotation: {x: -0.01619602, y: 0.015837524, z: 0.7147919, w: 0.69897026}
-  m_LocalPosition: {x: 0, y: 0, z: 1.2497}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1603265255}
-  m_LocalEulerAnglesHint: {x: -2.595, y: -0.058, z: 91.284}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1926.3668, y: 239.33337}
-  m_SizeDelta: {x: -3112.669, y: -1265.6443}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1537645603
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537645601}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a465d57b8d9a64943bd53323217054d4, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1537645604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537645601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1537645605
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537645601}
-  m_CullTransparentMesh: 1
 --- !u!1 &1538777238
 GameObject:
   m_ObjectHideFlags: 0
@@ -18169,7 +18117,6 @@ MonoBehaviour:
   deckEditorPanel: {fileID: 877725854}
   cardImprovementPanel: {fileID: 343227909}
   SelectedCardImprovementPanel: {fileID: 504986735}
-  dungeonPanel: {fileID: 777580240}
   townPanel: {fileID: 1458482066}
   unlockedDungeonLevels: []
   largeCardView1: {fileID: 170375972}
@@ -18532,7 +18479,6 @@ RectTransform:
   - {fileID: 170375970}
   - {fileID: 677101854}
   - {fileID: 87787941}
-  - {fileID: 1537645602}
   - {fileID: 1672232275}
   - {fileID: 619538269}
   m_Father: {fileID: 1202905739}
@@ -21643,7 +21589,6 @@ GameObject:
   - component: {fileID: 2053796045}
   - component: {fileID: 2053796044}
   - component: {fileID: 2053796043}
-  - component: {fileID: 2053796046}
   m_Layer: 5
   m_Name: TownButton
   m_TagString: Untagged
@@ -21753,19 +21698,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2053796041}
   m_CullTransparentMesh: 1
---- !u!114 &2053796046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053796041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f5be20193bef064b9781d090f8c7351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tabName: Town
 --- !u!1 &2054040081
 GameObject:
   m_ObjectHideFlags: 0
@@ -23142,6 +23074,7 @@ SceneRoots:
   - {fileID: 1551016605}
   - {fileID: 1232887079}
   - {fileID: 129315357}
+  - {fileID: 1178267208}
   - {fileID: 1184803088}
   - {fileID: 440160917}
   - {fileID: 464253458}

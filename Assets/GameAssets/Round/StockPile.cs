@@ -16,14 +16,20 @@ public class StockPile : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, SpriteManager spriteManager, DiContainer container)
+    public void Construct(GameManager gameManager, 
+                          RoundManager roundManager, 
+                          PlayerStats playerStats,
+                          SpriteManager spriteManager, 
+                          DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _playerStats = playerStats;
         _spriteManager = spriteManager;
         _container = container;
     }
@@ -79,9 +85,9 @@ public class StockPile : MonoBehaviour
             }
         }
 
-        if (_roundManager.Coins >= Cost)
+        if (_playerStats.Coins >= Cost)
         {
-            _roundManager.Coins -= Cost;
+            _playerStats.Coins -= Cost;
 
             Card newCard = null;
 

@@ -8,14 +8,15 @@ public class OptionButton : MonoBehaviour
 {
     string effect;
     List<Card> cards;
-    GameState mainPhase;
 
     private RoundManager _roundManager;
+    private PlayerStats _playerStats;
 
     [Inject]
-    public void Construct(RoundManager roundManager)
+    public void Construct(RoundManager roundManager, PlayerStats playerStats)
     {
         _roundManager = roundManager;
+        _playerStats = playerStats;
     }
 
     void Start()
@@ -28,11 +29,10 @@ public class OptionButton : MonoBehaviour
         
     }
 
-    public void Initialize(string effect, List<Card> cards, GameState mainPhase)
+    public void Initialize(string effect, List<Card> cards)
     {
         this.effect = effect;
         this.cards = cards;
-        this.mainPhase = mainPhase;
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Coins")
         {
@@ -64,7 +64,7 @@ public class OptionButton : MonoBehaviour
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Coins")
         {
-            _roundManager.Coins += int.Parse(effectParts[1]);
+            _playerStats.Coins += int.Parse(effectParts[1]);
         } else if (effectParts[0] == "Draw")
         {
             for (int i = 0; i < int.Parse(effectParts[1]); i++)
@@ -73,7 +73,7 @@ public class OptionButton : MonoBehaviour
             }
         } else if (effectParts[0] == "Mana")
         {
-            _roundManager.Mana += int.Parse(effectParts[1]);
+            _playerStats.Mana += int.Parse(effectParts[1]);
         } else if (effectParts[0] == "Trash")
         {
             _roundManager.TrashCardsFromDeck(this.cards);
@@ -90,7 +90,7 @@ public class OptionButton : MonoBehaviour
         {
             foreach (Card card in cards)
             {
-                ((MainPhase)mainPhase).cardsToAutoPlay.Add(card);
+                ((MainPhase)_roundManager.gameState).cardsToAutoPlay.Add(card);
             }
         }
         

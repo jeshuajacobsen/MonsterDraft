@@ -33,7 +33,7 @@ public class Monster : MonoBehaviour
             {
                 if (team == "Enemy")
                 {
-                    _roundManager.Experience += this.experienceGiven;
+                    _playerStats.Experience += this.experienceGiven;
                 }
                 tileOn.monster = null;
                 if (_roundManager.largeMonsterView1.monster == this)
@@ -106,14 +106,20 @@ public class Monster : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, SpriteManager spriteManager, DiContainer container)
+    public void Construct(GameManager gameManager, 
+                          RoundManager roundManager, 
+                          PlayerStats playerStats,
+                          SpriteManager spriteManager, 
+                          DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _playerStats = playerStats;
         _spriteManager = spriteManager;
         _container = container;
     }
@@ -132,7 +138,7 @@ public class Monster : MonoBehaviour
 
     void Update()
     {
-        if (team == "Ally" && !string.IsNullOrEmpty(evolvesTo) && _roundManager.Experience >= experienceRequired)
+        if (team == "Ally" && !string.IsNullOrEmpty(evolvesTo) && _playerStats.Experience >= experienceRequired)
         {
             transform.Find("EvolveButton").gameObject.SetActive(true);
         } else {
@@ -144,7 +150,7 @@ public class Monster : MonoBehaviour
     {
         MonsterCard monsterCard = _container.Instantiate<MonsterCard>();
         monsterCard.Initialize(evolvesTo, _gameManager.cardLevels[evolvesTo]);
-        _roundManager.Experience -= experienceRequired;
+        _playerStats.Experience -= experienceRequired;
         this.Initialize(monsterCard, tileOn, team);
     }
 

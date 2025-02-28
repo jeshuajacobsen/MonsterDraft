@@ -38,7 +38,31 @@ public class Card
         } 
     }
     public int BuyCardPrestigeCost { get; set; }
-    public List<string> OnGainEffects { get; set; }
+    private List<string> _onGainEffects;
+    public List<string> OnGainEffects  {
+        get 
+        {
+            List<string> modifiedEffects = new List<string>();
+            
+            foreach (var effect in _onGainEffects)
+            {
+                string currentEffect = effect;
+                if (this.EffectVariables != null)
+                {
+                    foreach (var effectVariable in this.EffectVariables)
+                    {
+                        currentEffect = currentEffect.Replace("{" + effectVariable.Key + "}", effectVariable.Value);
+                    }
+                }
+                modifiedEffects.Add(currentEffect);
+            }
+            return modifiedEffects;
+        }
+        set
+        {
+            _onGainEffects = value;
+        }
+    }
     private List<string> _effects;
     public List<string> Effects {
         get
@@ -100,7 +124,6 @@ public class Card
                 else if (Type == "Action")
                     variableChanges = _gameManager.gameData.GetActionData(Name).levelData[i].effectVariableChanges;
                 
-                Dictionary<string, string> modifiedEffectVariables = new Dictionary<string, string>();
                 if (variableChanges != null)
                 {
                     foreach (KeyValuePair<string, string> entry in variableChanges)

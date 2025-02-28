@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Zenject;
 
 public class ResolvingEffectState : CardPlayState
 {
@@ -27,7 +28,7 @@ public class ResolvingEffectState : CardPlayState
             string[] effectParts = mainPhase.playedCard.Effects[i].Split(' ');
             if (effectParts[0] == "Actions")
             {
-                _roundManager.Actions += int.Parse(effectParts[1]);
+                _playerStats.Actions += int.Parse(effectParts[1]);
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0]  == "Coins") 
             {
@@ -35,7 +36,7 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[2] == "Times")
                     {
-                        _roundManager.Coins += mainPhase.selectedCards.Count * int.Parse(effectParts[3]);
+                        _playerStats.Coins += mainPhase.selectedCards.Count * int.Parse(effectParts[3]);
                     }
                 } else {
                     int coins = int.Parse(effectParts[1]);
@@ -46,7 +47,7 @@ public class ResolvingEffectState : CardPlayState
                             coins *= mainPhase.treasuresPlayed;
                         }
                     }
-                    _roundManager.Coins += coins;
+                    _playerStats.Coins += coins;
                 }
                 mainPhase.playedActionCardStep++;
                 
@@ -58,19 +59,19 @@ public class ResolvingEffectState : CardPlayState
                     if (effectParts[3] == "Ally")
                     {
                         amount *= _roundManager.GetAllAllies().Count;
-                        _roundManager.Mana += amount;
+                        _playerStats.Mana += amount;
                     } else if (effectParts[3] == "Coins/2")
                     {
-                        amount = _roundManager.Coins / 2;
-                        _roundManager.Mana += amount;
+                        amount = _playerStats.Coins / 2;
+                        _playerStats.Mana += amount;
                     }
                 } else {
-                    _roundManager.Mana += amount;
+                    _playerStats.Mana += amount;
                 }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Experience")
             {
-                _roundManager.Experience += int.Parse(effectParts[1]);
+                _playerStats.Experience += int.Parse(effectParts[1]);
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Draw")
             {

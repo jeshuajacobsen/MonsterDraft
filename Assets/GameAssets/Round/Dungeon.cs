@@ -33,7 +33,7 @@ public class Dungeon
         {
             guaranteedMonsterTimer = 4;
             var guaranteedMonsterCard = _container.Instantiate<MonsterCard>();
-            guaranteedMonsterCard.Initialize(guaranteedMonster, _gameManager.cardLevels[guaranteedMonster]);
+            guaranteedMonsterCard.Initialize(guaranteedMonster, 1);
             return guaranteedMonsterCard;
         }
 
@@ -54,30 +54,32 @@ public class Dungeon
             {
                 string cardName = kvp.Key;
                 string type = _gameManager.gameData.GetCardType(cardName);
-                Card card = null;
-
-                switch (type)
+                if (type == "Monster")
                 {
-                    case "Monster":
-                        card = _container.Instantiate<MonsterCard>();
-                        card.Initialize(cardName, "Monster", _gameManager.cardLevels[cardName]);
-                        break;
-                    case "Action":
-                        card = _container.Instantiate<ActionCard>();
-                        card.Initialize(cardName, "Action", _gameManager.cardLevels[cardName]);
-                        break;
-                    case "Treasure":
-                        card = _container.Instantiate<TreasureCard>();
-                        card.Initialize(cardName, "Treasure", _gameManager.cardLevels[cardName]);
-                        break;
-                    case "Pass":
-                        break;
-                    default:
-                        Debug.LogWarning($"Unknown card type: {type}");
-                        break;
+                    MonsterCard card = _container.Instantiate<MonsterCard>();
+                    card.Initialize(cardName, 1);
+                    return card;
                 }
-
-                return card;
+                else if (type == "Action")
+                {
+                    ActionCard card = _container.Instantiate<ActionCard>();
+                    card.Initialize(cardName, 1);
+                    return card;
+                }
+                else if (type == "Treasure")
+                {
+                    TreasureCard card = _container.Instantiate<TreasureCard>();
+                    card.Initialize(cardName, 1);
+                    return card;
+                }
+                else if (type == "Pass")
+                {
+                    return null;
+                }
+                else
+                {
+                    Debug.LogWarning($"Unknown card type: {type}");
+                }
             }
         }
 

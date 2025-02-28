@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     public GameObject deckEditorPanel;
     public GameObject cardImprovementPanel;
     public GameObject SelectedCardImprovementPanel;
-    public GameObject dungeonPanel;
     public GameObject townPanel;
     public List<string> unlockedDungeonLevels;
 

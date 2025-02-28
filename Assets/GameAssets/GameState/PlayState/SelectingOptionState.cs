@@ -29,11 +29,11 @@ public class SelectingOptionState : CardPlayState
         Debug.Log("Selecting option State Entered");
         if (this.showCards)
         {
-            _roundManager.SetupOptionPanel(this.options, this.displayCards);
+            _uiManager.SetupOptionPanel(this.options, this.displayCards);
         }
         else
         {
-            _roundManager.SetupOptionPanel(this.options);
+            _uiManager.SetupOptionPanel(this.options);
         }
     }
 
@@ -49,6 +49,6 @@ public class SelectingOptionState : CardPlayState
     public override void ExitState()
     {
         Debug.Log("Exiting Selecting option State");
-        _roundManager.SelectingOptionPanel.SetActive(false);;
+        _uiManager.selectingOptionPanel.SetActive(false);;
     }
 }

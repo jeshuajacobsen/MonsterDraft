@@ -19,12 +19,10 @@ public class AutoPlayingMonsterState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Auto Playing Monster State Entered");
-        _roundManager.roundPanel.transform.Find("TownPanel").gameObject.SetActive(false);
-        _roundManager.roundPanel.transform.Find("DungeonPanel").gameObject.SetActive(true);
+        _uiManager.OpenDungeonPanel();
         MarkValidTargets();
         if (gemCost > 0)
         {
-            _roundManager.roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
             _roundManager.SetupBoostCancelButton(gemCost);
         } else {
             _roundManager.SetupDoneButton(false);
@@ -73,7 +71,7 @@ public class AutoPlayingMonsterState : CardPlayState
         {
             for (int tile = 1; tile <= 2; tile++)
             {
-                Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                Transform tileTransform = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                 if (tileTransform != null)
                 {
                     Tile tileComponent = tileTransform.GetComponent<Tile>();

@@ -6,12 +6,16 @@ public abstract class CardPlayState
     protected MainPhase mainPhase;
 
     protected RoundManager _roundManager;
+    protected RoundUIManager _uiManager;
     protected DiContainer _container;
+    protected PlayerStats _playerStats;
 
     [Inject]
-    public void Construct(RoundManager roundManager, DiContainer container)
+    public void Construct(RoundManager roundManager, PlayerStats playerStats, RoundUIManager uiManager, DiContainer container)
     {
         _roundManager = roundManager;
+        _playerStats = playerStats;
+        _uiManager = uiManager;
         mainPhase = (MainPhase)_roundManager.gameState;
         _container = container;
     }

@@ -8,12 +8,10 @@ using Zenject;
 public class RoundManager : MonoBehaviour
 {
     public GameObject roundPanel;
-    public GameObject gemStorePanel;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
-    [SerializeField] private OptionButton optionButtonPrefab;
+
     public GameObject handContent;
-    public GameObject DungeonPanel;
-    public GameObject SelectingOptionPanel;
+    
     public Monster MonsterPrefab;
     public FloatyNumber floatyNumberPrefab;
 
@@ -31,38 +29,6 @@ public class RoundManager : MonoBehaviour
     public Dungeon currentDungeon;
 
     [SerializeField] private GameObject DeckDiscardPanel;
-    public GameObject monsterOptionPanel;
-    private int _coins;
-    public int Coins { get { return _coins; } 
-        set { 
-            _coins = value; 
-            DeckDiscardPanel.transform.Find("CoinsImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
-        } 
-    }
-
-    private int _mana;
-    public int Mana { get { return _mana; } 
-        set { 
-            _mana = value; 
-            DeckDiscardPanel.transform.Find("ManaImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
-        } 
-    }
-
-    private int _actions;
-    public int Actions { get { return _actions; } 
-        set { 
-            _actions = value; 
-            DeckDiscardPanel.transform.Find("ActionsImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
-        } 
-    }
-
-    private int _Experience;
-    public int Experience { get { return _Experience; } 
-        set { 
-            _Experience = value; 
-            DeckDiscardPanel.transform.Find("ExperienceImage").Find("Text").GetComponent<TextMeshProUGUI>().text = value.ToString();
-        } 
-    }
 
     public GameObject EnemyBase;
     public GameObject PlayerBase;
@@ -84,6 +50,7 @@ public class RoundManager : MonoBehaviour
 
     private GameManager _gameManager;
     private RunManager _runManager;
+    private PlayerStats _playerStats;
     private DiContainer _container;
 
     private SkillVisualEffect.Factory _skillVisualEffectFactory;
@@ -92,12 +59,14 @@ public class RoundManager : MonoBehaviour
     [Inject]
     public void Construct(GameManager gameManager, 
                           RunManager runManager, 
+                          PlayerStats playerStats,
                           SkillVisualEffect.Factory skillVisualEffectFactory,
                           CardVisualEffect.Factory cardVisualEffectFactory,
                           DiContainer container)
     {
         _gameManager = gameManager;
         _runManager = runManager;
+        _playerStats = playerStats;
         _skillVisualEffectFactory = skillVisualEffectFactory;
         _cardVisualEffectFactory = cardVisualEffectFactory;
         _container = container;
@@ -111,24 +80,6 @@ public class RoundManager : MonoBehaviour
     public void Start()
     {
         _runManager.startRoundEvent.AddListener(StartRound);
-        roundPanel.transform.Find("BoostMenuButton").GetComponent<Button>().onClick.AddListener(() => {
-            if (roundPanel.transform.Find("BoostsPanel").gameObject.activeSelf)
-            {
-                roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
-                gemStorePanel.SetActive(false);
-                return;
-            }
-            roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(true);
-        });
-        roundPanel.transform.Find("BoostsPanel").Find("CloseButton").GetComponent<Button>().onClick.AddListener(() => {
-            roundPanel.transform.Find("BoostsPanel").gameObject.SetActive(false);
-        });
-        gemStorePanel.transform.Find("CloseButton").GetComponent<Button>().onClick.AddListener(() => {
-            gemStorePanel.SetActive(false);
-        });
-        roundPanel.transform.Find("BoostsPanel").Find("GemStoreButton").GetComponent<Button>().onClick.AddListener(() => {
-            gemStorePanel.SetActive(true);
-        });
     }
 
     public void Update()
@@ -139,6 +90,7 @@ public class RoundManager : MonoBehaviour
         }
         skillVisualEffects.RemoveAll(effect => effect == null || !effect.gameObject.activeSelf);
 
+        cardVisualEffects.RemoveAll(effect => effect == null || !effect.gameObject.activeSelf);
         foreach (var visualEffect in cardVisualEffects)
         {
             visualEffect.Update();
@@ -249,9 +201,9 @@ public class RoundManager : MonoBehaviour
 
     public void SwitchState(GameState newState)
     {
-        gameState?.ExitState(); // Exit the current state
+        gameState?.ExitState();
         gameState = newState;
-        gameState.EnterState(); // Enter the new state
+        gameState.EnterState();
     }
 
     public void EndTurn()
@@ -386,7 +338,7 @@ public class RoundManager : MonoBehaviour
 
     public void UseSkill(Monster monster, SkillData skill, Tile tile)
     {
-        Mana -= skill.ManaCost;
+        _playerStats.Mana -= skill.ManaCost;
         int damage = DamageDealtToMonster(tile.monster, monster, skill);
         SkillVisualEffect skillEffect = _skillVisualEffectFactory.Create();
         skillEffect.Initialize(monster.tileOn.transform.position, tile.transform.position, skill.attackVisualEffect);
@@ -402,7 +354,7 @@ public class RoundManager : MonoBehaviour
 
     public void UseAreaSkill(Monster monster, SkillData skill, List<Tile> targets)
     {
-        Mana -= skill.ManaCost;
+        _playerStats.Mana -= skill.ManaCost;
         foreach (Tile target in targets)
         {
             int damage = DamageDealtToMonster(target.monster, monster, skill);
@@ -420,7 +372,7 @@ public class RoundManager : MonoBehaviour
 
     public void UseSkillOnBase(Monster monster, SkillData skill)
     {
-        Mana -= skill.ManaCost;
+        _playerStats.Mana -= skill.ManaCost;
         EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
         AddFloatyNumberOverBase(skill.Damage, true, true);
         monster.actionsUsedThisTurn.Add(skill.name);
@@ -435,7 +387,7 @@ public class RoundManager : MonoBehaviour
 
     public void SelectSkill(Monster monster, SkillData skill)
     {
-        if(skill.ManaCost <= Mana)
+        if(skill.ManaCost <= _playerStats.Mana)
         {
             gameState.SwitchPhaseState(_container.Instantiate<SelectingSkillTargetState>().Initialize(monster, skill));
         }
@@ -803,67 +755,6 @@ public class RoundManager : MonoBehaviour
         floatyNumber.Initialize(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
     }
 
-    public void SetupOptionPanel(List<string> options, List<Card> displayCards)
-    {
-        SelectingOptionPanel.SetActive(true);
-        Transform cardSection = SelectingOptionPanel.transform.Find("CardSection");
-        Transform buttonSection = SelectingOptionPanel.transform.Find("ButtonSection");
-        Transform noCardsText = SelectingOptionPanel.transform.Find("NoCardText");
-        noCardsText.gameObject.SetActive(false);
-        foreach (Transform child in cardSection)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (Transform child in buttonSection)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (string option in options)
-        {
-            OptionButton optionButton = _container.InstantiatePrefabForComponent<OptionButton>(optionButtonPrefab, buttonSection);
-            optionButton.Initialize(option, displayCards, gameState);
-            optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
-        }
-        if (displayCards.Count == 0)
-        {
-            cardSection.gameObject.SetActive(false);
-            noCardsText.gameObject.SetActive(true);
-            noCardsText.GetComponent<TextMeshProUGUI>().text = "No cards found.";
-        } else {
-            cardSection.gameObject.SetActive(true);
-            noCardsText.gameObject.SetActive(false);
-            foreach (Card card in displayCards)
-            {
-                SmallCardView cardView = _container.InstantiatePrefabForComponent<SmallCardView>(SmallCardViewPrefab, cardSection);
-                cardView.Initialize(card);
-            }
-        }
-    }
-
-    public void SetupOptionPanel(List<string> options)
-    {
-        SelectingOptionPanel.SetActive(true);
-        Transform cardSection = SelectingOptionPanel.transform.Find("CardSection");
-        Transform buttonSection = SelectingOptionPanel.transform.Find("ButtonSection");
-        Transform noCardsText = SelectingOptionPanel.transform.Find("NoCardText");
-        noCardsText.gameObject.SetActive(false);
-        cardSection.gameObject.SetActive(false);
-        foreach (Transform child in cardSection)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (Transform child in buttonSection)
-        {
-            Destroy(child.gameObject);
-        }
-        foreach (string option in options)
-        {
-            OptionButton optionButton = _container.InstantiatePrefabForComponent<OptionButton>(optionButtonPrefab, buttonSection);
-            optionButton.Initialize(option, new List<Card>(), gameState);
-            optionButton.GetComponent<Button>().onClick.AddListener(OnOptionSelected);
-        }
-    }
-
     public void TrashCardsFromDeck(List<Card> cards)
     {
         foreach (Card card in cards)
@@ -878,21 +769,6 @@ public class RoundManager : MonoBehaviour
         {
             roundDeck.Discard(card);
         }
-    }
-
-    public void OnOptionSelected()
-    {
-        SelectingOptionPanel.SetActive(false);
-        if (gameState is MainPhase)
-        {
-            if (((MainPhase)gameState).playedCard != null)
-            {
-                gameState.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
-            } else {
-                gameState.SwitchPhaseState(_container.Instantiate<ResolvingOnGainEffectState>());
-            }
-        }
-       
     }
 
     public void DestroyCard(SmallCardView card)

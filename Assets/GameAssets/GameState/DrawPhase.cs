@@ -18,7 +18,7 @@ public class DrawPhase : GameState
         {
             for (int tile = 1; tile <= 7; tile++)
             {
-                Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                Transform tileTransform = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                 Tile tileComponent = tileTransform.GetComponent<Tile>();
                 if (tileComponent.monster != null)
                 {

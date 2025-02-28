@@ -27,9 +27,9 @@ public class MainPhase : GameState
     public override void EnterState()
     {
         Debug.Log("Entering Main Phase");
-        _roundManager.Actions = 1;
-        _roundManager.Mana = 0;
-        _roundManager.Coins = 0;
+        _playerStats.Actions = 1;
+        _playerStats.Mana = 0;
+        _playerStats.Coins = 0;
         mainCamera = Camera.main;
         currentState = _container.Instantiate<IdleState>();
         currentState.EnterState();
@@ -43,7 +43,7 @@ public class MainPhase : GameState
         {
             for (int tile = 1; tile <= 7; tile++)
             {
-                Tile tileComponent = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}").GetComponent<Tile>();
+                Tile tileComponent = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}").GetComponent<Tile>();
                 if (tileComponent.monster != null)
                 {
                     List<MonsterBuff> buffsToRemove = new List<MonsterBuff>();
@@ -70,7 +70,7 @@ public class MainPhase : GameState
         {
             for (int i = 7; i >= 1; i--)
             {
-                Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                Tile tile = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                 if (tile.monster != null && tile.monster.team == "Ally" && _roundManager.CanMoveMonster(tile.monster))
                 {
                     _roundManager.MoveMonster(tile.monster);
@@ -82,20 +82,6 @@ public class MainPhase : GameState
     public override void UpdateState()
     {
         currentState.UpdateState();
-    }
-
-    public bool IsInsideOptionPanel(Vector3 position)
-    {
-        bool isInsideOptionPanel = RectTransformUtility.RectangleContainsScreenPoint(
-            _roundManager.monsterOptionPanel.GetComponent<RectTransform>(),
-            position,
-            mainCamera
-        );
-        if (_roundManager.monsterOptionPanel.gameObject.activeSelf && isInsideOptionPanel)
-        {
-            return true;
-        }
-        return false;
     }
 
     public void HandleMouseInDungeon(Vector2 mousePosition)
@@ -111,10 +97,10 @@ public class MainPhase : GameState
     public override void ExitState()
     {
         Debug.Log("Exiting Main Phase");
-        _roundManager.Actions = 0;
+        _playerStats.Actions = 0;
         _roundManager.DiscardHand();
-        _roundManager.Mana = 0;
-        _roundManager.Coins = 0;
+        _playerStats.Mana = 0;
+        _playerStats.Coins = 0;
         List<PersistentEffect> effectsToRemove = new List<PersistentEffect>();
         foreach (var effect in _roundManager.persistentEffects)
         {
@@ -137,7 +123,7 @@ public class MainPhase : GameState
         if (card is MonsterCard)
         {
             MonsterCard monsterCard = (MonsterCard)card;
-            if (monsterCard.ManaCost > _roundManager.Mana)
+            if (monsterCard.ManaCost > _playerStats.Mana)
             {
                 return false;
             }
@@ -145,7 +131,7 @@ public class MainPhase : GameState
             {
                 for (int tile = 1; tile <= 7; tile++)
                 {
-                    Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                    Transform tileTransform = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                     if (tileTransform != null && tileTransform.GetComponent<Collider2D>().bounds.Contains(position))
                     {
                         return true;
@@ -156,7 +142,7 @@ public class MainPhase : GameState
         if (card is ActionCard)
         {
             ActionCard actionCard = (ActionCard)card;
-            if (_roundManager.Actions > 0)
+            if (_playerStats.Actions > 0)
             {
                 return true;
             }
@@ -201,7 +187,7 @@ public class MainPhase : GameState
     {
         if (!autoPlaying && playedCard is ActionCard)
         {
-            _roundManager.Actions--;
+            _playerStats.Actions--;
         }
         playedActionCardStep = 0;
         playedCard = null;
@@ -229,8 +215,8 @@ public class MainPhase : GameState
     public void PlayTreasureCard(TreasureCard treasureCard)
     {
         treasuresPlayed++;
-        _roundManager.Coins += treasureCard.CoinGeneration;
-        _roundManager.Mana += treasureCard.ManaGeneration;
+        _playerStats.Coins += treasureCard.CoinGeneration;
+        _playerStats.Mana += treasureCard.ManaGeneration;
         ScrollRect scrollRect = _roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
         if (treasureCard.Effects.Count > 0)
@@ -259,12 +245,13 @@ public class MainPhase : GameState
         CardVisualEffect visualEffect = null;
         if (cardView.card is MonsterCard)
         {
-            _roundManager.Mana -= ((MonsterCard)cardView.card).ManaCost;
+            _playerStats.Mana -= ((MonsterCard)cardView.card).ManaCost;
             PlayMonster((MonsterCard)cardView.card, target);
         }
         else if (cardView.card is ActionCard)
         {
             ActionCard actionCard = (ActionCard)cardView.card;
+            playedCard = actionCard;
             for (int i = playedActionCardStep; i < actionCard.Effects.Count; i++)
             {
                 string[] effectParts = actionCard.Effects[i].Split(' ');
@@ -337,10 +324,7 @@ public class MainPhase : GameState
     {
         if (tile.monster != null && !tile.monster.IsOnInfoButton(pointerPosition))
         {
-            _roundManager.monsterOptionPanel.SetActive(true);
-            _roundManager.monsterOptionPanel
-                .GetComponent<MonsterOptionsPanel>()
-                .SetActiveTile(tile, pointerPosition);
+            _uiManager.OpenMonsterOptionPanel(tile, pointerPosition);
         }
     }
 

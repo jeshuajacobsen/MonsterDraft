@@ -13,6 +13,8 @@ public class GameInstaller : MonoInstaller
         Container.Bind<RoundManager>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<RunManager>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<SpriteManager>().FromComponentInHierarchy().AsSingle().NonLazy();
+        Container.Bind<PlayerStats>().AsSingle();
+        Container.Bind<RoundUIManager>().FromComponentInHierarchy().AsSingle();
 
         Container.BindFactory<SkillVisualEffect, SkillVisualEffect.Factory>()
             .FromComponentInNewPrefab(skillVisualEffectPrefab);

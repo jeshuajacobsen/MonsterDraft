@@ -17,7 +17,7 @@ public class EnemyPhase : GameState
         {
             for (int i = 1; i <= 7; i++)
             {
-                Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                Tile tile = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                 if (tile.monster != null && tile.monster.team == "Enemy")
                 {
                     Monster currentMonster = tile.monster;
@@ -59,7 +59,7 @@ public class EnemyPhase : GameState
             {
                 for (int i = 6; i <= 7; i++)
                 {
-                    Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                    Tile tile = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                     if (tile.monster == null)
                     {
                         openTiles.Add(tile);
@@ -84,7 +84,7 @@ public class EnemyPhase : GameState
                     {
                         for (int i = 1; i <= 7; i++)
                         {
-                            Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                            Tile tile = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                             if (tile.monster != null && tile.monster.team == "Ally")
                             {
                                 targets.Add(tile.monster);
@@ -98,7 +98,7 @@ public class EnemyPhase : GameState
                     {
                         for (int i = 1; i <= 7; i++)
                         {
-                            Tile tile = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                            Tile tile = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
                             if (tile.monster != null && tile.monster.team == "Enemy")
                             {
                                 targets.Add(tile.monster);
@@ -124,7 +124,6 @@ public class EnemyPhase : GameState
                     if (visualEffect != null)
                     {
                         visualEffect.reachedTarget.AddListener(() => {
-                            visualEffect.reachedTarget.RemoveAllListeners();
                             target.Health -= int.Parse(effectParts[1]);
                             _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                         });

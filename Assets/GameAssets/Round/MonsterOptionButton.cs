@@ -11,11 +11,15 @@ public class MonsterOptionButton : MonoBehaviour
     private Monster monster;
     
     private RoundManager _roundManager;
+    private RoundUIManager _uiManager;
+    private PlayerStats _playerStats;
 
     [Inject]
-    public void Construct(RoundManager roundManager)
+    public void Construct(RoundManager roundManager, RoundUIManager uiManager, PlayerStats playerStats)
     {
         _roundManager = roundManager;
+        _uiManager = uiManager;
+        _playerStats = playerStats;
     }
 
     void Start()
@@ -52,7 +56,7 @@ public class MonsterOptionButton : MonoBehaviour
             SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
             skillDirections.SetDirections(monster.skill1.directions);
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-            if (_roundManager.Mana >= monster.skill1.ManaCost && 
+            if (_playerStats.Mana >= monster.skill1.ManaCost && 
                 monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
                 if (_roundManager.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
@@ -70,7 +74,7 @@ public class MonsterOptionButton : MonoBehaviour
             SkillDirections skillDirections = transform.Find("SkillDirections/Panel").GetComponent<SkillDirections>();
             skillDirections.SetDirections(monster.skill2.directions);
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
-            if (_roundManager.Mana >= monster.skill2.ManaCost && 
+            if (_playerStats.Mana >= monster.skill2.ManaCost && 
                 monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
                 if (_roundManager.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
@@ -88,16 +92,20 @@ public class MonsterOptionButton : MonoBehaviour
 
     public void OnClick()
     {
+        if (!transform.GetComponent<Button>().interactable)
+        {
+            return;
+        }
+
         if (option == "Skill1")
         {
-
             _roundManager.SelectSkill(monster, monster.skill1);
-            _roundManager.monsterOptionPanel.gameObject.SetActive(false);
+            _uiManager.CloseMonsterOptionPanel();
         }
         else if (option == "Skill2")
         {
             _roundManager.SelectSkill(monster, monster.skill2);
-            _roundManager.monsterOptionPanel.gameObject.SetActive(false);
+            _uiManager.CloseMonsterOptionPanel();
         }
     }
 }

@@ -11,13 +11,17 @@ public class BoostButton : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private RoundUIManager _uiManager;
+    private PlayerStats _playerStats;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, RoundUIManager uiManager, PlayerStats playerStats, DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _uiManager = uiManager;
+        _playerStats = playerStats;
         _container = container;
     }
 
@@ -50,7 +54,7 @@ public class BoostButton : MonoBehaviour
             {
                 for (int tile = 1; tile <= 2; tile++)
                 {
-                    Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                    Transform tileTransform = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                     if (tileTransform != null)
                     {
                         Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -77,7 +81,7 @@ public class BoostButton : MonoBehaviour
         }
         else if (boostName == "Coins")
         {
-            _roundManager.Coins += 5;
+            _playerStats.Coins += 5;
         }
         else if (boostName == "Draw")
         {
@@ -91,7 +95,7 @@ public class BoostButton : MonoBehaviour
         }
         else if (boostName == "Mana")
         {
-            _roundManager.Mana += 5;
+            _playerStats.Mana += 5;
         }
 
         _gameManager.Gems -= gemCost;

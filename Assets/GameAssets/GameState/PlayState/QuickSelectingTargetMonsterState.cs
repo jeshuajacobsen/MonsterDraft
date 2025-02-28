@@ -74,7 +74,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
                     {
                         for (int tile = 1; tile <= 7; tile++)
                         {
-                            Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                            Transform tileTransform = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                             if (tileTransform != null)
                             {
                                 Tile tileComponent = tileTransform.GetComponent<Tile>();
@@ -92,7 +92,7 @@ public class QuickSelectingTargetMonsterState : CardPlayState
                     {
                         for (int tile = 1; tile <= 7; tile++)
                         {
-                            Transform tileTransform = _roundManager.DungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
+                            Transform tileTransform = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{tile}");
                             if (tileTransform != null)
                             {
                                 Tile tileComponent = tileTransform.GetComponent<Tile>();

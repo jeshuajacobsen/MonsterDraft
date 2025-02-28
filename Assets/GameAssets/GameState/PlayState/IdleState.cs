@@ -56,13 +56,13 @@ public class IdleState : CardPlayState
 
         if (pointerDown)
         {
-            if (mainPhase.IsInsideOptionPanel(pointerPosition))
+            if (_uiManager.IsInMonsterOptionPanel(pointerPosition))
             {
                 return;
             }
             else
             {
-                _roundManager.monsterOptionPanel.gameObject.SetActive(false);
+                _uiManager.CloseMonsterOptionPanel();
 
                 foreach (var cardView in _roundManager.hand)
                 {
