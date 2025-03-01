@@ -59,13 +59,13 @@ public class ResolvingSkillEffectState : CardPlayState
                 {
                     if (effectParts[7] == "Ally")
                     {
-                        foreach (var ally in _roundManager.GetAllAllies())
+                        foreach (var ally in _dungeonManager.GetAllAllies())
                         {
                             ally.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                         }
                     } else if (effectParts[7] == "Enemy")
                     {
-                        foreach (var enemy in _roundManager.GetAllEnemies())
+                        foreach (var enemy in _dungeonManager.GetAllEnemies())
                         {
                             enemy.buffs.Add(new MonsterBuff(buffType, buffValue, buffDescription, duration));
                         }

@@ -55,11 +55,6 @@ public class DrawPhase : GameState
         Debug.LogError("Cards cannot be played during the Draw Phase!");
     }
 
-    public override void SelectTile(Tile tile, Vector2 position)
-    {
-        Debug.LogError("Tiles cannot be selected during the Draw Phase!");
-    }
-
     public override void SwitchPhaseState(CardPlayState newState)
     {
         currentState.ExitState();

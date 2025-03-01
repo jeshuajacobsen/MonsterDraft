@@ -19,9 +19,8 @@ public class SelectingCardsState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Selecting cards State Entered");
-        _roundManager.SetupDoneButton();
-        _roundManager.messageText.text = "Select " + numberToSelect + " cards";
-        _roundManager.messageText.gameObject.SetActive(true);
+        _uiManager.SetupDoneButton();
+        _uiManager.SetGameMessage("Select " + numberToSelect + " cards");
     }
 
     public override void HandleInput()
@@ -118,12 +117,10 @@ public class SelectingCardsState : CardPlayState
     public override void ExitState()
     {
         Debug.Log("Exiting Selecting cards State");
-        _roundManager.CleanupDoneButton();
+        _uiManager.CleanupDoneButton();
         selectedCards.ForEach(cardView => {
             cardView.GetComponent<Image>().color = Color.white;
         });
         mainPhase.selectedCards = selectedCards;
-        _roundManager.messageText.text = "";
-        _roundManager.messageText.gameObject.SetActive(false);
     }
 }

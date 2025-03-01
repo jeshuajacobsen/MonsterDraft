@@ -4,6 +4,15 @@ using Zenject;
 
 public class EnemyPhase : GameState
 {
+
+    protected DungeonManager _dungeonManager;
+
+    [Inject]
+    public void Construct(DungeonManager dungeonManager)
+    {
+        _dungeonManager = dungeonManager;
+    }
+
     public EnemyPhase() : base() { }
 
     static int StartPadding = 2;
@@ -46,7 +55,7 @@ public class EnemyPhase : GameState
             StartPadding--;
             return;
         }
-        Card card = _roundManager.currentDungeon.DrawCard();
+        Card card = _dungeonManager.currentDungeon.DrawCard();
         if (card != null)
         {
             card.level = 1;
@@ -191,11 +200,6 @@ public class EnemyPhase : GameState
         Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(_roundManager.MonsterPrefab, tile.transform);
         newMonster.Initialize(card, tile, "Enemy");
         tile.monster = newMonster;
-    }
-
-    public override void SelectTile(Tile tile, Vector2 position)
-    {
-        Debug.LogError("Tiles cannot be selected during the Draw Phase!");
     }
 
     public override void SwitchPhaseState(CardPlayState newState)

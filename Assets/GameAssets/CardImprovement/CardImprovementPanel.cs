@@ -5,16 +5,17 @@ using Zenject;
 
 public class CardImprovementPanel : MonoBehaviour
 {
-    public CardImprovementButton CardImprovementButtonPrefab;
+    private CardImprovementButton.Factory _cardImprovementButtonFactory;
 
     private GameManager _gameManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, CardImprovementButton.Factory cardImprovementButtonFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _container = container;
+        _cardImprovementButtonFactory = cardImprovementButtonFactory;
     }
 
     void Start()
@@ -63,7 +64,8 @@ public class CardImprovementPanel : MonoBehaviour
 
     private void AddCardToPanel(string panelName, string cardName, string cardType)
     {
-        CardImprovementButton cardImprovementButton = Instantiate(CardImprovementButtonPrefab, transform.Find(panelName));
+        CardImprovementButton cardImprovementButton = _cardImprovementButtonFactory.Create();
+        cardImprovementButton.transform.SetParent(transform.Find(panelName), false);
 
         if (cardType == "Monster")
         {

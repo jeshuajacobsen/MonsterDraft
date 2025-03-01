@@ -4,7 +4,6 @@ using Zenject;
 
 public class Dungeon
 {
-    private DungeonLevelData currentDungeonLevel;
     private Dictionary<string, int> cardProbabilities = new Dictionary<string, int>();
     private int guaranteedMonsterTimer = 3;
     private string guaranteedMonster;
@@ -21,7 +20,6 @@ public class Dungeon
 
     public void Initialize(DungeonLevelData currentDungeonLevel, int roundNumber)
     {
-        this.currentDungeonLevel = currentDungeonLevel;
         cardProbabilities = currentDungeonLevel.GetDungeonData(roundNumber).cardProbabilities;
         guaranteedMonster = currentDungeonLevel.GetDungeonData(roundNumber).guaranteedMonster;
     }

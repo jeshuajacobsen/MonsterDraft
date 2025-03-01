@@ -23,26 +23,10 @@ public class RoundManager : MonoBehaviour
     public LayerMask draggableLayer; 
 
     public List<SmallCardView> hand = new List<SmallCardView>();
-    public DungeonRow dungeonRow1;
-    public DungeonRow dungeonRow2;
-    public DungeonRow dungeonRow3;
-    public Dungeon currentDungeon;
 
     [SerializeField] private GameObject DeckDiscardPanel;
 
-    public GameObject EnemyBase;
-    public GameObject PlayerBase;
-    public LargeMonsterView largeMonsterView1;
-    public LargeMonsterView largeMonsterView2;
-    public LargeMonsterView largeMonsterView3;
-
-    public Button doneButton;
-    public Button cancelButton;
-    public bool isGainingCard = false;
-    public TextMeshProUGUI messageText;
-
     public List<Card> cardsGainedThisRound = new List<Card>();
-    public DungeonLevelData currentDungeonLevel;
 
     public List<SkillVisualEffect> skillVisualEffects;
     public List<CardVisualEffect> cardVisualEffects = new List<CardVisualEffect>();
@@ -50,6 +34,7 @@ public class RoundManager : MonoBehaviour
 
     private GameManager _gameManager;
     private RunManager _runManager;
+    private DungeonManager _dungeonManager;
     private PlayerStats _playerStats;
     private DiContainer _container;
 
@@ -59,6 +44,7 @@ public class RoundManager : MonoBehaviour
     [Inject]
     public void Construct(GameManager gameManager, 
                           RunManager runManager, 
+                          DungeonManager dungeonManager,
                           PlayerStats playerStats,
                           SkillVisualEffect.Factory skillVisualEffectFactory,
                           CardVisualEffect.Factory cardVisualEffectFactory,
@@ -66,6 +52,7 @@ public class RoundManager : MonoBehaviour
     {
         _gameManager = gameManager;
         _runManager = runManager;
+        _dungeonManager = dungeonManager;
         _playerStats = playerStats;
         _skillVisualEffectFactory = skillVisualEffectFactory;
         _cardVisualEffectFactory = cardVisualEffectFactory;
@@ -110,77 +97,27 @@ public class RoundManager : MonoBehaviour
         }
     }
 
-    public void SetupDoneButton(bool showCancel = true)
-    {
-        doneButton.gameObject.SetActive(true);
-        doneButton.onClick.RemoveAllListeners();
-        doneButton.onClick.AddListener(OnDoneButtonClicked);
-        
-        if (showCancel)
-        {
-            cancelButton.onClick.RemoveAllListeners();
-            cancelButton.gameObject.SetActive(true);
-            cancelButton.onClick.AddListener(OnCancelButtonClicked);
-        }
-    }
-
-    public void SetupBoostCancelButton(int gemCost)
-    {
-        cancelButton.gameObject.SetActive(true);
-        cancelButton.onClick.RemoveAllListeners();
-        if (cancelButton.onClick.GetPersistentEventCount() == 0)
-        {
-            cancelButton.onClick.AddListener(() => {
-                _gameManager.Gems += gemCost;
-                gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
-            });
-        }
-    }
-
-    public void CleanupDoneButton()
-    {
-        doneButton.onClick.RemoveAllListeners();
-        cancelButton.onClick.RemoveAllListeners();
-        doneButton.gameObject.SetActive(false);
-        cancelButton.gameObject.SetActive(false);
-    }
-
     public void OnDoneButtonClicked()
     {
         if (gameState is AutoPlayingMonsterState)
         {
             gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
-        } else {
+        }
+        else
+        {
             gameState.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
         }
     }
 
-    public void OnCancelButtonClicked()
+    public void RefundGemsAndReturnToIdle(int gemCost)
     {
-        MainPhase mainPhase = (MainPhase)gameState;
-        mainPhase.CancelFullPlay();
+        _gameManager.Gems += gemCost;
+        gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
-    public void StartRound(DungeonLevelData currentDungeonLevel, int roundNumber)
+    public void StartRound()
     {
-        this.currentDungeonLevel = currentDungeonLevel;
-        foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
-        {
-            foreach (Transform tileTransform in row.transform)
-            {
-                Tile tile = tileTransform.GetComponent<Tile>();
-                if (tile != null && tile.monster != null)
-                {
-                    Destroy(tile.monster.gameObject);
-                    tile.monster = null;
-                }
-            } 
-        }
-        //TODO adjust health based on dungeon level
-        PlayerBase.GetComponent<PlayerBase>().MaxHealth = 200;
-        EnemyBase.GetComponent<EnemyBase>().MaxHealth = 200;
-        PlayerBase.GetComponent<PlayerBase>().Health = PlayerBase.GetComponent<PlayerBase>().MaxHealth;
-        EnemyBase.GetComponent<EnemyBase>().Health = EnemyBase.GetComponent<EnemyBase>().MaxHealth;
+        cardsGainedThisRound.Clear();
         roundPanel.gameObject.SetActive(true);
         roundPanel.transform.Find("TownPanel").gameObject.SetActive(true);
         //TODO add guaranteed cards to dungeon data.
@@ -193,8 +130,7 @@ public class RoundManager : MonoBehaviour
         {
             AddCardToHand(card);
         }
-        currentDungeon = _container.Instantiate<Dungeon>();
-        currentDungeon.Initialize(currentDungeonLevel, roundNumber);
+        
         gameState = _container.Instantiate<MainPhase>();
         gameState.EnterState();
     }
@@ -369,20 +305,6 @@ public class RoundManager : MonoBehaviour
         }
         monster.actionsUsedThisTurn.Add(skill.name);
     }
-
-    public void UseSkillOnBase(Monster monster, SkillData skill)
-    {
-        _playerStats.Mana -= skill.ManaCost;
-        EnemyBase.GetComponent<EnemyBase>().Health -= skill.Damage;
-        AddFloatyNumberOverBase(skill.Damage, true, true);
-        monster.actionsUsedThisTurn.Add(skill.name);
-
-        if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
-        {
-            _runManager.EndRound(cardsGainedThisRound);
-            cardsGainedThisRound.Clear();
-        }
-    }
     
 
     public void SelectSkill(Monster monster, SkillData skill)
@@ -414,13 +336,8 @@ public class RoundManager : MonoBehaviour
             List<Tile> validTargets = GetValidTargetsForEnemy(monster, skill);
             if (currentTileNumber - i < 1)
             {
-                PlayerBase.GetComponent<PlayerBase>().Health -= skill.Damage;
-                AddFloatyNumberOverBase(skill.Damage, false, true);
+                _dungeonManager.DamagePlayerBase(skill.Damage);
                 monster.actionsUsedThisTurn.Add(skill.name);
-                if (PlayerBase.GetComponent<PlayerBase>().Health <= 0)
-                {
-                    _runManager.EndRoundLose();
-                }
                 break;
             }
             else if (validTargets.Count > 0)
@@ -679,40 +596,6 @@ public class RoundManager : MonoBehaviour
         return null;
     }
 
-    public List<Monster> GetAllAllies()
-    {
-        List<Monster> allies = new List<Monster>();
-        foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
-        {
-            foreach (Transform tileTransform in row.transform)
-            {
-                Tile tile = tileTransform.GetComponent<Tile>();
-                if (tile != null && tile.monster != null && tile.monster.team == "Ally")
-                {
-                    allies.Add(tile.monster);
-                }
-            }
-        }
-        return allies;
-    }
-
-    public List<Monster> GetAllEnemies()
-    {
-        List<Monster> enemies = new List<Monster>();
-        foreach (DungeonRow row in new DungeonRow[] { dungeonRow1, dungeonRow2, dungeonRow3 })
-        {
-            foreach (Transform tileTransform in row.transform)
-            {
-                Tile tile = tileTransform.GetComponent<Tile>();
-                if (tile != null && tile.monster != null && tile.monster.team == "Enemy")
-                {
-                    enemies.Add(tile.monster);
-                }
-            }
-        }
-        return enemies;
-    }
-
 //TODO fix this fireball animation
     public CardVisualEffect AddCardVisualEffect(string effectName, Tile target)
     {
@@ -751,8 +634,7 @@ public class RoundManager : MonoBehaviour
 
     public void AddFloatyNumberOverBase(int number, bool overEnemyBase, bool isDamage)
     {
-        FloatyNumber floatyNumber = Instantiate(floatyNumberPrefab, overEnemyBase ? EnemyBase.transform : PlayerBase.transform);
-        floatyNumber.Initialize(number, overEnemyBase ? EnemyBase.transform.position : PlayerBase.transform.position, isDamage);
+
     }
 
     public void TrashCardsFromDeck(List<Card> cards)

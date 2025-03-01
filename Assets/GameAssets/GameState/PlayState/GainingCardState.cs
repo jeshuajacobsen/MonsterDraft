@@ -21,10 +21,9 @@ public class GainingCardState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Gaining card State Entered");
-        _roundManager.isGainingCard = true;
-        _roundManager.messageText.text = "Select a " + (restriction == "None" ? "" : restriction) +" card to gain costing up to " + cost + " coins";
-        _roundManager.messageText.gameObject.SetActive(true);
-        _roundManager.SetupDoneButton(cancelable);
+        _uiManager.SetGameMessage(
+            "Select a " + (restriction == "None" ? "" : restriction) +" card to gain costing up to " + cost + " coins");
+        _uiManager.SetupDoneButton(cancelable);
     }
 
     public override void HandleInput()
@@ -66,9 +65,7 @@ public class GainingCardState : CardPlayState
     public override void ExitState()
     {
         Debug.Log("Exiting Gaining card State");
-        _roundManager.isGainingCard = false;
-        _roundManager.messageText.text = "";
-        _roundManager.messageText.gameObject.SetActive(false);
-        _roundManager.CleanupDoneButton();
+        _uiManager.CloseGameMessage();
+        _uiManager.CleanupDoneButton();
     }
 }

@@ -36,12 +36,13 @@ public class Monster : MonoBehaviour
                     _playerStats.Experience += this.experienceGiven;
                 }
                 tileOn.monster = null;
-                if (_roundManager.largeMonsterView1.monster == this)
+                if (_uiManager.largeMonsterView1.monster == this || 
+                    _uiManager.largeMonsterView2.monster == this || 
+                    _uiManager.largeMonsterView3.monster == this)
                 {
-                    _roundManager.largeMonsterView1.gameObject.SetActive(false);
-                    _roundManager.largeMonsterView2.gameObject.SetActive(false);
-                    _roundManager.largeMonsterView3.gameObject.SetActive(false);
+                   _uiManager.CloseMonsterInfoPanel();
                 }
+                
                 Destroy(gameObject);
             }
         }
@@ -106,6 +107,7 @@ public class Monster : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private RoundUIManager _uiManager;
     private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
     private DiContainer _container;
@@ -113,12 +115,14 @@ public class Monster : MonoBehaviour
     [Inject]
     public void Construct(GameManager gameManager, 
                           RoundManager roundManager, 
+                          RoundUIManager uiManager,
                           PlayerStats playerStats,
                           SpriteManager spriteManager, 
                           DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _uiManager = uiManager;
         _playerStats = playerStats;
         _spriteManager = spriteManager;
         _container = container;

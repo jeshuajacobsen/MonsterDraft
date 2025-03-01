@@ -944,6 +944,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67439093}
   m_CullTransparentMesh: 1
+--- !u!1 &70396811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70396812}
+  - component: {fileID: 70396814}
+  - component: {fileID: 70396813}
+  m_Layer: 5
+  m_Name: MessagePanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &70396812
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70396811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 669442319}
+  m_Father: {fileID: 1603265255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 478.97998, y: -194.01}
+  m_SizeDelta: {x: -1062.2, y: -1588}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &70396813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70396811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5803922}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &70396814
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70396811}
+  m_CullTransparentMesh: 1
 --- !u!1 &70671685
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,19 +1651,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hand: []
-  dungeonRow1: {fileID: 912628886}
-  dungeonRow2: {fileID: 1283951561}
-  dungeonRow3: {fileID: 1331802458}
   DeckDiscardPanel: {fileID: 739858336}
-  EnemyBase: {fileID: 546164430}
-  PlayerBase: {fileID: 327850610}
-  largeMonsterView1: {fileID: 606385593}
-  largeMonsterView2: {fileID: 2133717529}
-  largeMonsterView3: {fileID: 1000870774}
-  doneButton: {fileID: 1543829577}
-  cancelButton: {fileID: 794702217}
-  isGainingCard: 0
-  messageText: {fileID: 669442317}
   skillVisualEffects: []
   cardVisualEffects: []
 --- !u!4 &129315357
@@ -4390,6 +4454,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449243050}
   m_CullTransparentMesh: 1
+--- !u!1 &455025230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 455025232}
+  - component: {fileID: 455025231}
+  m_Layer: 5
+  m_Name: DungeonManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &455025231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455025230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 946052398212aa649a564cde4c858410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonRow1: {fileID: 912628886}
+  dungeonRow2: {fileID: 1283951561}
+  dungeonRow3: {fileID: 1331802458}
+  EnemyBase: {fileID: 546164430}
+  PlayerBase: {fileID: 327850610}
+--- !u!224 &455025232
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455025230}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -10.6382, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &464253455
 GameObject:
   m_ObjectHideFlags: 0
@@ -4422,6 +4539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillVisualEffectPrefab: {fileID: 4848713655441817405, guid: 0414cb7bbe543c044ab33cdba18a1c50, type: 3}
   cardVisualEffectPrefab: {fileID: 2216814549277630331, guid: 4af774bf740683c4cb562ee92624332c, type: 3}
+  floatyNumberPrefab: {fileID: 6881235438777132051, guid: b16fac3cac5a8f64aad7e4b67cacf25d, type: 3}
 --- !u!114 &464253457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7267,7 +7385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &669442317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7374,17 +7492,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669442316}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1603265255}
+  m_Father: {fileID: 70396812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 478.98, y: -194.02222}
-  m_SizeDelta: {x: 2391.5, y: 171.3356}
+  m_AnchoredPosition: {x: 9, y: 0.00065613}
+  m_SizeDelta: {x: 2391.5, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &677101853
 PrefabInstance:
@@ -8302,7 +8420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1052.9952, y: 213.03189}
+  m_AnchoredPosition: {x: -1052.9928, y: 213.03189}
   m_SizeDelta: {x: 84, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &751029103
@@ -9028,7 +9146,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2127775288}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999879
+  m_Size: 0.9999946
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13414,7 +13532,10 @@ MonoBehaviour:
   DeckDiscardPanel: {fileID: 739858336}
   doneButton: {fileID: 1543829577}
   cancelButton: {fileID: 794702217}
-  messageText: {fileID: 669442317}
+  messagePanel: {fileID: 70396811}
+  largeMonsterView1: {fileID: 606385593}
+  largeMonsterView2: {fileID: 2133717529}
+  largeMonsterView3: {fileID: 1000870774}
   optionButtonPrefab: {fileID: 2296903141565680520, guid: c27ba5bb4921dbe4b8bd59c1f825e890, type: 3}
   SmallCardViewPrefab: {fileID: 7487615780272366053, guid: 5a74fd9e6f218f3438ef5f2888dea81c, type: 3}
 --- !u!224 &1178267208
@@ -14513,6 +14634,7 @@ MonoBehaviour:
   betweenRoundPanel: {fileID: 48160604}
   doneButton: {fileID: 952676748}
   currentDungeonIndex: 1
+  roundNumber: 1
   startRoundEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -18474,13 +18596,13 @@ RectTransform:
   - {fileID: 1458482067}
   - {fileID: 794702215}
   - {fileID: 1543829575}
-  - {fileID: 669442319}
   - {fileID: 1147202720}
   - {fileID: 170375970}
   - {fileID: 677101854}
   - {fileID: 87787941}
   - {fileID: 1672232275}
   - {fileID: 619538269}
+  - {fileID: 70396812}
   m_Father: {fileID: 1202905739}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -22495,7 +22617,7 @@ RectTransform:
   m_Father: {fileID: 699590742}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.9999879, y: 1}
+  m_AnchorMax: {x: 0.9999946, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -23075,6 +23197,7 @@ SceneRoots:
   - {fileID: 1232887079}
   - {fileID: 129315357}
   - {fileID: 1178267208}
+  - {fileID: 455025232}
   - {fileID: 1184803088}
   - {fileID: 440160917}
   - {fileID: 464253458}

@@ -52,14 +52,16 @@ public class SelectingSkillTargetState : CardPlayState
             int tileIndex = int.Parse(monster.tileOn.name.Replace("Tile", ""));
 
             bool isInEnemyBase = RectTransformUtility.RectangleContainsScreenPoint(
-                _roundManager.EnemyBase.transform.GetComponent<RectTransform>(),
+                _dungeonManager.EnemyBase.transform.GetComponent<RectTransform>(),
                 pointerPosition,
                 mainPhase.mainCamera
             );
 
             if (tileIndex + skill.Range > 7 && isInEnemyBase)
             {
-                _roundManager.UseSkillOnBase(monster, skill);
+                _playerStats.Mana -= skill.ManaCost;
+                _dungeonManager.DamageEnemyBase(skill.Damage);
+                monster.actionsUsedThisTurn.Add(skill.name);
                 if (skill.effects.Count > 0)
                 {
                     mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, null));

@@ -8,6 +8,7 @@ public class CardImprovementButton : MonoBehaviour
 
     public Card card;
 
+    public class Factory : PlaceholderFactory<CardImprovementButton> { }
     private SpriteManager _spriteManager;
 
     [Inject]

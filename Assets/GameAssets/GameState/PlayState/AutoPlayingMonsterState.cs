@@ -23,9 +23,9 @@ public class AutoPlayingMonsterState : CardPlayState
         MarkValidTargets();
         if (gemCost > 0)
         {
-            _roundManager.SetupBoostCancelButton(gemCost);
+            _uiManager.SetupBoostCancelButton(gemCost);
         } else {
-            _roundManager.SetupDoneButton(false);
+            _uiManager.SetupDoneButton(false);
         }
     }
 
@@ -61,7 +61,7 @@ public class AutoPlayingMonsterState : CardPlayState
         Debug.Log("Exiting playing monster state");
         validTargets.ForEach(tile => tile.GetComponent<Image>().color = Color.white);
         validTargets.Clear();
-        _roundManager.CleanupDoneButton();
+        _uiManager.CleanupDoneButton();
     }
 
     public void MarkValidTargets()

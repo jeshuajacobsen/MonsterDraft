@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Zenject;
 
 public class IdleState : CardPlayState
 {
-
     public override void EnterState()
     {
         Debug.Log("Idle State Entered");
@@ -63,7 +63,7 @@ public class IdleState : CardPlayState
             else
             {
                 _uiManager.CloseMonsterOptionPanel();
-
+//TODO see if I can raycast here too.
                 foreach (var cardView in _roundManager.hand)
                 {
                     cardView.HandleMouseDown(pointerPosition);
@@ -94,7 +94,25 @@ public class IdleState : CardPlayState
                     }
                 }
                 
-                mainPhase.HandleMouseInDungeon(Input.mousePosition);
+                HandleMouseInDungeon(Input.mousePosition);
+            }
+        }
+    }
+
+    private void HandleMouseInDungeon(Vector2 pointerPosition)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+        if (hit.collider != null)
+        {
+            Tile tile = hit.collider.GetComponent<Tile>();
+            if (tile != null)
+            {
+                if (tile.monster != null && !tile.monster.IsOnInfoButton(pointerPosition))
+                {
+                    _uiManager.OpenMonsterOptionPanel(tile, pointerPosition);
+                }
             }
         }
     }

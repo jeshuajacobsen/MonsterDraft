@@ -74,13 +74,14 @@ public class StockPile : MonoBehaviour
 
     private void BuyCard()
     {
-        if (_roundManager.isGainingCard)
+        if (_roundManager.gameState is MainPhase && ((MainPhase)_roundManager.gameState).currentState is GainingCardState)
         {
             MainPhase mainPhase = (MainPhase)_roundManager.gameState;
             if ((mainPhase.currentState as GainingCardState).MeetsRestrictions(card))
             {
                 (mainPhase.currentState as GainingCardState).GainCard(card);
                 _roundManager.cardsGainedThisRound.Add(card);
+                StockLeft--;
                 return;
             }
         }

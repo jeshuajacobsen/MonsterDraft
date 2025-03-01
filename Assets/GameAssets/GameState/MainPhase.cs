@@ -84,15 +84,7 @@ public class MainPhase : GameState
         currentState.UpdateState();
     }
 
-    public void HandleMouseInDungeon(Vector2 mousePosition)
-    {
-        for(int i = 1; i <= 7; i++)
-        {
-            _roundManager.dungeonRow1.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
-            _roundManager.dungeonRow2.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
-            _roundManager.dungeonRow3.transform.Find("Tile" + i).GetComponent<Tile>().HandlePointerDown(mousePosition);
-        }
-    }
+    
 
     public override void ExitState()
     {
@@ -318,41 +310,6 @@ public class MainPhase : GameState
     public void AutoPlayMonsterCard(MonsterCard monsterCard, Tile target)
     {
         PlayMonster(monsterCard, target);
-    }
-
-    public override void SelectTile(Tile tile, Vector2 pointerPosition)
-    {
-        if (tile.monster != null && !tile.monster.IsOnInfoButton(pointerPosition))
-        {
-            _uiManager.OpenMonsterOptionPanel(tile, pointerPosition);
-        }
-    }
-
-    // public override void DoneButton()
-    // {
-    //     roundManager.doneButton.gameObject.SetActive(false);
-    //     roundManager.cancelButton.gameObject.SetActive(false);
-    //     if (selectingCards)
-    //     {
-    //         selectingCards = false;
-    //         selectedCards.ForEach(cardView => {
-    //             cardView.GetComponent<Image>().color = Color.white;
-    //         });
-    //         ContinuePlayingCard();
-    //         selectedCards.Clear();
-    //     }
-    // }
-
-    public void CancelButton()
-    {
-        CancelFullPlay();
-        _roundManager.doneButton.gameObject.SetActive(false);
-        _roundManager.cancelButton.gameObject.SetActive(false);
-        if (playedCard != null)
-        {
-            _roundManager.AddCardToHand(playedCard);
-            playedCard = null;
-        }
     }
 
     public override void SwitchPhaseState(CardPlayState newState)

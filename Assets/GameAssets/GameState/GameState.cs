@@ -34,8 +34,6 @@ public abstract class GameState
     public abstract bool CanPlayCard(Card card, Vector3 position);
     public abstract void PlayCard(Card card, Vector3 position);
 
-    public abstract void SelectTile(Tile tile, Vector2 position);
-
     public abstract void SwitchPhaseState(CardPlayState newState);
 
 }

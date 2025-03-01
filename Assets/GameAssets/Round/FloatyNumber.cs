@@ -1,8 +1,13 @@
 using UnityEngine;
 using TMPro;
+using Zenject;
+
 public class FloatyNumber : MonoBehaviour
 {
     private float FLOATY_NUMBER_LIFETIME = 1.5f;
+
+    public class Factory : PlaceholderFactory<FloatyNumber> { }
+
     void Start()
     {
         

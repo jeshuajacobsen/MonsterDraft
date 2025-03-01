@@ -19,18 +19,23 @@ public class RoundUIManager : MonoBehaviour
     [SerializeField] private GameObject DeckDiscardPanel;
     public Button doneButton;
     public Button cancelButton;
-    public TextMeshProUGUI messageText;
+    public GameObject messagePanel;
+    public LargeMonsterView largeMonsterView1;
+    public LargeMonsterView largeMonsterView2;
+    public LargeMonsterView largeMonsterView3;
 
     [SerializeField] private OptionButton optionButtonPrefab;
     [SerializeField] private SmallCardView SmallCardViewPrefab;
 
     private DiContainer _container;
     private RoundManager _roundManager;
+    private GameManager _gameManager;
 
     [Inject]
-    public void Construct(RoundManager roundManager, DiContainer container)
+    public void Construct(RoundManager roundManager, GameManager gameManager, DiContainer container)
     {
         _roundManager = roundManager;
+        _gameManager = gameManager;
         _container = container;
     }
 
@@ -196,4 +201,128 @@ public class RoundUIManager : MonoBehaviour
         }
         return false;
     }
+
+
+    public void SetupDoneButton(bool showCancel = true)
+    {
+        doneButton.gameObject.SetActive(true);
+        doneButton.onClick.RemoveAllListeners();
+        doneButton.onClick.AddListener(_roundManager.OnDoneButtonClicked);
+
+        if (showCancel)
+        {
+            cancelButton.onClick.RemoveAllListeners();
+            if (_roundManager.gameState is MainPhase)
+            {
+                cancelButton.onClick.AddListener(() => {
+                    ((MainPhase)_roundManager.gameState).CancelFullPlay();
+                });
+                cancelButton.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void SetupBoostCancelButton(int gemCost)
+    {
+        cancelButton.gameObject.SetActive(true);
+        cancelButton.onClick.RemoveAllListeners();
+        if (cancelButton.onClick.GetPersistentEventCount() == 0)
+        {
+            cancelButton.onClick.AddListener(() => {
+                _roundManager.RefundGemsAndReturnToIdle(gemCost);
+            });
+        }
+    }
+
+    public void CleanupDoneButton()
+    {
+        doneButton.onClick.RemoveAllListeners();
+        cancelButton.onClick.RemoveAllListeners();
+        doneButton.gameObject.SetActive(false);
+        cancelButton.gameObject.SetActive(false);
+        messagePanel.gameObject.SetActive(false);
+    }
+
+    public void SetGameMessage(string message)
+    {
+        messagePanel.gameObject.SetActive(true);
+        messagePanel.transform.Find("MessageText").GetComponent<TextMeshProUGUI>().text = message;
+    }
+
+    public void CloseGameMessage()
+    {
+        messagePanel.gameObject.SetActive(false);
+    }
+
+    public void CloseMonsterInfoPanel()
+    {
+        largeMonsterView1.gameObject.SetActive(false);
+        largeMonsterView2.gameObject.SetActive(false);
+        largeMonsterView3.gameObject.SetActive(false);
+    }
+
+    public void OpenMonsterInfo(Monster monster, Vector2 position)
+    {
+        if (largeMonsterView1 != null)
+        {
+            
+            BaseMonsterData currentMonster = _gameManager.gameData.GetBaseMonsterData(monster.name);
+            Vector2 firstCardPosition = new Vector2(-1100, -250);
+            Vector2 secondCardPosition = new Vector2(0, -250);
+            Vector2 thirdCardPosition = new Vector2(1100, -250);
+
+            if (string.IsNullOrEmpty(monster.evolvesFrom) && string.IsNullOrEmpty(monster.evolvesTo))
+            {
+                largeMonsterView1.SetMonster(monster, position);
+                largeMonsterView1.gameObject.SetActive(true);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(monster.evolvesTo) && !string.IsNullOrEmpty(monster.evolvesFrom))
+            {
+                BaseMonsterData evolvesTo = _gameManager.gameData.GetBaseMonsterData(monster.evolvesTo);
+                BaseMonsterData evolvesFrom = _gameManager.gameData.GetBaseMonsterData(monster.evolvesFrom);
+                
+                largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
+                largeMonsterView1.gameObject.SetActive(true);
+                largeMonsterView2.SetMonster(monster, secondCardPosition, false);
+                largeMonsterView2.gameObject.SetActive(true);
+                largeMonsterView3.SetMonsterFromBaseData(evolvesTo, thirdCardPosition);
+                largeMonsterView3.gameObject.SetActive(true);
+                return;
+            }
+            
+            if (!string.IsNullOrEmpty(monster.evolvesTo))
+            {
+                BaseMonsterData evolvesTo = _gameManager.gameData.GetBaseMonsterData(monster.evolvesTo);
+                largeMonsterView1.SetMonster(monster, firstCardPosition, false);
+                largeMonsterView1.gameObject.SetActive(true);
+                largeMonsterView2.SetMonsterFromBaseData(evolvesTo, secondCardPosition);
+                largeMonsterView2.gameObject.SetActive(true);
+                if (!string.IsNullOrEmpty(evolvesTo.evolvesTo))
+                {
+                    BaseMonsterData evolvesTo2 = _gameManager.gameData.GetBaseMonsterData(evolvesTo.evolvesTo);
+                    largeMonsterView3.SetMonsterFromBaseData(evolvesTo2, thirdCardPosition);
+                    largeMonsterView3.gameObject.SetActive(true);
+                }
+            }
+            else if (!string.IsNullOrEmpty(monster.evolvesFrom))
+            {
+                BaseMonsterData evolvesFrom = _gameManager.gameData.GetBaseMonsterData(monster.evolvesFrom);
+                largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
+                largeMonsterView1.gameObject.SetActive(true);
+                largeMonsterView2.SetMonster(monster, secondCardPosition, false);
+                largeMonsterView2.gameObject.SetActive(true);
+                if (!string.IsNullOrEmpty(evolvesFrom.evolvesFrom))
+                {
+                    BaseMonsterData evolvesFrom2 = _gameManager.gameData.GetBaseMonsterData(evolvesFrom.evolvesFrom);
+                    largeMonsterView3.SetMonsterFromBaseData(evolvesFrom2, thirdCardPosition);
+                    largeMonsterView3.gameObject.SetActive(true);
+                }
+            }
+            
+            
+        }
+    }
+
 }

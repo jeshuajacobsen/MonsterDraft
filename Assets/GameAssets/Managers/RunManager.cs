@@ -18,8 +18,9 @@ public class RunManager : MonoBehaviour
 
     public DungeonLevelData currentDungeonLevel;
     public int currentDungeonIndex = 1;
+    public int roundNumber = 1;
 
-    public UnityEvent<DungeonLevelData, int> startRoundEvent = new UnityEvent<DungeonLevelData, int>();
+    public UnityEvent startRoundEvent = new UnityEvent();
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
@@ -124,10 +125,10 @@ public class RunManager : MonoBehaviour
     public void StartRound()
     {
         roundPanel.gameObject.SetActive(true);
-        startRoundEvent.Invoke(currentDungeonLevel, currentDungeonIndex);
+        startRoundEvent.Invoke();
     }
 
-    public void EndRound(List<Card> gainedCards)
+    public void EndRound()
     {   
         _gameManager.PrestigePoints += currentDungeonLevel.GetDungeonData(currentDungeonIndex).PrestigeReward;
         currentDungeonIndex++;
@@ -135,7 +136,7 @@ public class RunManager : MonoBehaviour
         {
             roundPanel.gameObject.SetActive(false);
             betweenRoundPanel.gameObject.SetActive(true);
-            SelectCards(gainedCards);
+            SelectCards(_roundManager.cardsGainedThisRound);
         } else {
             EndRunWin();
         }
