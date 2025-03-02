@@ -54,7 +54,7 @@ public class SelectingSkillTargetState : CardPlayState
             bool isInEnemyBase = RectTransformUtility.RectangleContainsScreenPoint(
                 _dungeonManager.EnemyBase.transform.GetComponent<RectTransform>(),
                 pointerPosition,
-                mainPhase.mainCamera
+                _roundManager.gameState.mainCamera
             );
 
             if (tileIndex + skill.Range > 7 && isInEnemyBase)
@@ -64,25 +64,25 @@ public class SelectingSkillTargetState : CardPlayState
                 monster.actionsUsedThisTurn.Add(skill.name);
                 if (skill.effects.Count > 0)
                 {
-                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, null));
+                    _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, null));
                 }
                 else
                 {
-                    mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
+                    _roundManager.gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
                 }
                 return;
             }
 
             if (skill.attacksAllInRange)
             {
-                _roundManager.UseAreaSkill(monster, skill, validTargets);
+                _combatManager.UseAreaSkill(monster, skill, validTargets);
                 if (skill.effects.Count > 0)
                 {
-                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, validTargets));
+                    _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, validTargets));
                 }
                 else
                 {
-                    mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
+                    _roundManager.gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
                 }
                 return;
             }
@@ -92,25 +92,25 @@ public class SelectingSkillTargetState : CardPlayState
                 bool isInTile = RectTransformUtility.RectangleContainsScreenPoint(
                     tile.transform.GetComponent<RectTransform>(),
                     pointerPosition,
-                    mainPhase.mainCamera
+                    _roundManager.gameState.mainCamera
                 );
 
                 if (isInTile)
                 {
-                    _roundManager.UseSkill(monster, skill, tile);
+                    _combatManager.UseSkill(monster, skill, tile);
                     if (skill.effects.Count > 0)
                     {
-                        mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, new List<Tile>{tile}));
+                        _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ResolvingSkillEffectState>().Initialize(skill, monster, new List<Tile>{tile}));
                     }
                     else
                     {
-                        mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
+                        _roundManager.gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
                     }
                     return;
                 }
             }
 
-            mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
+            _roundManager.gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
         }
     }
 
@@ -123,7 +123,7 @@ public class SelectingSkillTargetState : CardPlayState
 
    public void MarkValidTargets()
     {
-        validTargets = _roundManager.GetValidTargets(monster, skill);
+        validTargets = _combatManager.GetValidTargets(monster, skill);
         if (skill.directions == "")
         {
             validTargets.Add(monster.tileOn);

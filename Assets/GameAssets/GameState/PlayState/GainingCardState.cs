@@ -58,8 +58,8 @@ public class GainingCardState : CardPlayState
 
     public void GainCard(Card card)
     {
-        _roundManager.discardPile.AddCard(card);
-        mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
+        _cardManager.discardPile.AddCard(card);
+        _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
     }
 
     public override void ExitState()

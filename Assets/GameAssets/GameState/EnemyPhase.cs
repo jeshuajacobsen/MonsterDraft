@@ -30,21 +30,21 @@ public class EnemyPhase : GameState
                 if (tile.monster != null && tile.monster.team == "Enemy")
                 {
                     Monster currentMonster = tile.monster;
-                    if (_roundManager.EnemyCanMove(tile.monster))
+                    if (_combatManager.EnemyCanMove(tile.monster))
                     {
-                        _roundManager.MoveEnemyMonster(tile.monster);
+                        _combatManager.MoveEnemyMonster(tile.monster);
                     }
                     bool usedSkill = false;
-                    if (_roundManager.EnemyCanUseSkill(currentMonster, currentMonster.skill1))
+                    if (_combatManager.EnemyCanUseSkill(currentMonster, currentMonster.skill1))
                     {
                         Debug.Log("Enemy using skill 1");
                         usedSkill = true;
-                        _roundManager.EnemyUseSkill(currentMonster, currentMonster.skill1);
+                        _combatManager.EnemyUseSkill(currentMonster, currentMonster.skill1);
                     }
-                    if (!usedSkill && _roundManager.EnemyCanUseSkill(currentMonster, currentMonster.skill2))
+                    if (!usedSkill && _combatManager.EnemyCanUseSkill(currentMonster, currentMonster.skill2))
                     {
                         Debug.Log("Enemy using skill 2");
-                        _roundManager.EnemyUseSkill(currentMonster, currentMonster.skill2);
+                        _combatManager.EnemyUseSkill(currentMonster, currentMonster.skill2);
                     }
                 }
             }
@@ -134,11 +134,11 @@ public class EnemyPhase : GameState
                     {
                         visualEffect.reachedTarget.AddListener(() => {
                             target.Health -= int.Parse(effectParts[1]);
-                            _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
+                            _visualEffectManager.CreateFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                         });
                     } else {
                         target.Health -= int.Parse(effectParts[1]);
-                        _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
+                        _visualEffectManager.CreateFloatyNumber(int.Parse(effectParts[1]), target.tileOn, true);
                     }
                     
                 } else if (effectParts[0] == "Heal")
@@ -169,7 +169,7 @@ public class EnemyPhase : GameState
                 {
                     if (effectParts[1] == "Fireball")
                     {
-                        visualEffect = _roundManager.AddCardVisualEffect("Fireball", target.tileOn);
+                        visualEffect = _visualEffectManager.CreateCardVisualEffect("Fireball", target.tileOn);
                     }
                 }
             }

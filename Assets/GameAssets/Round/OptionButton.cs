@@ -10,12 +10,14 @@ public class OptionButton : MonoBehaviour
     List<Card> cards;
 
     private RoundManager _roundManager;
+    private CardManager _cardManager;
     private PlayerStats _playerStats;
 
     [Inject]
-    public void Construct(RoundManager roundManager, PlayerStats playerStats)
+    public void Construct(RoundManager roundManager, CardManager cardManager, PlayerStats playerStats)
     {
         _roundManager = roundManager;
+        _cardManager = cardManager;
         _playerStats = playerStats;
     }
 
@@ -69,22 +71,22 @@ public class OptionButton : MonoBehaviour
         {
             for (int i = 0; i < int.Parse(effectParts[1]); i++)
             {
-                _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
+                _cardManager.AddCardToHand(_cardManager.roundDeck.DrawCard());
             }
         } else if (effectParts[0] == "Mana")
         {
             _playerStats.Mana += int.Parse(effectParts[1]);
         } else if (effectParts[0] == "Trash")
         {
-            _roundManager.TrashCardsFromDeck(this.cards);
+            _cardManager.TrashCardsFromDeck(this.cards);
         } else if (effectParts[0] == "Discard")
         {
-            _roundManager.DiscardCardsFromDeck(this.cards);
+            _cardManager.DiscardCardsFromDeck(this.cards);
         } else if (effectParts[0] == "DrawRevealed")
         {
             foreach (Card card in cards)
             {
-                _roundManager.AddCardToHand(card);
+                _cardManager.AddCardToHand(card);
             }
         } else if (effectParts[0] == "Play")
         {

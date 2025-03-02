@@ -111,7 +111,8 @@ public class QuickSelectingTargetMonsterState : CardPlayState
 
     public void HandleCardDrop(SmallCardView cardView, Vector2 dropPosition)
     {
-        RectTransform parentRect = _roundManager.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
+        MainPhase mainPhase = _roundManager.gameState as MainPhase;
+        RectTransform parentRect = _cardManager.handContent.transform.parent.parent.parent.GetComponent<RectTransform>();
         bool isInsideHand = RectTransformUtility.RectangleContainsScreenPoint(
             parentRect,
             dropPosition,

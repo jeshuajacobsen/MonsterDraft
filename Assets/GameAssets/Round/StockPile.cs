@@ -18,6 +18,7 @@ public class StockPile : MonoBehaviour
     private RoundManager _roundManager;
     private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
+    private CardManager _cardManager;
     private DiContainer _container;
 
     [Inject]
@@ -25,12 +26,14 @@ public class StockPile : MonoBehaviour
                           RoundManager roundManager, 
                           PlayerStats playerStats,
                           SpriteManager spriteManager, 
+                          CardManager cardManager,
                           DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
         _playerStats = playerStats;
         _spriteManager = spriteManager;
+        _cardManager = cardManager;
         _container = container;
     }
 
@@ -108,7 +111,7 @@ public class StockPile : MonoBehaviour
                     break;
             }
 
-            _roundManager.discardPile.AddCard(newCard);
+            _cardManager.discardPile.AddCard(newCard);
             _roundManager.cardsGainedThisRound.Add(newCard);
 
             if (newCard is ActionCard actionCard && actionCard.OnGainEffects.Count > 0)

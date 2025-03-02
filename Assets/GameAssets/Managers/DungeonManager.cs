@@ -14,15 +14,16 @@ public class DungeonManager : MonoBehaviour
     public GameObject PlayerBase;
 
     private RunManager _runManager;
+    private VisualEffectManager _visualEffectManager;
     private DiContainer _container;
 
-    public FloatyNumber.Factory _floatyNumberFactory;
+    
 
     [Inject]
-    public void Construct(RunManager runManager, DiContainer container, FloatyNumber.Factory floatyNumberFactory)
+    public void Construct(RunManager runManager, VisualEffectManager visualEffectManager, DiContainer container)
     {
         _runManager = runManager;
-        _floatyNumberFactory = floatyNumberFactory;
+        _visualEffectManager = visualEffectManager;
         _container = container;
     }
     
@@ -64,8 +65,7 @@ public class DungeonManager : MonoBehaviour
     public void DamageEnemyBase(int damage)
     {
         EnemyBase.GetComponent<EnemyBase>().Health -= damage;
-        FloatyNumber floatyNumber = _floatyNumberFactory.Create();
-        floatyNumber.Initialize(damage, EnemyBase.transform.position, true);
+        _visualEffectManager.CreateFloatyNumber(damage, EnemyBase.transform.position, true);
 
         if (EnemyBase.GetComponent<EnemyBase>().Health <= 0)
         {
@@ -76,8 +76,7 @@ public class DungeonManager : MonoBehaviour
     public void DamagePlayerBase(int damage)
     {
         PlayerBase.GetComponent<PlayerBase>().Health -= damage;
-        FloatyNumber floatyNumber = _floatyNumberFactory.Create();
-        floatyNumber.Initialize(damage, PlayerBase.transform.position, true);
+        _visualEffectManager.CreateFloatyNumber(damage, PlayerBase.transform.position, true);
 
         if (PlayerBase.GetComponent<PlayerBase>().Health <= 0)
         {
@@ -117,5 +116,25 @@ public class DungeonManager : MonoBehaviour
             }
         }
         return enemies;
+    }
+
+    public Monster CheckForMonster(Tile currentTile, int distance)
+    {
+        Tile nextTile;
+        if (distance < 0)
+        {
+            nextTile = currentTile.dungeonRow.GetPreviousTile(currentTile, -distance, currentTile.dungeonRow);
+            if (nextTile != null && nextTile.monster != null)
+            {
+                return nextTile.monster;
+            }
+            return null;
+        }
+        nextTile = currentTile.dungeonRow.GetNextTile(currentTile, distance, currentTile.dungeonRow);
+        if (nextTile != null && nextTile.monster != null)
+        {
+            return nextTile.monster;
+        }
+        return null;
     }
 }

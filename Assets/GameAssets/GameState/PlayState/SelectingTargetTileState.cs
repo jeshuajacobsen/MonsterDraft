@@ -51,10 +51,10 @@ public class SelectingTargetTileState : CardPlayState
             {
                 RectTransform targetRect = validTargets[i].GetComponent<RectTransform>();
 
-                if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, mainPhase.mainCamera))
+                if (RectTransformUtility.RectangleContainsScreenPoint(targetRect, pointerPosition, _roundManager.gameState.mainCamera))
                 {
-                    mainPhase.selectedTile = validTargets[i];
-                    mainPhase.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
+                    ((MainPhase)_roundManager.gameState).selectedTile = validTargets[i];
+                    _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ResolvingEffectState>());
                     break;
                 }
             }
@@ -70,7 +70,7 @@ public class SelectingTargetTileState : CardPlayState
 
     public void MarkValidTargets(ActionCard actionCard)
     {
-        string effect = actionCard.Effects[mainPhase.playedActionCardStep - 1];
+        string effect = actionCard.Effects[((MainPhase)_roundManager.gameState).playedActionCardStep - 1];
 
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Target")

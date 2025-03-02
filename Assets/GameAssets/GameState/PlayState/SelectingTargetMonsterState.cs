@@ -31,6 +31,7 @@ public class SelectingTargetMonsterState : CardPlayState
 
     public override void UpdateState()
     {
+        MainPhase mainPhase = (MainPhase)_roundManager.gameState;
         bool pointerDown = false;
         Vector2 pointerPosition = Vector2.zero;
 
@@ -70,7 +71,7 @@ public class SelectingTargetMonsterState : CardPlayState
 
     public void MarkValidTargets(ActionCard actionCard)
     {
-        string effect = actionCard.Effects[mainPhase.playedActionCardStep - 1];
+        string effect = actionCard.Effects[((MainPhase)_roundManager.gameState).playedActionCardStep - 1];
 
         string[] effectParts = effect.Split(' ');
         if (effectParts[0] == "Target")

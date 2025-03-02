@@ -9,11 +9,13 @@ public class DeckDiscardPanel : MonoBehaviour
 {
 
     private RoundManager _roundManager;
+    private CardManager _cardManager;
 
     [Inject]
-    public void Construct(RoundManager roundManager)
+    public void Construct(RoundManager roundManager, CardManager cardManager)
     {
         _roundManager = roundManager;
+        _cardManager = cardManager;
     }
 
     void Start()
@@ -23,10 +25,10 @@ public class DeckDiscardPanel : MonoBehaviour
 
     void Update()
     {
-        if (_roundManager.roundDeck != null)
+        if (_cardManager.roundDeck != null)
         {
-            transform.Find("DeckImage").Find("DeckSizeText").GetComponent<TextMeshProUGUI>().text = _roundManager.roundDeck.cards.Count.ToString();
-            transform.Find("DiscardImage").Find("DiscardSizeText").GetComponent<TextMeshProUGUI>().text = _roundManager.discardPile.cards.Count.ToString();
+            transform.Find("DeckImage").Find("DeckSizeText").GetComponent<TextMeshProUGUI>().text = _cardManager.roundDeck.cards.Count.ToString();
+            transform.Find("DiscardImage").Find("DiscardSizeText").GetComponent<TextMeshProUGUI>().text = _cardManager.discardPile.cards.Count.ToString();
         }
     }
 }

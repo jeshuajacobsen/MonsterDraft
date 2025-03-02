@@ -30,7 +30,6 @@ public class SelectingCardsState : CardPlayState
 
     public override void UpdateState()
     {
-        RoundManager roundManager = _roundManager;
 
         bool pointerUp = false;
         Vector2 pointerPosition = Vector2.zero;
@@ -49,15 +48,15 @@ public class SelectingCardsState : CardPlayState
 
         if (pointerUp)
         {
-            for (int i = 0; i < roundManager.hand.Count; i++)
+            for (int i = 0; i < _cardManager.hand.Count; i++)
             {
-                SmallCardView cardView = roundManager.hand[i];
+                SmallCardView cardView = _cardManager.hand[i];
                 RectTransform cardRect = cardView.GetComponent<RectTransform>();
 
                 if (RectTransformUtility.RectangleContainsScreenPoint(
                     cardRect,
                     pointerPosition,
-                    mainPhase.mainCamera
+                    _roundManager.gameState.mainCamera
                 ))
                 {
                     if (numberToSelect == "x" && meetsRestrictions(cardView))
@@ -121,6 +120,6 @@ public class SelectingCardsState : CardPlayState
         selectedCards.ForEach(cardView => {
             cardView.GetComponent<Image>().color = Color.white;
         });
-        mainPhase.selectedCards = selectedCards;
+        ((MainPhase)_roundManager.gameState).selectedCards = selectedCards;
     }
 }

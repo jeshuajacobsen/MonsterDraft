@@ -6,12 +6,14 @@ public class RoundDeck : Deck
 
     private RoundManager _roundManager;
     private RunManager _runManager;
+    private CardManager _cardManager;
 
     [Inject]
-    public void Construct(RoundManager roundManager, RunManager runManager)
+    public void Construct(RoundManager roundManager, RunManager runManager, CardManager cardManager)
     {
         _roundManager = roundManager;
         _runManager = runManager;
+        _cardManager = cardManager;
     }
 
     public RoundDeck Initialize()
@@ -48,7 +50,7 @@ public class RoundDeck : Deck
 
     public void ShuffleDiscardIntoDeck()
     {
-        foreach (Card card in _roundManager.discardPile.cards)
+        foreach (Card card in _cardManager.discardPile.cards)
         {
             cards.Add(card);
         }
@@ -59,7 +61,7 @@ public class RoundDeck : Deck
             cards[i] = cards[j];
             cards[j] = temp;
         }
-        _roundManager.discardPile.cards.Clear();
+        _cardManager.discardPile.cards.Clear();
     }
 
     public void Discard(Card card)
@@ -69,7 +71,7 @@ public class RoundDeck : Deck
         {
             cards.Remove(cardToRemove);
         }
-        _roundManager.discardPile.cards.Add(card);
+        _cardManager.discardPile.cards.Add(card);
     }
 
     public void Trash(Card card)

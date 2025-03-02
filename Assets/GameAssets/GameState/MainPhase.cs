@@ -7,7 +7,7 @@ using Zenject;
 
 public class MainPhase : GameState
 {
-    public Camera mainCamera;
+    
     public static UnityEvent ExitMainPhase = new UnityEvent();
 
     private List<Tile> validTargets = new List<Tile>();
@@ -70,10 +70,10 @@ public class MainPhase : GameState
         {
             for (int i = 7; i >= 1; i--)
             {
-                Tile tile = _uiManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
-                if (tile.monster != null && tile.monster.team == "Ally" && _roundManager.CanMoveMonster(tile.monster))
+                Tile tile = _combatManager.dungeonPanel.transform.Find($"CombatRow{row}/Tile{i}").GetComponent<Tile>();
+                if (tile.monster != null && tile.monster.team == "Ally" && _combatManager.CanMoveMonster(tile.monster))
                 {
-                    _roundManager.MoveMonster(tile.monster);
+                    _combatManager.MoveMonster(tile.monster);
                 }
             }
         }
@@ -90,7 +90,7 @@ public class MainPhase : GameState
     {
         Debug.Log("Exiting Main Phase");
         _playerStats.Actions = 0;
-        _roundManager.DiscardHand();
+        _cardManager.DiscardHand();
         _playerStats.Mana = 0;
         _playerStats.Coins = 0;
         List<PersistentEffect> effectsToRemove = new List<PersistentEffect>();
@@ -153,11 +153,11 @@ public class MainPhase : GameState
         playedCard = null;
         if (!autoPlaying)
         {
-            for (int j = 0; j < _roundManager.hand.Count; j++)
+            for (int j = 0; j < _cardManager.hand.Count; j++)
             {
-                if (_roundManager.hand[j].isDragging)
+                if (_cardManager.hand[j].isDragging)
                 {
-                    _roundManager.hand[j].CancelPlay();
+                    _cardManager.hand[j].CancelPlay();
                 }
             }
         }
@@ -169,7 +169,7 @@ public class MainPhase : GameState
         playedActionCardStep = 0;
         if (!autoPlaying)
         {
-            _roundManager.AddCardToHand(playedCard);
+            _cardManager.AddCardToHand(playedCard);
         }
         playedCard = null;
         SwitchPhaseState(_container.Instantiate<IdleState>());
@@ -183,7 +183,7 @@ public class MainPhase : GameState
         }
         playedActionCardStep = 0;
         playedCard = null;
-        ScrollRect scrollRect = _roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
+        ScrollRect scrollRect = _cardManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
         SwitchPhaseState(_container.Instantiate<IdleState>());
     }
@@ -196,8 +196,8 @@ public class MainPhase : GameState
 
     public void RemoveCard(SmallCardView cardView)
     {
-        _roundManager.discardPile.AddCard(cardView.card);
-        _roundManager.RemoveCardFromHand(cardView);
+        _cardManager.discardPile.AddCard(cardView.card);
+        _cardManager.RemoveCardFromHand(cardView);
         if (cardView != null)
         {
             cardView.DestroyCardView();
@@ -209,7 +209,7 @@ public class MainPhase : GameState
         treasuresPlayed++;
         _playerStats.Coins += treasureCard.CoinGeneration;
         _playerStats.Mana += treasureCard.ManaGeneration;
-        ScrollRect scrollRect = _roundManager.handContent.transform.GetComponentInParent<ScrollRect>();
+        ScrollRect scrollRect = _cardManager.handContent.transform.GetComponentInParent<ScrollRect>();
         scrollRect.enabled = true;
         if (treasureCard.Effects.Count > 0)
         {
@@ -253,11 +253,11 @@ public class MainPhase : GameState
                     {
                         visualEffect.reachedTarget.AddListener(() => {
                             target.monster.Health -= int.Parse(effectParts[1]);
-                            _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target, true);
+                            _visualEffectManager.CreateFloatyNumber(int.Parse(effectParts[1]), target, true);
                         });
                     } else {
                         target.monster.Health -= int.Parse(effectParts[1]);
-                        _roundManager.AddFloatyNumber(int.Parse(effectParts[1]), target, true);
+                        _visualEffectManager.CreateFloatyNumber(int.Parse(effectParts[1]), target, true);
                     }
                     playedActionCardStep++;
                 } else if (effectParts[0] == "Heal")
@@ -290,7 +290,7 @@ public class MainPhase : GameState
                 {
                     if (effectParts[1] == "Fireball")
                     {
-                        visualEffect = _roundManager.AddCardVisualEffect("Fireball", target);
+                        visualEffect = _visualEffectManager.CreateCardVisualEffect("Fireball", target);
                         playedActionCardStep++;
                     }
                 } else if (effectParts[0] == "Destroy")

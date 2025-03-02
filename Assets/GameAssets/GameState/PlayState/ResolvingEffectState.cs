@@ -22,6 +22,7 @@ public class ResolvingEffectState : CardPlayState
 
     private void ResolveEffects()
     {
+        MainPhase mainPhase = _roundManager.gameState as MainPhase;
         CardVisualEffect visualEffect = null;
         for (int i = mainPhase.playedActionCardStep; i < mainPhase.playedCard.Effects.Count; i++)
         {
@@ -80,12 +81,12 @@ public class ResolvingEffectState : CardPlayState
                     int x = mainPhase.selectedCards.Count;
                     for (int j = 0; j < x; j++)
                     {
-                        _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
+                        _cardManager.AddCardToHand(_cardManager.roundDeck.DrawCard());
                     }
                 } else {
                     for (int j = 0; j < int.Parse(effectParts[1]); j++)
                     {
-                        _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
+                        _cardManager.AddCardToHand(_cardManager.roundDeck.DrawCard());
                     }
                 }
                 mainPhase.playedActionCardStep++;
@@ -110,17 +111,17 @@ public class ResolvingEffectState : CardPlayState
                     int x = mainPhase.selectedCards.Count;
                     for (int j = 0; j < x; j++)
                     {
-                        _roundManager.discardPile.AddCard(mainPhase.selectedCards[j].card);
-                        _roundManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
-                        _roundManager.DestroyCard(mainPhase.selectedCards[j]);
+                        _cardManager.discardPile.AddCard(mainPhase.selectedCards[j].card);
+                        _cardManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
+                        _cardManager.DestroyCard(mainPhase.selectedCards[j]);
                     }
                 } else if (effectParts[1] == "Selected") 
                 {
                     for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                     {
-                        _roundManager.discardPile.AddCard(mainPhase.selectedCards[j].card);
-                        _roundManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
-                        _roundManager.DestroyCard(mainPhase.selectedCards[j]);
+                        _cardManager.discardPile.AddCard(mainPhase.selectedCards[j].card);
+                        _cardManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
+                        _cardManager.DestroyCard(mainPhase.selectedCards[j]);
                     }
                 }
                 
@@ -131,8 +132,8 @@ public class ResolvingEffectState : CardPlayState
                 {
                     for (int j = 0; j < mainPhase.selectedCards.Count; j++)
                     {
-                        _roundManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
-                        _roundManager.DestroyCard(mainPhase.selectedCards[j]);
+                        _cardManager.RemoveCardFromHand(mainPhase.selectedCards[j]);
+                        _cardManager.DestroyCard(mainPhase.selectedCards[j]);
                     }
                 }
                 
@@ -207,11 +208,11 @@ public class ResolvingEffectState : CardPlayState
                 {
                     visualEffect.reachedTarget.AddListener(() => {
                         mainPhase.selectedTile.monster.Health -= damage;
-                        _roundManager.AddFloatyNumber(damage, mainPhase.selectedTile, true);
+                        _visualEffectManager.CreateFloatyNumber(damage, mainPhase.selectedTile, true);
                     });
                 } else {
                     mainPhase.selectedTile.monster.Health -= damage;
-                    _roundManager.AddFloatyNumber(damage, mainPhase.selectedTile, true);
+                    _visualEffectManager.CreateFloatyNumber(damage, mainPhase.selectedTile, true);
                 }
                 mainPhase.playedActionCardStep++;
             } else if (effectParts[0] == "Heal")
@@ -279,12 +280,12 @@ public class ResolvingEffectState : CardPlayState
                 {
                     if (effectParts[2] == "Copper")
                     {
-                        for (int j = _roundManager.discardPile.cards.Count - 1; j >= 0; j--)
+                        for (int j = _cardManager.discardPile.cards.Count - 1; j >= 0; j--)
                         {
-                            var card = _roundManager.discardPile.cards[j];
+                            var card = _cardManager.discardPile.cards[j];
                             if (card.Name == "Copper")
                             {
-                                _roundManager.discardPile.RemoveCard(card);
+                                _cardManager.discardPile.RemoveCard(card);
                                 mainPhase.foundCards.Add(card);
                             }
                         }
@@ -297,7 +298,7 @@ public class ResolvingEffectState : CardPlayState
                         Card nextCard = FindNextCardInDeck(effectParts[3]);
                         if (nextCard == null)
                         {
-                            _roundManager.roundDeck.ShuffleDiscardIntoDeck();
+                            _cardManager.roundDeck.ShuffleDiscardIntoDeck();
                             nextCard = FindNextCardInDeck(effectParts[3]);
                         }
                         mainPhase.foundCards.Add(nextCard);
@@ -312,7 +313,7 @@ public class ResolvingEffectState : CardPlayState
                     {
                         foreach (var card in mainPhase.foundCards)
                         {
-                            _roundManager.AddCardToHand(card);
+                            _cardManager.AddCardToHand(card);
                         }
                     }
                 }
@@ -389,7 +390,7 @@ public class ResolvingEffectState : CardPlayState
             {
                 if (effectParts[1] == "Fireball")
                 {
-                    visualEffect = _roundManager.AddCardVisualEffect("Fireball", mainPhase.selectedTile);
+                    visualEffect = _visualEffectManager.CreateCardVisualEffect("Fireball", mainPhase.selectedTile);
                 }
                 mainPhase.playedActionCardStep++;
             }
@@ -400,11 +401,11 @@ public class ResolvingEffectState : CardPlayState
 
     private Card FindNextCardInDeck(string cardType)
     {
-        for (int i = 0; i < _roundManager.roundDeck.cards.Count; i++)
+        for (int i = 0; i < _cardManager.roundDeck.cards.Count; i++)
         {
-            if (_roundManager.roundDeck.cards[i].Type == cardType)
+            if (_cardManager.roundDeck.cards[i].Type == cardType)
             {
-                return _roundManager.roundDeck.cards[i];
+                return _cardManager.roundDeck.cards[i];
             }
         }
         return null;

@@ -9,6 +9,7 @@ public class IdleState : CardPlayState
     public override void EnterState()
     {
         Debug.Log("Idle State Entered");
+        MainPhase mainPhase = (MainPhase)_roundManager.gameState;
         mainPhase.selectedTile = null;
         mainPhase.selectedCards.Clear();
         mainPhase.playedActionCardStep = 0;
@@ -64,7 +65,7 @@ public class IdleState : CardPlayState
             {
                 _uiManager.CloseMonsterOptionPanel();
 //TODO see if I can raycast here too.
-                foreach (var cardView in _roundManager.hand)
+                foreach (var cardView in _cardManager.hand)
                 {
                     cardView.HandleMouseDown(pointerPosition);
 
@@ -74,21 +75,21 @@ public class IdleState : CardPlayState
                         {
                             if (actionCard.StartsWithTarget())
                             {
-                                mainPhase.playedActionCardStep++;
-                                mainPhase.SwitchPhaseState(_container.Instantiate<QuickSelectingTargetMonsterState>().Initialize(cardView));
+                                ((MainPhase)_roundManager.gameState).playedActionCardStep++;
+                                _roundManager.gameState.SwitchPhaseState(_container.Instantiate<QuickSelectingTargetMonsterState>().Initialize(cardView));
                             }
                             else
                             {
-                                mainPhase.SwitchPhaseState(_container.Instantiate<ToFieldState>().Initialize(cardView));
+                                _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ToFieldState>().Initialize(cardView));
                             }
                         }
                         else if (cardView.card is MonsterCard)
                         {
-                            mainPhase.SwitchPhaseState(_container.Instantiate<QuickSelectingMonsterTileState>().Initialize(cardView));
+                            _roundManager.gameState.SwitchPhaseState(_container.Instantiate<QuickSelectingMonsterTileState>().Initialize(cardView));
                         }
                         else if (cardView.card is TreasureCard)
                         {
-                            mainPhase.SwitchPhaseState(_container.Instantiate<ToFieldState>().Initialize(cardView));
+                            _roundManager.gameState.SwitchPhaseState(_container.Instantiate<ToFieldState>().Initialize(cardView));
                         }
                         break;
                     }

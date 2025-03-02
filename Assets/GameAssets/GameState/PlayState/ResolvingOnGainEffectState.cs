@@ -21,6 +21,7 @@ public class ResolvingOnGainEffectState : CardPlayState
 
     private void ResolveEffects()
     {
+        MainPhase mainPhase = _roundManager.gameState as MainPhase;
         for (int i = mainPhase.playedActionCardStep; i < ((ActionCard)mainPhase.gainedCard).OnGainEffects.Count; i++)
         {
             string[] effectParts = ((ActionCard)mainPhase.gainedCard).OnGainEffects[i].Split(' ');

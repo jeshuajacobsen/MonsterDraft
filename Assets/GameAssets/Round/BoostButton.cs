@@ -12,15 +12,22 @@ public class BoostButton : MonoBehaviour
     private GameManager _gameManager;
     private RoundManager _roundManager;
     private RoundUIManager _uiManager;
+    private CardManager _cardManager;
     private PlayerStats _playerStats;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, RoundUIManager uiManager, PlayerStats playerStats, DiContainer container)
+    public void Construct(GameManager gameManager, 
+                          RoundManager roundManager, 
+                          RoundUIManager uiManager, 
+                          CardManager cardManager,
+                          PlayerStats playerStats, 
+                          DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
         _uiManager = uiManager;
+        _cardManager = cardManager;
         _playerStats = playerStats;
         _container = container;
     }
@@ -85,13 +92,13 @@ public class BoostButton : MonoBehaviour
         }
         else if (boostName == "Draw")
         {
-            Card drawnCard = _roundManager.roundDeck.DrawCard();
+            Card drawnCard = _cardManager.roundDeck.DrawCard();
             if (drawnCard == null)
             {
                 // TODO: Add message about not enough cards in deck.
                 yield break;
             }
-            _roundManager.AddCardToHand(drawnCard);
+            _cardManager.AddCardToHand(drawnCard);
         }
         else if (boostName == "Mana")
         {

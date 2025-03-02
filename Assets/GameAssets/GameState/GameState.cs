@@ -4,19 +4,33 @@ using Zenject;
 public abstract class GameState
 {
     public CardPlayState currentState;
+    public Camera mainCamera;
 
     protected GameManager _gameManager;
     protected RoundManager _roundManager;
     protected RoundUIManager _uiManager;
+    protected CardManager _cardManager;
+    protected CombatManager _combatManager;
+    protected VisualEffectManager _visualEffectManager;
     protected PlayerStats _playerStats;
     protected DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, RoundUIManager uiManager, PlayerStats playerStats, DiContainer container)
+    public void Construct(GameManager gameManager, 
+                          RoundManager roundManager, 
+                          RoundUIManager uiManager, 
+                          CardManager cardManager,
+                          CombatManager combatManager,
+                          VisualEffectManager visualEffectManager,
+                          PlayerStats playerStats, 
+                          DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
         _uiManager = uiManager;
+        _cardManager = cardManager;
+        _combatManager = combatManager;
+        _visualEffectManager = visualEffectManager;
         _playerStats = playerStats;
         _container = container;
     }

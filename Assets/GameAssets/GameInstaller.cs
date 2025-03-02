@@ -18,6 +18,9 @@ public class GameInstaller : MonoInstaller
         Container.Bind<PlayerStats>().AsSingle();
         Container.Bind<RoundUIManager>().FromComponentInHierarchy().AsSingle();
         Container.Bind<DungeonManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<CardManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<CombatManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<VisualEffectManager>().FromComponentInHierarchy().AsSingle();
 
         Container.BindFactory<SkillVisualEffect, SkillVisualEffect.Factory>()
             .FromComponentInNewPrefab(skillVisualEffectPrefab);

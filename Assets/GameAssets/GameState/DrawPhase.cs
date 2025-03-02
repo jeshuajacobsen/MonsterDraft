@@ -9,10 +9,10 @@ public class DrawPhase : GameState
     public override void EnterState()
     {
         Debug.Log("Entering Draw Phase");
-        _roundManager.DiscardHand();
+        _cardManager.DiscardHand();
         for (int i = 0; i < 5; i++)
         {
-            _roundManager.AddCardToHand(_roundManager.roundDeck.DrawCard());
+            _cardManager.AddCardToHand(_cardManager.roundDeck.DrawCard());
         }
         for (int row = 1; row <= 3; row++)
         {

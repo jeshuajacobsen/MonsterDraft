@@ -76,7 +76,7 @@ public class ResolvingSkillEffectState : CardPlayState
             }
         }
         
-        mainPhase.SwitchPhaseState(_container.Instantiate<IdleState>());
+        _roundManager.gameState.SwitchPhaseState(_container.Instantiate<IdleState>());
     }
 
     public override void ExitState()

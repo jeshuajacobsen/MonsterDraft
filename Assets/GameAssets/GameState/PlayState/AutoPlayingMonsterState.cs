@@ -87,6 +87,7 @@ public class AutoPlayingMonsterState : CardPlayState
 
     public void HandleCardDrop(MonsterCard card, Vector2 dropPosition)
     {
+        MainPhase mainPhase = _roundManager.gameState as MainPhase;
         for (int i = 0; i < validTargets.Count; i++)
         {
             if (RectTransformUtility.RectangleContainsScreenPoint(

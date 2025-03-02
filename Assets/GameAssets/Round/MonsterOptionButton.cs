@@ -12,13 +12,18 @@ public class MonsterOptionButton : MonoBehaviour
     
     private RoundManager _roundManager;
     private RoundUIManager _uiManager;
+    private CombatManager _combatManager;
     private PlayerStats _playerStats;
 
     [Inject]
-    public void Construct(RoundManager roundManager, RoundUIManager uiManager, PlayerStats playerStats)
+    public void Construct(RoundManager roundManager, 
+                          RoundUIManager uiManager, 
+                          CombatManager combatManager, 
+                          PlayerStats playerStats)
     {
         _roundManager = roundManager;
         _uiManager = uiManager;
+        _combatManager = combatManager;
         _playerStats = playerStats;
     }
 
@@ -59,7 +64,7 @@ public class MonsterOptionButton : MonoBehaviour
             if (_playerStats.Mana >= monster.skill1.ManaCost && 
                 monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
-                if (_roundManager.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
+                if (_combatManager.GetValidTargets(monster, monster.skill1).Count > 0 || tileIndex + monster.skill1.Range > 7 || monster.skill1.directions == "")
                 {
                     transform.GetComponent<Button>().interactable = true;
                 }
@@ -77,7 +82,7 @@ public class MonsterOptionButton : MonoBehaviour
             if (_playerStats.Mana >= monster.skill2.ManaCost && 
                 monster.actionsUsedThisTurn.Count < additionalSkills + 1)
             {
-                if (_roundManager.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
+                if (_combatManager.GetValidTargets(monster, monster.skill2).Count > 0 || tileIndex + monster.skill2.Range > 7 || monster.skill2.directions == "")
                 {
                     transform.GetComponent<Button>().interactable = true;
                 }
@@ -99,12 +104,12 @@ public class MonsterOptionButton : MonoBehaviour
 
         if (option == "Skill1")
         {
-            _roundManager.SelectSkill(monster, monster.skill1);
+            _combatManager.SelectSkill(monster, monster.skill1);
             _uiManager.CloseMonsterOptionPanel();
         }
         else if (option == "Skill2")
         {
-            _roundManager.SelectSkill(monster, monster.skill2);
+            _combatManager.SelectSkill(monster, monster.skill2);
             _uiManager.CloseMonsterOptionPanel();
         }
     }
