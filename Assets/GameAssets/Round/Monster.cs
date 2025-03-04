@@ -105,11 +105,14 @@ public class Monster : MonoBehaviour
     private int experienceGiven;
     private int experienceRequired;
 
+    public class Factory : PlaceholderFactory<Monster> { }
+
     private GameManager _gameManager;
     private RoundManager _roundManager;
     private RoundUIManager _uiManager;
     private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
+    private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
@@ -117,7 +120,8 @@ public class Monster : MonoBehaviour
                           RoundManager roundManager, 
                           RoundUIManager uiManager,
                           PlayerStats playerStats,
-                          SpriteManager spriteManager, 
+                          SpriteManager spriteManager,
+                          CardFactory cardFactory,
                           DiContainer container)
     {
         _gameManager = gameManager;
@@ -125,6 +129,7 @@ public class Monster : MonoBehaviour
         _uiManager = uiManager;
         _playerStats = playerStats;
         _spriteManager = spriteManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -152,8 +157,7 @@ public class Monster : MonoBehaviour
 
     private void Evolve()
     {
-        MonsterCard monsterCard = _container.Instantiate<MonsterCard>();
-        monsterCard.Initialize(evolvesTo, _gameManager.cardLevels[evolvesTo]);
+        MonsterCard monsterCard = _cardFactory.CreateCard(evolvesTo, _gameManager.cardLevels[evolvesTo]) as MonsterCard;
         _playerStats.Experience -= experienceRequired;
         this.Initialize(monsterCard, tileOn, team);
     }

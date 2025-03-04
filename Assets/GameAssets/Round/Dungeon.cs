@@ -9,12 +9,14 @@ public class Dungeon
     private string guaranteedMonster;
 
     private GameManager _gameManager;
+    private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -30,8 +32,7 @@ public class Dungeon
         if (guaranteedMonsterTimer == 0)
         {
             guaranteedMonsterTimer = 4;
-            var guaranteedMonsterCard = _container.Instantiate<MonsterCard>();
-            guaranteedMonsterCard.Initialize(guaranteedMonster, 1);
+            Card guaranteedMonsterCard = _cardFactory.CreateCard(guaranteedMonster, 1);
             return guaranteedMonsterCard;
         }
 
@@ -51,33 +52,11 @@ public class Dungeon
             if (randomPoint <= 0f)
             {
                 string cardName = kvp.Key;
-                string type = _gameManager.gameData.GetCardType(cardName);
-                if (type == "Monster")
-                {
-                    MonsterCard card = _container.Instantiate<MonsterCard>();
-                    card.Initialize(cardName, 1);
-                    return card;
-                }
-                else if (type == "Action")
-                {
-                    ActionCard card = _container.Instantiate<ActionCard>();
-                    card.Initialize(cardName, 1);
-                    return card;
-                }
-                else if (type == "Treasure")
-                {
-                    TreasureCard card = _container.Instantiate<TreasureCard>();
-                    card.Initialize(cardName, 1);
-                    return card;
-                }
-                else if (type == "Pass")
+                if (cardName == "Pass")
                 {
                     return null;
                 }
-                else
-                {
-                    Debug.LogWarning($"Unknown card type: {type}");
-                }
+                Card card = _cardFactory.CreateCard(cardName, 1);
             }
         }
 

@@ -8,6 +8,7 @@ public class GameInstaller : MonoInstaller
     [SerializeField] private CardVisualEffect cardVisualEffectPrefab;
     [SerializeField] private FloatyNumber floatyNumberPrefab;
     [SerializeField] private CardImprovementButton cardImprovementButtonPrefab;
+    [SerializeField] private Monster monsterPrefab;
 
     public override void InstallBindings()
     {
@@ -21,6 +22,7 @@ public class GameInstaller : MonoInstaller
         Container.Bind<CardManager>().FromComponentInHierarchy().AsSingle();
         Container.Bind<CombatManager>().FromComponentInHierarchy().AsSingle();
         Container.Bind<VisualEffectManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<CardFactory>().AsSingle();
 
         Container.BindFactory<SkillVisualEffect, SkillVisualEffect.Factory>()
             .FromComponentInNewPrefab(skillVisualEffectPrefab);
@@ -30,5 +32,7 @@ public class GameInstaller : MonoInstaller
             .FromComponentInNewPrefab(floatyNumberPrefab);
         Container.BindFactory<CardImprovementButton, CardImprovementButton.Factory>()
             .FromComponentInNewPrefab(cardImprovementButtonPrefab);
+        Container.BindFactory<Monster, Monster.Factory>()
+            .FromComponentInNewPrefab(monsterPrefab);
     }
 }

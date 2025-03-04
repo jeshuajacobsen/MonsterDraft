@@ -10,8 +10,6 @@ public class StockPile : MonoBehaviour
     public string Name { get; set; }
     public int StockLeft { get; set; }
     public int Cost { get; set; }
-
-    private string cardType;
     public Card card;
 
     private GameManager _gameManager;
@@ -19,6 +17,7 @@ public class StockPile : MonoBehaviour
     private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
     private CardManager _cardManager;
+    private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
@@ -27,6 +26,7 @@ public class StockPile : MonoBehaviour
                           PlayerStats playerStats,
                           SpriteManager spriteManager, 
                           CardManager cardManager,
+                          CardFactory cardFactory,
                           DiContainer container)
     {
         _gameManager = gameManager;
@@ -34,6 +34,7 @@ public class StockPile : MonoBehaviour
         _playerStats = playerStats;
         _spriteManager = spriteManager;
         _cardManager = cardManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -42,24 +43,9 @@ public class StockPile : MonoBehaviour
         transform.Find("BuyButton").GetComponent<Button>().onClick.AddListener(BuyCard);
     }
 
-    public void Initialize(string name, int stockLeft, string cardType)
+    public void Initialize(string name, int stockLeft)
     {
-        this.cardType = cardType;
-        switch (this.cardType)
-        {
-            case "Monster":
-                card = _container.Instantiate<MonsterCard>();
-                ((MonsterCard)card).Initialize(name, _gameManager.cardLevels[name]);
-                break;
-            case "Treasure":
-                card = _container.Instantiate<TreasureCard>();
-                ((TreasureCard)card).Initialize(name, _gameManager.cardLevels[name]);
-                break;
-            case "Action":
-                card = _container.Instantiate<ActionCard>();
-                ((ActionCard)card).Initialize(name, _gameManager.cardLevels[name]);
-                break;
-        }
+        card = _cardFactory.CreateCard(name, _gameManager.cardLevels[name]);
 
         this.Name = name;
 
@@ -95,21 +81,7 @@ public class StockPile : MonoBehaviour
 
             Card newCard = null;
 
-            switch (cardType)
-            {
-                case "Monster":
-                    newCard = _container.Instantiate<MonsterCard>();
-                    ((MonsterCard)newCard).Initialize(Name, _gameManager.cardLevels[Name]);
-                    break;
-                case "Treasure":
-                    newCard = _container.Instantiate<TreasureCard>();
-                    ((TreasureCard)newCard).Initialize(Name, _gameManager.cardLevels[Name]);
-                    break;
-                case "Action":
-                    newCard = _container.Instantiate<ActionCard>();
-                    ((ActionCard)newCard).Initialize(Name, _gameManager.cardLevels[Name]);
-                    break;
-            }
+            newCard = _cardFactory.CreateCard(Name, _gameManager.cardLevels[Name]);
 
             _cardManager.discardPile.AddCard(newCard);
             _roundManager.cardsGainedThisRound.Add(newCard);

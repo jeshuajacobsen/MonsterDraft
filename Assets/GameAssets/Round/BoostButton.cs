@@ -13,6 +13,7 @@ public class BoostButton : MonoBehaviour
     private RoundManager _roundManager;
     private RoundUIManager _uiManager;
     private CardManager _cardManager;
+    private CardFactory _cardFactory;
     private PlayerStats _playerStats;
     private DiContainer _container;
 
@@ -21,6 +22,7 @@ public class BoostButton : MonoBehaviour
                           RoundManager roundManager, 
                           RoundUIManager uiManager, 
                           CardManager cardManager,
+                          CardFactory cardFactory,
                           PlayerStats playerStats, 
                           DiContainer container)
     {
@@ -28,6 +30,7 @@ public class BoostButton : MonoBehaviour
         _roundManager = roundManager;
         _uiManager = uiManager;
         _cardManager = cardManager;
+        _cardFactory = cardFactory;
         _playerStats = playerStats;
         _container = container;
     }
@@ -80,8 +83,8 @@ public class BoostButton : MonoBehaviour
             else
             {
                 string monsterName = _gameManager.gameData.GetRandomMonsterName(new List<string>(), "Common");
-                var monsterCard = _container.Instantiate<MonsterCard>();
-                monsterCard.Initialize(monsterName, _gameManager.cardLevels[monsterName]);
+                
+                MonsterCard monsterCard = (MonsterCard)_cardFactory.CreateCard(monsterName, _gameManager.cardLevels[monsterName]);
                 yield return new WaitForEndOfFrame();
                 _roundManager.gameState.SwitchPhaseState(_container.Instantiate<AutoPlayingMonsterState>().Initialize(monsterCard, gemCost));
             }

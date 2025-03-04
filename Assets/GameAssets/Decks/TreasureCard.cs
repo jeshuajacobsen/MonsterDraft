@@ -61,6 +61,10 @@ public class TreasureCard : Card
             }
             return description;
         }
+        set
+        {
+            _description = value;
+        }
     }
 
     public string GetColoredDescription(Color coinColor, Color manaColor)
@@ -96,16 +100,6 @@ public class TreasureCard : Card
             }
         }
         return description;
-    }
-
-    public void Initialize(string name, int level)
-    {
-        base.Initialize(name, "Treasure", level);
-
-        TreasureData baseStats = _gameManager.gameData.GetTreasureData(name);
-        CoinGeneration = baseStats.CoinGeneration;
-        ManaGeneration = baseStats.ManaGeneration;
-        _description = baseStats.Description;
     }
 
 }

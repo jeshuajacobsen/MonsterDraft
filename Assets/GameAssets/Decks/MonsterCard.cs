@@ -95,23 +95,4 @@ public class MonsterCard : Card
     public string evolvesTo;
     public int experienceGiven;
     public int experienceRequired;
-
-    public void Initialize(string name, int level)
-    {
-        base.Initialize(name, "Monster", level);
-
-        BaseMonsterData baseStats = _gameManager.gameData.GetBaseMonsterData(name);
-        Attack = baseStats.Attack;
-        Health = baseStats.Health;
-        Defense = baseStats.Defense;
-        Movement = baseStats.Movement;
-        ManaCost = baseStats.ManaCost;
-        skill1 = _gameManager.gameData.GetSkill(baseStats.skill1Name);
-        skill2 = _gameManager.gameData.GetSkill(baseStats.skill2Name);
-        evolvesFrom = baseStats.evolvesFrom;
-        evolvesTo = baseStats.evolvesTo;
-        experienceGiven = baseStats.experienceGiven;
-        experienceRequired = baseStats.experienceRequired;
-    }
-
 }

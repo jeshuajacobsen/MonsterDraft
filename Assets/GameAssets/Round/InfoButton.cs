@@ -7,12 +7,14 @@ using Zenject;
 public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private GameManager _gameManager;
+    CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -42,15 +44,13 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
             if (smallCard != null)
             {
-                currentCard = _container.Instantiate<MonsterCard>();
-                currentCard.Initialize(smallCard.card.Name, _gameManager.cardLevels[smallCard.card.Name]);
+                currentCard = (MonsterCard)_cardFactory.CreateCard(smallCard.card.Name, _gameManager.cardLevels[smallCard.card.Name]);
                 evolvesFrom = currentCard.evolvesFrom;
                 evolvesTo = currentCard.evolvesTo;
             }
             else if (stockPile != null)
             {
-                currentCard = _container.Instantiate<MonsterCard>();
-                currentCard.Initialize(stockPile.card.Name, _gameManager.cardLevels[stockPile.card.Name]);
+                currentCard = (MonsterCard)_cardFactory.CreateCard(stockPile.card.Name, _gameManager.cardLevels[stockPile.card.Name]);
                 evolvesFrom = currentCard.evolvesFrom;
                 evolvesTo = currentCard.evolvesTo;
             }
@@ -70,11 +70,11 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
                 if (!string.IsNullOrEmpty(evolvesTo) && !string.IsNullOrEmpty(evolvesFrom))
                 {
-                    MonsterCard evolvesToCard = _container.Instantiate<MonsterCard>();
-                    evolvesToCard.Initialize(evolvesTo, _gameManager.cardLevels[evolvesTo]);
+                    MonsterCard evolvesToCard = 
+                        _cardFactory.CreateCard(evolvesTo, _gameManager.cardLevels[evolvesTo]) as MonsterCard;
 
-                    MonsterCard evolvesFromCard = _container.Instantiate<MonsterCard>();
-                    evolvesFromCard.Initialize(evolvesFrom, _gameManager.cardLevels[evolvesFrom]);
+                    MonsterCard evolvesFromCard = 
+                        _cardFactory.CreateCard(evolvesFrom, _gameManager.cardLevels[evolvesFrom]) as MonsterCard;
 
                     _gameManager.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
                     _gameManager.largeCardView1.gameObject.SetActive(true);
@@ -89,8 +89,7 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
                 if (!string.IsNullOrEmpty(evolvesTo))
                 {
-                    MonsterCard evolvesToCard = _container.Instantiate<MonsterCard>();
-                    evolvesToCard.Initialize(evolvesTo, _gameManager.cardLevels[evolvesTo]);
+                    MonsterCard evolvesToCard = _cardFactory.CreateCard(evolvesTo, _gameManager.cardLevels[evolvesTo]) as MonsterCard;
 
                     _gameManager.largeCardView1.SetCard(currentCard, firstCardPosition);
                     _gameManager.largeCardView1.gameObject.SetActive(true);
@@ -100,16 +99,17 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
                     if (!string.IsNullOrEmpty(evolvesToCard.evolvesTo))
                     {
-                        MonsterCard evolvesTo2Card = _container.Instantiate<MonsterCard>();
-                        evolvesTo2Card.Initialize(evolvesToCard.evolvesTo, _gameManager.cardLevels[evolvesToCard.evolvesTo]);
+                        MonsterCard evolvesTo2Card = _cardFactory.CreateCard(
+                            evolvesToCard.evolvesTo, 
+                            _gameManager.cardLevels[evolvesToCard.evolvesTo]) as MonsterCard;
                         _gameManager.largeCardView3.SetCard(evolvesTo2Card, thirdCardPosition);
                         _gameManager.largeCardView3.gameObject.SetActive(true);
                     }
                 }
                 else if (!string.IsNullOrEmpty(evolvesFrom))
                 {
-                    MonsterCard evolvesFromCard = _container.Instantiate<MonsterCard>();
-                    evolvesFromCard.Initialize(evolvesFrom, _gameManager.cardLevels[evolvesFrom]);
+                    MonsterCard evolvesFromCard = 
+                        _cardFactory.CreateCard(evolvesFrom, _gameManager.cardLevels[evolvesFrom]) as MonsterCard;
 
                     _gameManager.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
                     _gameManager.largeCardView1.gameObject.SetActive(true);
@@ -119,8 +119,9 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
                     if (!string.IsNullOrEmpty(evolvesFromCard.evolvesFrom))
                     {
-                        MonsterCard evolvesFrom2Card = _container.Instantiate<MonsterCard>();
-                        evolvesFrom2Card.Initialize(evolvesFromCard.evolvesFrom, _gameManager.cardLevels[evolvesFromCard.evolvesFrom]);
+                        MonsterCard evolvesFrom2Card = _cardFactory.CreateCard(
+                            evolvesFromCard.evolvesFrom, 
+                            _gameManager.cardLevels[evolvesFromCard.evolvesFrom]) as MonsterCard;
                         _gameManager.largeCardView3.SetCard(evolvesFrom2Card, thirdCardPosition);
                         _gameManager.largeCardView3.gameObject.SetActive(true);
                     }

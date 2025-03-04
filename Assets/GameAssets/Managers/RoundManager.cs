@@ -9,22 +9,15 @@ public class RoundManager : MonoBehaviour
 {
     public GameObject roundPanel;
 
-    public Monster MonsterPrefab;
-
     public GameState gameState;
-
-
-
     public LayerMask draggableLayer; 
 
     public List<Card> cardsGainedThisRound = new List<Card>();
 
-    
     public List<PersistentEffect> persistentEffects = new List<PersistentEffect>();
 
     private GameManager _gameManager;
     private RunManager _runManager;
-    private DungeonManager _dungeonManager;
     private PlayerStats _playerStats;
     private DiContainer _container;
 
@@ -32,15 +25,11 @@ public class RoundManager : MonoBehaviour
 
     [Inject]
     public void Construct(GameManager gameManager, 
-                          RunManager runManager, 
-                          DungeonManager dungeonManager,
-                          PlayerStats playerStats,
+                          RunManager runManager,
                           DiContainer container)
     {
         _gameManager = gameManager;
         _runManager = runManager;
-        _dungeonManager = dungeonManager;
-        _playerStats = playerStats;
         _container = container;
     }
 

@@ -4,12 +4,14 @@ using Zenject;
 public class InitialDeck : Deck, IInitializable
 {
     private GameManager _gameManager;
+    private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -18,40 +20,18 @@ public class InitialDeck : Deck, IInitializable
     {
         cards = new List<Card>();
 
-        AddTreasureCard("Copper", 7);
-        AddTreasureCard("Mana Vial", 5);
-        AddMonsterCard("Zaple", 1);
-        AddActionCard("Fireball", 1);
-        AddActionCard("Heal", 1);
+        AddCard("Copper", 7);
+        AddCard("Mana Vial", 5);
+        AddCard("Zaple", 1);
+        AddCard("Fireball", 1);
+        AddCard("Heal", 1);
     }
 
-    private void AddTreasureCard(string cardName, int count)
+    private void AddCard(string cardName, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            var treasureCard = _container.Instantiate<TreasureCard>();
-            treasureCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
-            cards.Add(treasureCard);
-        }
-    }
-
-    private void AddMonsterCard(string cardName, int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            var monsterCard = _container.Instantiate<MonsterCard>();
-            monsterCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
-            cards.Add(monsterCard);
-        }
-    }
-
-    private void AddActionCard(string cardName, int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            var actionCard = _container.Instantiate<ActionCard>();
-            actionCard.Initialize(cardName, _gameManager.cardLevels[cardName]);
-            cards.Add(actionCard);
+            cards.Add(_cardFactory.CreateCard(cardName, _gameManager.cardLevels[cardName]));
         }
     }
 
@@ -61,26 +41,7 @@ public class InitialDeck : Deck, IInitializable
 
         foreach (string card in cards)
         {
-            string type = _gameManager.gameData.GetCardType(card);
-
-            if (type == "Treasure")
-            {
-                var treasureCard = _container.Instantiate<TreasureCard>();
-                treasureCard.Initialize(card, _gameManager.cardLevels[card]);
-                this.cards.Add(treasureCard);
-            }
-            else if (type == "Monster")
-            {
-                var monsterCard = _container.Instantiate<MonsterCard>();
-                monsterCard.Initialize(card, _gameManager.cardLevels[card]);
-                this.cards.Add(monsterCard);
-            }
-            else if (type == "Action")
-            {
-                var actionCard = _container.Instantiate<ActionCard>();
-                actionCard.Initialize(card, _gameManager.cardLevels[card]);
-                this.cards.Add(actionCard);
-            }
+            this.cards.Add(_cardFactory.CreateCard(card, _gameManager.cardLevels[card]));
         }
     }
 

@@ -403,7 +403,15 @@ public class ResolvingEffectState : CardPlayState
     {
         for (int i = 0; i < _cardManager.roundDeck.cards.Count; i++)
         {
-            if (_cardManager.roundDeck.cards[i].Type == cardType)
+            if (cardType == "Monster" && _cardManager.roundDeck.cards[i] is MonsterCard)
+            {
+                return _cardManager.roundDeck.cards[i];
+            }
+            else if (cardType == "Treasure" && _cardManager.roundDeck.cards[i] is TreasureCard)
+            {
+                return _cardManager.roundDeck.cards[i];
+            }
+            else if (cardType == "Action" && _cardManager.roundDeck.cards[i] is ActionCard)
             {
                 return _cardManager.roundDeck.cards[i];
             }

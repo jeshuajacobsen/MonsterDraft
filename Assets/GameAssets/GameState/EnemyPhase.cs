@@ -197,8 +197,10 @@ public class EnemyPhase : GameState
 
     private void PlayMonsterCardOnTile(MonsterCard card, Tile tile)
     {
-        Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(_roundManager.MonsterPrefab, tile.transform);
+        Monster newMonster = _monsterFactory.Create();
         newMonster.Initialize(card, tile, "Enemy");
+        newMonster.transform.SetParent(tile.transform);
+        newMonster.transform.localPosition = Vector3.zero;
         tile.monster = newMonster;
     }
 

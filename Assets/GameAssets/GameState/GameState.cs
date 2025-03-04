@@ -12,6 +12,7 @@ public abstract class GameState
     protected CardManager _cardManager;
     protected CombatManager _combatManager;
     protected VisualEffectManager _visualEffectManager;
+    protected Monster.Factory _monsterFactory;
     protected PlayerStats _playerStats;
     protected DiContainer _container;
 
@@ -22,6 +23,7 @@ public abstract class GameState
                           CardManager cardManager,
                           CombatManager combatManager,
                           VisualEffectManager visualEffectManager,
+                          Monster.Factory monsterFactory,
                           PlayerStats playerStats, 
                           DiContainer container)
     {
@@ -31,6 +33,7 @@ public abstract class GameState
         _cardManager = cardManager;
         _combatManager = combatManager;
         _visualEffectManager = visualEffectManager;
+        _monsterFactory = monsterFactory;
         _playerStats = playerStats;
         _container = container;
     }

@@ -227,8 +227,10 @@ public class MainPhase : GameState
 
     private void PlayMonster(MonsterCard monsterCard, Tile target)
     {
-        Monster newMonster = _container.InstantiatePrefabForComponent<Monster>(_roundManager.MonsterPrefab, target.transform);
+        Monster newMonster = _monsterFactory.Create();
         newMonster.Initialize(monsterCard, target, "Ally");
+        newMonster.transform.SetParent(target.transform);
+        newMonster.transform.localPosition = Vector3.zero;
         target.monster = newMonster;
     }
 

@@ -10,12 +10,14 @@ public class DeckEditorPanel : MonoBehaviour
     public DeckEditorCardView cardViewPrefab;
 
     private GameManager _gameManager;
+    private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -41,26 +43,7 @@ public class DeckEditorPanel : MonoBehaviour
         {
             DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
 
-            string type = _gameManager.gameData.GetCardType(cardName.Key);
-
-            if (type == "Treasure")
-            {
-                var treasureCard = _container.Instantiate<TreasureCard>();
-                treasureCard.Initialize(cardName.Key, _gameManager.cardLevels[cardName.Key]);
-                cardView.Initialize(treasureCard, cardName.Value);
-            }
-            else if (type == "Monster")
-            {
-                var monsterCard = _container.Instantiate<MonsterCard>();
-                monsterCard.Initialize(cardName.Key, _gameManager.cardLevels[cardName.Key]);
-                cardView.Initialize(monsterCard, cardName.Value);
-            }
-            else if (type == "Action")
-            {
-                var actionCard = _container.Instantiate<ActionCard>();
-                actionCard.Initialize(cardName.Key, _gameManager.cardLevels[cardName.Key]);
-                cardView.Initialize(actionCard, cardName.Value);
-            }
+            cardView.Initialize(_cardFactory.CreateCard(cardName.Key, _gameManager.cardLevels[cardName.Key]), cardName.Value);
 
             int count = _gameManager.selectedInitialDeck.cards.Count(card => card.Name == cardName.Key);
             cardView.LoadValues(count, count);
@@ -69,41 +52,25 @@ public class DeckEditorPanel : MonoBehaviour
     }
 
     public void LoadCards(SaveData saveData)
-{
-    foreach (Transform child in transform)
     {
-        Destroy(child.gameObject);
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        unlockedCards.Clear();
+
+        foreach (string card in saveData.cardsUsed.Keys)
+        {
+            DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
+            string type = _gameManager.gameData.GetCardType(card);
+
+            cardView.Initialize(_cardFactory.CreateCard(card, _gameManager.cardLevels[card]), 
+                                _gameManager.gameData.availableDeckEditorCards[card]);
+
+            cardView.LoadValues(saveData.cardsUsed[card], saveData.cardsBought[card]);
+            unlockedCards.Add(cardView);
+        }
     }
-    unlockedCards.Clear();
-
-    foreach (string card in saveData.cardsUsed.Keys)
-    {
-        DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
-        string type = _gameManager.gameData.GetCardType(card);
-
-        if (type == "Treasure")
-        {
-            var treasureCard = _container.Instantiate<TreasureCard>();
-            treasureCard.Initialize(card, _gameManager.cardLevels[card]);
-            cardView.Initialize(treasureCard, _gameManager.gameData.availableDeckEditorCards[card]);
-        }
-        else if (type == "Monster")
-        {
-            var monsterCard = _container.Instantiate<MonsterCard>();
-            monsterCard.Initialize(card, _gameManager.cardLevels[card]);
-            cardView.Initialize(monsterCard, _gameManager.gameData.availableDeckEditorCards[card]);
-        }
-        else if (type == "Action")
-        {
-            var actionCard = _container.Instantiate<ActionCard>();
-            actionCard.Initialize(card, _gameManager.cardLevels[card]);
-            cardView.Initialize(actionCard, _gameManager.gameData.availableDeckEditorCards[card]);
-        }
-
-        cardView.LoadValues(saveData.cardsUsed[card], saveData.cardsBought[card]);
-        unlockedCards.Add(cardView);
-    }
-}
 
 
     public InitialDeck GetSelectedInitialDeck()

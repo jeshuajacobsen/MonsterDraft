@@ -8,12 +8,14 @@ public class SelectedCardPanel : MonoBehaviour
     private Card selectedCard;
 
     private GameManager _gameManager;
+    private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
+        _cardFactory = cardFactory;
         _container = container;
     }
 
@@ -50,24 +52,7 @@ public class SelectedCardPanel : MonoBehaviour
 
             LargeCardView largeCardViewAfter = transform.Find("LargeCardViewAfter").GetComponent<LargeCardView>();
 
-            if (card is MonsterCard)
-            {
-                var upgradedCard = _container.Instantiate<MonsterCard>();
-                upgradedCard.Initialize(card.Name, _gameManager.cardLevels[card.Name] + 1);
-                largeCardViewAfter.SetCard(upgradedCard, new Vector2(), false);
-            }
-            else if (card is TreasureCard)
-            {
-                var upgradedCard = _container.Instantiate<TreasureCard>();
-                upgradedCard.Initialize(card.Name, _gameManager.cardLevels[card.Name] + 1);
-                largeCardViewAfter.SetCard(upgradedCard, new Vector2(), false);
-            }
-            else if (card is ActionCard)
-            {
-                var upgradedCard = _container.Instantiate<ActionCard>();
-                upgradedCard.Initialize(card.Name, _gameManager.cardLevels[card.Name] + 1);
-                largeCardViewAfter.SetCard(upgradedCard, new Vector2(), false);
-            }
+            largeCardViewAfter.SetCard(_cardFactory.CreateCard(card.Name, _gameManager.cardLevels[card.Name] + 1), new Vector2(), false);
 
             largeCardViewAfter.MarkImprovements();
 

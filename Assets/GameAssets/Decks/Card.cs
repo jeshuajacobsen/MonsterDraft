@@ -4,7 +4,6 @@ using Zenject;
 public class Card
 {
     public string Name { get; set; }
-    public string Type { get; set; }
     private int _cost;
     public int CoinCost {
         get
@@ -12,11 +11,11 @@ public class Card
             int addedCost = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                if (Type == "Monster")
+                if (this is MonsterCard)
                     addedCost += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].coinCostChange;
-                else if (Type == "Treasure")
+                else if (this is TreasureCard)
                     addedCost += _gameManager.gameData.GetTreasureData(Name).levelData[i].coinCostChange;
-                else if (Type == "Action")
+                else if (this is ActionCard)
                     addedCost += _gameManager.gameData.GetActionData(Name).levelData[i].coinCostChange;
             }
             return _cost + addedCost;
@@ -70,9 +69,9 @@ public class Card
             Dictionary<int, string> changedEffects = new Dictionary<int, string>();
             for(int i = 0; i < level - 1; i++)
             {
-                if (Type == "Treasure")
+                if (this is TreasureCard)
                     changedEffects = _gameManager.gameData.GetTreasureData(Name).levelData[i].effectChanges;
-                else if (Type == "Action")
+                else if (this is ActionCard)
                     changedEffects = _gameManager.gameData.GetActionData(Name).levelData[i].effectChanges;
                 
                 if (changedEffects != null)
@@ -119,9 +118,9 @@ public class Card
             Dictionary<string, string> variableChanges = new Dictionary<string, string>();
             for(int i = 0; i < level - 1; i++)
             {
-                if (Type == "Treasure")
+                if (this is TreasureCard)
                     variableChanges = _gameManager.gameData.GetTreasureData(Name).levelData[i].effectVariableChanges;
-                else if (Type == "Action")
+                else if (this is ActionCard)
                     variableChanges = _gameManager.gameData.GetActionData(Name).levelData[i].effectVariableChanges;
                 
                 if (variableChanges != null)
@@ -155,47 +154,5 @@ public class Card
     public void Construct(GameManager gameManager)
     {
         _gameManager = gameManager;
-    }
-
-    public void Initialize(string name, string type, int level)
-    {
-        OnGainEffects = new List<string>();
-        Effects = new List<string>();
-        EffectVariables = new Dictionary<string, string>();
-
-        Name = name;
-        Type = type;
-        this.level = level;
-
-        if (type == "Monster")
-        {
-            BaseMonsterData baseStats = _gameManager.gameData.GetBaseMonsterData(name);
-            CoinCost = baseStats.CoinCost;
-            LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
-            maxLevel = baseStats.maxLevel;
-            BuyCardPrestigeCost = baseStats.BuyCardPrestigeCost;
-        }
-        else if (type == "Treasure")
-        {
-            TreasureData baseStats = _gameManager.gameData.GetTreasureData(name);
-            CoinCost = baseStats.CoinCost;
-            LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
-            OnGainEffects = new List<string>(baseStats.onGainEffects);
-            Effects = new List<string>(baseStats.effects);
-            maxLevel = baseStats.maxLevel;
-            EffectVariables = new Dictionary<string, string>(baseStats.effectVariables);
-            BuyCardPrestigeCost = baseStats.BuyCardPrestigeCost;
-        }
-        else if (type == "Action")
-        {
-            BaseActionData baseStats = _gameManager.gameData.GetActionData(name);
-            CoinCost = baseStats.CoinCost;
-            LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
-            OnGainEffects = new List<string>(baseStats.onGainEffects);
-            Effects = new List<string>(baseStats.effects);
-            maxLevel = baseStats.maxLevel;
-            EffectVariables = new Dictionary<string, string>(baseStats.effectVariables);
-            BuyCardPrestigeCost = baseStats.BuyCardPrestigeCost;
-        }
     }
 }

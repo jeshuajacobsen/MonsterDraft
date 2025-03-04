@@ -24,13 +24,15 @@ public class RunManager : MonoBehaviour
 
     private GameManager _gameManager;
     private RoundManager _roundManager;
+    private CardFactory _CardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, DiContainer container)
+    public void Construct(GameManager gameManager, RoundManager roundManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
+        _CardFactory = cardFactory;
         _container = container;
     }
 
@@ -195,8 +197,7 @@ public class RunManager : MonoBehaviour
 
             if (gainedCards.Count == 0)
             {
-                TreasureCard treasureCard = _container.Instantiate<TreasureCard>();
-                treasureCard.Initialize("Copper", _gameManager.cardLevels["Copper"]);
+                Card treasureCard = _CardFactory.CreateCard("Copper", _gameManager.cardLevels["Copper"]);
                 largeCardViews[i].GetComponent<LargeCardView>().SetCard(treasureCard, new Vector2(0, 0), false);
             }
             

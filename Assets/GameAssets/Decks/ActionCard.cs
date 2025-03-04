@@ -68,14 +68,6 @@ public class ActionCard : Card
         return description;
     }
 
-    public void Initialize(string name, int level)
-    {
-        base.Initialize(name, "Action", level);
-
-        BaseActionData baseStats = _gameManager.gameData.GetActionData(name);
-        Description = baseStats.Description;
-    }
-
     public bool StartsWithTarget()
     {
         return Effects[0].StartsWith("Target");
