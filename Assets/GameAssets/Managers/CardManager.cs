@@ -10,9 +10,7 @@ public class CardManager : MonoBehaviour
     public RoundDeck roundDeck;
     public DiscardPile discardPile;
 
-    private GameManager _gameManager;
     private RunManager _runManager;
-    private DungeonManager _dungeonManager;
     private PlayerStats _playerStats;
     private DiContainer _container;
 
@@ -20,17 +18,13 @@ public class CardManager : MonoBehaviour
     private CardVisualEffect.Factory _cardVisualEffectFactory;
 
     [Inject]
-    public void Construct(GameManager gameManager, 
-                          RunManager runManager, 
-                          DungeonManager dungeonManager,
+    public void Construct(RunManager runManager, 
                           PlayerStats playerStats,
                           SkillVisualEffect.Factory skillVisualEffectFactory,
                           CardVisualEffect.Factory cardVisualEffectFactory,
                           DiContainer container)
     {
-        _gameManager = gameManager;
         _runManager = runManager;
-        _dungeonManager = dungeonManager;
         _playerStats = playerStats;
         _skillVisualEffectFactory = skillVisualEffectFactory;
         _cardVisualEffectFactory = cardVisualEffectFactory;

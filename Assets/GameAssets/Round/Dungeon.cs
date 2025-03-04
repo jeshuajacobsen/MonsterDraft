@@ -8,14 +8,12 @@ public class Dungeon
     private int guaranteedMonsterTimer = 3;
     private string guaranteedMonster;
 
-    private GameManager _gameManager;
     private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
+    public void Construct(CardFactory cardFactory, DiContainer container)
     {
-        _gameManager = gameManager;
         _cardFactory = cardFactory;
         _container = container;
     }

@@ -108,7 +108,6 @@ public class Monster : MonoBehaviour
     public class Factory : PlaceholderFactory<Monster> { }
 
     private GameManager _gameManager;
-    private RoundManager _roundManager;
     private RoundUIManager _uiManager;
     private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
@@ -116,8 +115,7 @@ public class Monster : MonoBehaviour
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, 
-                          RoundManager roundManager, 
+    public void Construct(GameManager gameManager,  
                           RoundUIManager uiManager,
                           PlayerStats playerStats,
                           SpriteManager spriteManager,
@@ -125,7 +123,6 @@ public class Monster : MonoBehaviour
                           DiContainer container)
     {
         _gameManager = gameManager;
-        _roundManager = roundManager;
         _uiManager = uiManager;
         _playerStats = playerStats;
         _spriteManager = spriteManager;

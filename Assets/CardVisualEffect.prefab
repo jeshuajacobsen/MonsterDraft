@@ -60,11 +60,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectSprite: {fileID: 0}
   desiredSize: {x: 150, y: 150}
-  moveSpeed: 1000
+  moveSpeed: 1500
   reachedTarget:
     m_PersistentCalls:
       m_Calls: []
-  done: 0
 --- !u!1 &4727469361209340444
 GameObject:
   m_ObjectHideFlags: 0

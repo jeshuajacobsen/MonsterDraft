@@ -18,7 +18,6 @@ public class RoundManager : MonoBehaviour
 
     private GameManager _gameManager;
     private RunManager _runManager;
-    private PlayerStats _playerStats;
     private DiContainer _container;
 
 

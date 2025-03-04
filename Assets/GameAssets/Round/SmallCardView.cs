@@ -18,15 +18,12 @@ public class SmallCardView : MonoBehaviour
     private Transform originalParent;
     private Canvas dragCanvas;
     private Canvas originalCanvas;
-
-    private GameManager _gameManager;
     private SpriteManager _spriteManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, SpriteManager spriteManager, DiContainer container)
+    public void Construct(SpriteManager spriteManager, DiContainer container)
     {
-        _gameManager = gameManager;
         _container = container;
         _spriteManager = spriteManager;
     }

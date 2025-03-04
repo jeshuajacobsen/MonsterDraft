@@ -58,6 +58,8 @@ public class QuickSelectingMonsterTileState : CardPlayState
     {
         Debug.Log("Exiting Quick Selecting target Tile State");
         validTargets.ForEach(tile => tile.GetComponent<Image>().color = Color.white);
+        validTargets.ForEach(tile => tile.GetComponent<Image>().color = new Color(
+            tile.GetComponent<Image>().color.r, tile.GetComponent<Image>().color.g, tile.GetComponent<Image>().color.b, 0.3f));
         validTargets.Clear();
     }
 

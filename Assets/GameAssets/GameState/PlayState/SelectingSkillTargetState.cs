@@ -118,6 +118,8 @@ public class SelectingSkillTargetState : CardPlayState
     {
         Debug.Log("Exiting Selecting Skill Target State");
         validTargets.ForEach(tile => tile.GetComponent<Image>().color = Color.white);
+        validTargets.ForEach(tile => tile.GetComponent<Image>().color = new Color(
+            tile.GetComponent<Image>().color.r, tile.GetComponent<Image>().color.g, tile.GetComponent<Image>().color.b, 0.3f));
         validTargets.Clear();
     }
 

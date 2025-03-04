@@ -4,14 +4,12 @@ using Zenject;
 public class RoundDeck : Deck
 {
 
-    private RoundManager _roundManager;
     private RunManager _runManager;
     private CardManager _cardManager;
 
     [Inject]
-    public void Construct(RoundManager roundManager, RunManager runManager, CardManager cardManager)
+    public void Construct(RunManager runManager, CardManager cardManager)
     {
-        _roundManager = roundManager;
         _runManager = runManager;
         _cardManager = cardManager;
     }

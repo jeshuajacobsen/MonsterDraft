@@ -11,14 +11,6 @@ public class Tile : MonoBehaviour
     private Camera mainCamera;
     public DungeonRow dungeonRow;
 
-    private RoundManager _roundManager;
-
-    [Inject]
-    public void Construct(RoundManager roundManager)
-    {
-        _roundManager = roundManager;
-    }
-
 
     void Start()
     {
