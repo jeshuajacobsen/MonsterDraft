@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class CardFactory
 {
-    private readonly GameManager _gameManager;
+    private readonly IGameManager _gameManager;
     
     [Inject]
-    public CardFactory(GameManager gameManager)
+    public CardFactory(IGameManager gameManager)
     {
         _gameManager = gameManager;
     }
@@ -16,7 +16,7 @@ public class CardFactory
     public Card CreateCard(string name, int level)
     {
         Card card;
-        string type = _gameManager.gameData.GetCardType(name);
+        string type = _gameManager.GameData.GetCardType(name);
         
         switch (type)
         {
@@ -52,7 +52,7 @@ public class CardFactory
     private void InitializeMonsterCard(MonsterCard card, string name, int level)
     {
         InitializeCardBase(card, name, level);
-        var baseStats = _gameManager.gameData.GetBaseMonsterData(name);
+        var baseStats = _gameManager.GameData.GetBaseMonsterData(name);
         card.CoinCost = baseStats.CoinCost;
         card.LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
         card.maxLevel = baseStats.maxLevel;
@@ -62,8 +62,8 @@ public class CardFactory
         card.Defense = baseStats.Defense;
         card.Movement = baseStats.Movement;
         card.ManaCost = baseStats.ManaCost;
-        card.skill1 = _gameManager.gameData.GetSkill(baseStats.skill1Name);
-        card.skill2 = _gameManager.gameData.GetSkill(baseStats.skill2Name);
+        card.skill1 = _gameManager.GameData.GetSkill(baseStats.skill1Name);
+        card.skill2 = _gameManager.GameData.GetSkill(baseStats.skill2Name);
         card.evolvesFrom = baseStats.evolvesFrom;
         card.evolvesTo = baseStats.evolvesTo;
         card.experienceGiven = baseStats.experienceGiven;
@@ -73,7 +73,7 @@ public class CardFactory
     private void InitializeTreasureCard(TreasureCard card, string name, int level)
     {
         InitializeCardBase(card, name, level);
-        var baseStats = _gameManager.gameData.GetTreasureData(name);
+        var baseStats = _gameManager.GameData.GetTreasureData(name);
         card.CoinCost = baseStats.CoinCost;
         card.LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
         card.maxLevel = baseStats.maxLevel;
@@ -89,7 +89,7 @@ public class CardFactory
     private void InitializeActionCard(ActionCard card, string name, int level)
     {
         InitializeCardBase(card, name, level);
-        var baseStats = _gameManager.gameData.GetActionData(name);
+        var baseStats = _gameManager.GameData.GetActionData(name);
         card.CoinCost = baseStats.CoinCost;
         card.LevelUpPrestigeCost = baseStats.LevelUpPrestigeCost;
         card.maxLevel = baseStats.maxLevel;

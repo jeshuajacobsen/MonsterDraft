@@ -11,11 +11,11 @@ public class LargeCardView : MonoBehaviour
     public Camera mainCamera;
     public Card card;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager, SpriteManager spriteManager)
+    public void Construct(IGameManager gameManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
         _spriteManager = spriteManager;
@@ -119,7 +119,7 @@ public class LargeCardView : MonoBehaviour
             transform.Find("CardTypeText").GetComponent<TextMeshProUGUI>().text = "Action";
         }
 
-        transform.Find("LevelText").GetComponent<TextMeshProUGUI>().text = "Level: " + _gameManager.cardLevels[card.Name];
+        transform.Find("LevelText").GetComponent<TextMeshProUGUI>().text = "Level: " + _gameManager.CardLevels[card.Name];
     }
 
 
@@ -166,47 +166,47 @@ public class LargeCardView : MonoBehaviour
     {
         if (card is MonsterCard monsterCard)
         {
-            if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].health > 0)
+            if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].health > 0)
             {
                 transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("StatsPanel/HealthText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
-            if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].attack > 0)
+            if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].attack > 0)
             {
                 transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("StatsPanel/AttackText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
             
-            if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].defense > 0)
+            if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].defense > 0)
             {
                 transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("StatsPanel/DefenseText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
-            if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].movement > 0)
+            if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].movement > 0)
             {
                 transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
-            if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].manaCost > 0)
+            if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].manaCost > 0)
             {
                 transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.red;
-            } else if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].manaCost < 0) {
+            } else if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].manaCost < 0) {
                 transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("ManaImage/Text").GetComponent<TextMeshProUGUI>().color = Color.black;
             }
 
-            if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].coinCostChange > 0)
+            if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].coinCostChange > 0)
             {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.red;
-            } else if (_gameManager.gameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].coinCostChange > 0) {
+            } else if (_gameManager.GameData.GetBaseMonsterData(card.Name).levelData[card.level - 2].coinCostChange > 0) {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.black;
@@ -215,7 +215,7 @@ public class LargeCardView : MonoBehaviour
         {
             Color manaColor = Color.black;
             Color coinColor = Color.black;
-            TreasureCardLevelData levelData = _gameManager.gameData.GetTreasureData(card.Name).levelData[card.level - 2];
+            TreasureCardLevelData levelData = _gameManager.GameData.GetTreasureData(card.Name).levelData[card.level - 2];
             if (levelData.manaGeneration > 0)
             {
                 manaColor = Color.green;
@@ -238,10 +238,10 @@ public class LargeCardView : MonoBehaviour
         {
             string desc = actionCard.GetColoredDescription();
             transform.Find("CardDescription").GetComponent<TextMeshProUGUI>().text = desc;
-            if (_gameManager.gameData.GetActionData(card.Name).levelData[card.level - 2].coinCostChange > 0)
+            if (_gameManager.GameData.GetActionData(card.Name).levelData[card.level - 2].coinCostChange > 0)
             {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.red;
-            } else if (_gameManager.gameData.GetActionData(card.Name).levelData[card.level - 2].coinCostChange < 0) {
+            } else if (_gameManager.GameData.GetActionData(card.Name).levelData[card.level - 2].coinCostChange < 0) {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.green;
             } else {
                 transform.Find("CostBackgroundImage/CostText").GetComponent<TextMeshProUGUI>().color = Color.black;

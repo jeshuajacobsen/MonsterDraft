@@ -11,11 +11,11 @@ public class TownPanel : MonoBehaviour
     public List<StockPile> stockPiles;
     public List<StockPile> basicStockPiles;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, DiContainer container)
+    public void Construct(IGameManager gameManager, DiContainer container)
     {
         _gameManager = gameManager;
         _container = container;
@@ -65,7 +65,7 @@ public class TownPanel : MonoBehaviour
         for (int i = 0; i <= 5 - guaranteedCards.Count; i++)
         {
             StockPile stockPile = _container.InstantiatePrefabForComponent<StockPile>(stockPilePrefab, mainGoodsTransform);
-            string name = _gameManager.gameData.GetRandomActionOrTreasureName(combinedNames);
+            string name = _gameManager.GameData.GetRandomActionOrTreasureName(combinedNames);
             stockPile.Initialize(name, 10);
             combinedNames.Add(stockPile.Name);
             stockPiles.Add(stockPile);
@@ -76,7 +76,7 @@ public class TownPanel : MonoBehaviour
 
     private StockPile GenerateStockPile(string rarity, Transform parent, List<string> existingNames, string type)
     {
-        string name = _gameManager.gameData.GetRandomMonsterName(existingNames, rarity);
+        string name = _gameManager.GameData.GetRandomMonsterName(existingNames, rarity);
         StockPile stockPile = _container.InstantiatePrefabForComponent<StockPile>(stockPilePrefab, parent);
         stockPile.Initialize(name, 10);
         existingNames.Add(name);

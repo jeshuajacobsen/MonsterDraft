@@ -6,12 +6,12 @@ using Zenject;
 
 public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
+    public void Construct(IGameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _cardFactory = cardFactory;
@@ -20,21 +20,21 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (_gameManager.largeCardView1 != null)
+        if (_gameManager.LargeCardView1 != null)
         {
             SmallCardView smallCard = GetComponentInParent<SmallCardView>();
             StockPile stockPile = GetComponentInParent<StockPile>();
 
             if (smallCard != null && !(smallCard.card is MonsterCard))
             {
-                _gameManager.largeCardView1.SetCard(smallCard.card, eventData.position);
-                _gameManager.largeCardView1.gameObject.SetActive(true);
+                _gameManager.LargeCardView1.SetCard(smallCard.card, eventData.position);
+                _gameManager.LargeCardView1.gameObject.SetActive(true);
                 return;
             }
             else if (stockPile != null && !(stockPile.card is MonsterCard))
             {
-                _gameManager.largeCardView1.SetCard(stockPile.card, eventData.position);
-                _gameManager.largeCardView1.gameObject.SetActive(true);
+                _gameManager.LargeCardView1.SetCard(stockPile.card, eventData.position);
+                _gameManager.LargeCardView1.gameObject.SetActive(true);
                 return;
             }
 
@@ -44,13 +44,13 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
             if (smallCard != null)
             {
-                currentCard = (MonsterCard)_cardFactory.CreateCard(smallCard.card.Name, _gameManager.cardLevels[smallCard.card.Name]);
+                currentCard = (MonsterCard)_cardFactory.CreateCard(smallCard.card.Name, _gameManager.CardLevels[smallCard.card.Name]);
                 evolvesFrom = currentCard.evolvesFrom;
                 evolvesTo = currentCard.evolvesTo;
             }
             else if (stockPile != null)
             {
-                currentCard = (MonsterCard)_cardFactory.CreateCard(stockPile.card.Name, _gameManager.cardLevels[stockPile.card.Name]);
+                currentCard = (MonsterCard)_cardFactory.CreateCard(stockPile.card.Name, _gameManager.CardLevels[stockPile.card.Name]);
                 evolvesFrom = currentCard.evolvesFrom;
                 evolvesTo = currentCard.evolvesTo;
             }
@@ -63,67 +63,67 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             {
                 if (string.IsNullOrEmpty(evolvesFrom) && string.IsNullOrEmpty(evolvesTo))
                 {
-                    _gameManager.largeCardView1.SetCard(currentCard, eventData.position);
-                    _gameManager.largeCardView1.gameObject.SetActive(true);
+                    _gameManager.LargeCardView1.SetCard(currentCard, eventData.position);
+                    _gameManager.LargeCardView1.gameObject.SetActive(true);
                     return;
                 }
 
                 if (!string.IsNullOrEmpty(evolvesTo) && !string.IsNullOrEmpty(evolvesFrom))
                 {
                     MonsterCard evolvesToCard = 
-                        _cardFactory.CreateCard(evolvesTo, _gameManager.cardLevels[evolvesTo]) as MonsterCard;
+                        _cardFactory.CreateCard(evolvesTo, _gameManager.CardLevels[evolvesTo]) as MonsterCard;
 
                     MonsterCard evolvesFromCard = 
-                        _cardFactory.CreateCard(evolvesFrom, _gameManager.cardLevels[evolvesFrom]) as MonsterCard;
+                        _cardFactory.CreateCard(evolvesFrom, _gameManager.CardLevels[evolvesFrom]) as MonsterCard;
 
-                    _gameManager.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
-                    _gameManager.largeCardView1.gameObject.SetActive(true);
+                    _gameManager.LargeCardView1.SetCard(evolvesFromCard, firstCardPosition);
+                    _gameManager.LargeCardView1.gameObject.SetActive(true);
 
-                    _gameManager.largeCardView2.SetCard(currentCard, secondCardPosition);
-                    _gameManager.largeCardView2.gameObject.SetActive(true);
+                    _gameManager.LargeCardView2.SetCard(currentCard, secondCardPosition);
+                    _gameManager.LargeCardView2.gameObject.SetActive(true);
 
-                    _gameManager.largeCardView3.SetCard(evolvesToCard, thirdCardPosition);
-                    _gameManager.largeCardView3.gameObject.SetActive(true);
+                    _gameManager.LargeCardView3.SetCard(evolvesToCard, thirdCardPosition);
+                    _gameManager.LargeCardView3.gameObject.SetActive(true);
                     return;
                 }
 
                 if (!string.IsNullOrEmpty(evolvesTo))
                 {
-                    MonsterCard evolvesToCard = _cardFactory.CreateCard(evolvesTo, _gameManager.cardLevels[evolvesTo]) as MonsterCard;
+                    MonsterCard evolvesToCard = _cardFactory.CreateCard(evolvesTo, _gameManager.CardLevels[evolvesTo]) as MonsterCard;
 
-                    _gameManager.largeCardView1.SetCard(currentCard, firstCardPosition);
-                    _gameManager.largeCardView1.gameObject.SetActive(true);
+                    _gameManager.LargeCardView1.SetCard(currentCard, firstCardPosition);
+                    _gameManager.LargeCardView1.gameObject.SetActive(true);
 
-                    _gameManager.largeCardView2.SetCard(evolvesToCard, secondCardPosition);
-                    _gameManager.largeCardView2.gameObject.SetActive(true);
+                    _gameManager.LargeCardView2.SetCard(evolvesToCard, secondCardPosition);
+                    _gameManager.LargeCardView2.gameObject.SetActive(true);
 
                     if (!string.IsNullOrEmpty(evolvesToCard.evolvesTo))
                     {
                         MonsterCard evolvesTo2Card = _cardFactory.CreateCard(
                             evolvesToCard.evolvesTo, 
-                            _gameManager.cardLevels[evolvesToCard.evolvesTo]) as MonsterCard;
-                        _gameManager.largeCardView3.SetCard(evolvesTo2Card, thirdCardPosition);
-                        _gameManager.largeCardView3.gameObject.SetActive(true);
+                            _gameManager.CardLevels[evolvesToCard.evolvesTo]) as MonsterCard;
+                        _gameManager.LargeCardView3.SetCard(evolvesTo2Card, thirdCardPosition);
+                        _gameManager.LargeCardView3.gameObject.SetActive(true);
                     }
                 }
                 else if (!string.IsNullOrEmpty(evolvesFrom))
                 {
                     MonsterCard evolvesFromCard = 
-                        _cardFactory.CreateCard(evolvesFrom, _gameManager.cardLevels[evolvesFrom]) as MonsterCard;
+                        _cardFactory.CreateCard(evolvesFrom, _gameManager.CardLevels[evolvesFrom]) as MonsterCard;
 
-                    _gameManager.largeCardView1.SetCard(evolvesFromCard, firstCardPosition);
-                    _gameManager.largeCardView1.gameObject.SetActive(true);
+                    _gameManager.LargeCardView1.SetCard(evolvesFromCard, firstCardPosition);
+                    _gameManager.LargeCardView1.gameObject.SetActive(true);
 
-                    _gameManager.largeCardView2.SetCard(currentCard, secondCardPosition);
-                    _gameManager.largeCardView2.gameObject.SetActive(true);
+                    _gameManager.LargeCardView2.SetCard(currentCard, secondCardPosition);
+                    _gameManager.LargeCardView2.gameObject.SetActive(true);
 
                     if (!string.IsNullOrEmpty(evolvesFromCard.evolvesFrom))
                     {
                         MonsterCard evolvesFrom2Card = _cardFactory.CreateCard(
                             evolvesFromCard.evolvesFrom, 
-                            _gameManager.cardLevels[evolvesFromCard.evolvesFrom]) as MonsterCard;
-                        _gameManager.largeCardView3.SetCard(evolvesFrom2Card, thirdCardPosition);
-                        _gameManager.largeCardView3.gameObject.SetActive(true);
+                            _gameManager.CardLevels[evolvesFromCard.evolvesFrom]) as MonsterCard;
+                        _gameManager.LargeCardView3.SetCard(evolvesFrom2Card, thirdCardPosition);
+                        _gameManager.LargeCardView3.gameObject.SetActive(true);
                     }
                 }
             }
@@ -132,8 +132,8 @@ public class InfoButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _gameManager.largeCardView1.gameObject.SetActive(false);
-        _gameManager.largeCardView2.gameObject.SetActive(false);
-        _gameManager.largeCardView3.gameObject.SetActive(false);
+        _gameManager.LargeCardView1.gameObject.SetActive(false);
+        _gameManager.LargeCardView2.gameObject.SetActive(false);
+        _gameManager.LargeCardView3.gameObject.SetActive(false);
     }
 }

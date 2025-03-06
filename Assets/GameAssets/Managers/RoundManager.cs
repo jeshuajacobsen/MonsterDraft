@@ -16,14 +16,14 @@ public class RoundManager : MonoBehaviour
 
     public List<PersistentEffect> persistentEffects = new List<PersistentEffect>();
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private RunManager _runManager;
     private DiContainer _container;
 
 
 
     [Inject]
-    public void Construct(GameManager gameManager, 
+    public void Construct(IGameManager gameManager, 
                           RunManager runManager,
                           DiContainer container)
     {

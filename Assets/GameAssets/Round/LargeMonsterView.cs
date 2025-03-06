@@ -11,11 +11,11 @@ public class LargeMonsterView : MonoBehaviour
 
     public Monster monster; 
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager, SpriteManager spriteManager)
+    public void Construct(IGameManager gameManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
         _spriteManager = spriteManager;
@@ -89,7 +89,7 @@ public class LargeMonsterView : MonoBehaviour
         transform.Find("StatsPanel/SpeedText").GetComponent<TextMeshProUGUI>().text = monster.Movement.ToString();
 
         // Skill 1
-        SkillData skill1 = _gameManager.gameData.GetSkill(monster.skill1Name);
+        SkillData skill1 = _gameManager.GameData.GetSkill(monster.skill1Name);
         transform.Find("SkillsPanel/Skill1NameText").GetComponent<TextMeshProUGUI>().text = skill1.name;
         transform.Find("SkillsPanel/Skill1Text").GetComponent<TextMeshProUGUI>().text = skill1.Description;
         transform.Find("SkillsPanel/Skill1ManaCost/Text").GetComponent<TextMeshProUGUI>().text = skill1.ManaCost.ToString();
@@ -97,7 +97,7 @@ public class LargeMonsterView : MonoBehaviour
         transform.Find("SkillsPanel/Skill1DamageText").GetComponent<TextMeshProUGUI>().text = "Damage: " + skill1.Damage;
 
         // Skill 2
-        SkillData skill2 = _gameManager.gameData.GetSkill(monster.skill2Name);
+        SkillData skill2 = _gameManager.GameData.GetSkill(monster.skill2Name);
         transform.Find("SkillsPanel/Skill2NameText").GetComponent<TextMeshProUGUI>().text = skill2.name;
         transform.Find("SkillsPanel/Skill2Text").GetComponent<TextMeshProUGUI>().text = skill2.Description;
         transform.Find("SkillsPanel/Skill2ManaCost/Text").GetComponent<TextMeshProUGUI>().text = skill2.ManaCost.ToString();

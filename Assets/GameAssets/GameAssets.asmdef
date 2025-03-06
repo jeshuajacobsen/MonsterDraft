@@ -1,0 +1,17 @@
+{
+    "name": "GameAssets",
+    "references": [
+        "Unity.TextMeshPro",
+		"UnityEngine.UI",
+        "Zenject"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

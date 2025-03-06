@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Zenject;
 
-public class GameData 
+public class GameData : IGameData
 {
     private Dictionary<string, BaseMonsterData> _baseMonsterData;
     private Dictionary<string, BaseActionData> _actionData;
@@ -12,7 +12,8 @@ public class GameData
 
     private Dictionary<string, SkillData> _skills;
     private Dictionary<string, DungeonLevelData> _dungeonData;
-    public Dictionary<string, int> availableDeckEditorCards;
+    private Dictionary<string, int> _availableDeckEditorCards;
+    public Dictionary<string, int> AvailableDeckEditorCards => _availableDeckEditorCards;
 
     private DiContainer _container;
 
@@ -135,7 +136,7 @@ public class GameData
             { "Cave", new DungeonLevelData("Cave") }
         };
 
-        availableDeckEditorCards = new Dictionary<string, int>
+        _availableDeckEditorCards = new Dictionary<string, int>
         {
             { "Copper", 10 },
             { "Silver", 10 },

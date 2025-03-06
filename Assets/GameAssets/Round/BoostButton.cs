@@ -9,7 +9,7 @@ public class BoostButton : MonoBehaviour
     [SerializeField] private string boostName;
     [SerializeField] private int gemCost;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private RoundManager _roundManager;
     private RoundUIManager _uiManager;
     private CardManager _cardManager;
@@ -18,7 +18,7 @@ public class BoostButton : MonoBehaviour
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, 
+    public void Construct(IGameManager gameManager, 
                           RoundManager roundManager, 
                           RoundUIManager uiManager, 
                           CardManager cardManager,
@@ -82,9 +82,9 @@ public class BoostButton : MonoBehaviour
             }
             else
             {
-                string monsterName = _gameManager.gameData.GetRandomMonsterName(new List<string>(), "Common");
+                string monsterName = _gameManager.GameData.GetRandomMonsterName(new List<string>(), "Common");
                 
-                MonsterCard monsterCard = (MonsterCard)_cardFactory.CreateCard(monsterName, _gameManager.cardLevels[monsterName]);
+                MonsterCard monsterCard = (MonsterCard)_cardFactory.CreateCard(monsterName, _gameManager.CardLevels[monsterName]);
                 yield return new WaitForEndOfFrame();
                 _roundManager.gameState.SwitchPhaseState(_container.Instantiate<AutoPlayingMonsterState>().Initialize(monsterCard, gemCost));
             }

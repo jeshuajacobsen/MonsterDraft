@@ -6,7 +6,7 @@ public abstract class GameState
     public CardPlayState currentState;
     public Camera mainCamera;
 
-    protected GameManager _gameManager;
+    protected IGameManager _gameManager;
     protected RoundManager _roundManager;
     protected RoundUIManager _uiManager;
     protected CardManager _cardManager;
@@ -17,7 +17,7 @@ public abstract class GameState
     protected DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, 
+    public void Construct(IGameManager gameManager, 
                           RoundManager roundManager, 
                           RoundUIManager uiManager, 
                           CardManager cardManager,

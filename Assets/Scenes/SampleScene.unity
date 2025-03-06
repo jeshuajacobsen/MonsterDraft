@@ -14669,8 +14669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e8503866fcec504982622e88fdf256d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roundPanel: {fileID: 1603265254}
-  SelectedLargeCardView: {fileID: 0}
+  _roundPanel: {fileID: 1603265254}
+  _menuPanel: {fileID: 1792746576}
   betweenRoundPanel: {fileID: 48160604}
   doneButton: {fileID: 952676748}
   currentDungeonIndex: 1
@@ -18325,25 +18325,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a030b8eba0f7c4b93e5bef5a50dcfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuPanel: {fileID: 1792746576}
-  deckEditorPanel: {fileID: 877725854}
-  cardImprovementPanel: {fileID: 343227909}
-  SelectedCardImprovementPanel: {fileID: 504986735}
-  townPanel: {fileID: 1458482066}
-  unlockedDungeonLevels: []
-  largeCardView1: {fileID: 170375972}
-  largeCardView2: {fileID: 677101856}
-  largeCardView3: {fileID: 749559867}
-  prestigeText: {fileID: 1505566680}
-  OwnedPrestigeChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  OwnedGemsChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  startRunEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _menuPanel: {fileID: 1792746576}
+  _deckEditorPanel: {fileID: 877725854}
+  _cardImprovementPanel: {fileID: 343227909}
+  _selectedCardImprovementPanel: {fileID: 504986735}
+  _townPanel: {fileID: 1458482066}
+  _largeCardView1: {fileID: 170375972}
+  _largeCardView2: {fileID: 677101856}
+  _largeCardView3: {fileID: 749559867}
 --- !u!4 &1551016605
 Transform:
   m_ObjectHideFlags: 0

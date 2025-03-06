@@ -9,12 +9,12 @@ public class DeckEditorPanel : MonoBehaviour
     public List<DeckEditorCardView> unlockedCards;
     public DeckEditorCardView cardViewPrefab;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
+    public void Construct(IGameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _cardFactory = cardFactory;
@@ -39,13 +39,13 @@ public class DeckEditorPanel : MonoBehaviour
 
     public void FirstTimeSetup()
     {
-        foreach (var cardName in _gameManager.gameData.availableDeckEditorCards)
+        foreach (var cardName in _gameManager.GameData.AvailableDeckEditorCards)
         {
             DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
 
-            cardView.Initialize(_cardFactory.CreateCard(cardName.Key, _gameManager.cardLevels[cardName.Key]), cardName.Value);
+            cardView.Initialize(_cardFactory.CreateCard(cardName.Key, _gameManager.CardLevels[cardName.Key]), cardName.Value);
 
-            int count = _gameManager.selectedInitialDeck.cards.Count(card => card.Name == cardName.Key);
+            int count = _gameManager.SelectedInitialDeck.cards.Count(card => card.Name == cardName.Key);
             cardView.LoadValues(count, count);
             unlockedCards.Add(cardView);
         }
@@ -62,10 +62,10 @@ public class DeckEditorPanel : MonoBehaviour
         foreach (string card in saveData.cardsUsed.Keys)
         {
             DeckEditorCardView cardView = _container.InstantiatePrefabForComponent<DeckEditorCardView>(cardViewPrefab, transform);
-            string type = _gameManager.gameData.GetCardType(card);
+            string type = _gameManager.GameData.GetCardType(card);
 
-            cardView.Initialize(_cardFactory.CreateCard(card, _gameManager.cardLevels[card]), 
-                                _gameManager.gameData.availableDeckEditorCards[card]);
+            cardView.Initialize(_cardFactory.CreateCard(card, _gameManager.CardLevels[card]), 
+                                _gameManager.GameData.AvailableDeckEditorCards[card]);
 
             cardView.LoadValues(saveData.cardsUsed[card], saveData.cardsBought[card]);
             unlockedCards.Add(cardView);

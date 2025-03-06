@@ -7,55 +7,30 @@ using Newtonsoft.Json;
 using UnityEngine.Events;
 using Zenject;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IGameManager
 {
+    private IGameData _GameData;
+    private InitialDeck _selectedInitialDeck;
 
-    public GameData gameData;
-    public InitialDeck selectedInitialDeck;
+    [SerializeField] private GameObject _menuPanel;
+    [SerializeField] private GameObject _deckEditorPanel;
+    [SerializeField] private GameObject _cardImprovementPanel;
+    [SerializeField] private GameObject _selectedCardImprovementPanel;
+    [SerializeField] private GameObject _townPanel;
 
-    public GameObject menuPanel;
-    public GameObject deckEditorPanel;
-    public GameObject cardImprovementPanel;
-    public GameObject SelectedCardImprovementPanel;
-    public GameObject townPanel;
-    public List<string> unlockedDungeonLevels;
+    private List<string> _unlockedDungeonLevels = new();
+    private Dictionary<string, int> _cardLevels = new();
 
-    public LargeCardView largeCardView1;
-    public LargeCardView largeCardView2;
-    public LargeCardView largeCardView3;
+    [SerializeField] private LargeCardView _largeCardView1;
+    [SerializeField] private LargeCardView _largeCardView2;
+    [SerializeField] private LargeCardView _largeCardView3;
+
     private int _prestigePoints;
-    [SerializeField] private TextMeshProUGUI prestigeText;
-    public UnityEvent OwnedPrestigeChanged = new UnityEvent();
-    public int PrestigePoints { 
-        get
-        {
-            return _prestigePoints;
-        }
-        set
-        {
-            _prestigePoints = value;
-            OwnedPrestigeChanged.Invoke();
-        }
-    }
-
-
     private int _gems;
-    public UnityEvent OwnedGemsChanged = new UnityEvent();
-    public int Gems {
-        get
-        {
-            return _gems;
-        }
-        set
-        {
-            _gems = value;
-            OwnedGemsChanged.Invoke();
-        }
-    }
 
-    public Dictionary<string, int> cardLevels = new Dictionary<string, int>();
-
-    public UnityEvent startRunEvent = new UnityEvent();
+    private UnityEvent _startRunEvent = new();
+    private UnityEvent _ownedPrestigeChanged = new();
+    private UnityEvent _ownedGemsChanged = new();
 
     private DiContainer _container;
 
@@ -65,89 +40,109 @@ public class GameManager : MonoBehaviour
         _container = container;
     }
 
-    void Awake()
+    public IGameData GameData => _GameData;
+    public InitialDeck SelectedInitialDeck => _selectedInitialDeck;
+    public List<string> UnlockedDungeonLevels => _unlockedDungeonLevels;
+    public Dictionary<string, int> CardLevels => _cardLevels;
+
+    public UnityEvent StartRunEvent => _startRunEvent;
+    public UnityEvent OwnedPrestigeChanged => _ownedPrestigeChanged;
+    public UnityEvent OwnedGemsChanged => _ownedGemsChanged;
+
+    public LargeCardView LargeCardView1 => _largeCardView1;
+    public LargeCardView LargeCardView2 => _largeCardView2;
+    public LargeCardView LargeCardView3 => _largeCardView3;
+
+    public int PrestigePoints
     {
+        get => _prestigePoints;
+        set
+        {
+            _prestigePoints = value;
+            _ownedPrestigeChanged.Invoke();
+        }
     }
 
-    void Start()
+    public int Gems
     {
-        gameData = _container.Instantiate<GameData>().Initialize();
-
-        unlockedDungeonLevels = new List<string>();
-        unlockedDungeonLevels.Add("Forest");
-        foreach (string cardName in gameData.GetAllMonsterNames())
+        get => _gems;
+        set
         {
-            cardLevels.Add(cardName, 1);
+            _gems = value;
+            _ownedGemsChanged.Invoke();
         }
+    }
 
-        foreach (string cardName in gameData.GetAllTreasureNames())
-        {
-            cardLevels.Add(cardName, 1);
-        }
+    public void AddUnlockedDungeonLevel(string dungeonLevel)
+    {
+        _unlockedDungeonLevels.Add(dungeonLevel);
+    }
 
-        foreach (string cardName in gameData.GetAllActionNames())
-        {
-            cardLevels.Add(cardName, 1);
-        } 
-        selectedInitialDeck = _container.Instantiate<InitialDeck>();
+    private void Start()
+    {
+        _GameData = _container.Instantiate<GameData>().Initialize();
+        _selectedInitialDeck = _container.Instantiate<InitialDeck>();
+
+        _unlockedDungeonLevels.Add("Forest");
+
+        foreach (string cardName in _GameData.GetAllMonsterNames()) _cardLevels[cardName] = 1;
+        foreach (string cardName in _GameData.GetAllTreasureNames()) _cardLevels[cardName] = 1;
+        foreach (string cardName in _GameData.GetAllActionNames()) _cardLevels[cardName] = 1;
+
         LoadGame();
-    }
-
-    void Update()
-    {
-        
     }
 
     public void StartRun()
     {
-        menuPanel.SetActive(false); 
-        startRunEvent.Invoke();
+        _menuPanel.SetActive(false);
+        _startRunEvent.Invoke();
     }
 
     public void OpenDeckEditor()
     {
-        menuPanel.SetActive(false);
-        deckEditorPanel.GetComponent<DeckEditorPanel>().OnOpen();
-        deckEditorPanel.transform.parent.parent.gameObject.SetActive(true);
+        _menuPanel.SetActive(false);
+        _deckEditorPanel.GetComponent<DeckEditorPanel>().OnOpen();
+        _deckEditorPanel.transform.parent.parent.gameObject.SetActive(true);
     }
 
     public void CloseDeckEditor()
     {
-        deckEditorPanel.transform.parent.parent.gameObject.SetActive(false);
-        menuPanel.SetActive(true);
-        selectedInitialDeck = deckEditorPanel.GetComponent<DeckEditorPanel>().GetSelectedInitialDeck();
+        _deckEditorPanel.transform.parent.parent.gameObject.SetActive(false);
+        _menuPanel.SetActive(true);
+        _selectedInitialDeck = _deckEditorPanel.GetComponent<DeckEditorPanel>().GetSelectedInitialDeck();
         SaveGame();
     }
 
     public void OpenCardImprovementPanel()
     {
-        menuPanel.SetActive(false);
-        cardImprovementPanel.transform.parent.parent.gameObject.SetActive(true);
-        cardImprovementPanel.GetComponent<CardImprovementPanel>().OnOpen();
+        _menuPanel.SetActive(false);
+        _cardImprovementPanel.transform.parent.parent.gameObject.SetActive(true);
+        _cardImprovementPanel.GetComponent<CardImprovementPanel>().OnOpen();
     }
 
     public void CloseCardImprovementPanel()
     {
-        cardImprovementPanel.transform.parent.parent.gameObject.SetActive(false);
-        menuPanel.SetActive(true);
+        _cardImprovementPanel.transform.parent.parent.gameObject.SetActive(false);
+        _menuPanel.SetActive(true);
         SaveGame();
     }
 
     public void OpenSelectedCardImprovementPanel(Card card)
     {
-        SelectedCardImprovementPanel.SetActive(true);
-        SelectedCardImprovementPanel.GetComponent<SelectedCardPanel>().OnOpen(card);
+        _selectedCardImprovementPanel.SetActive(true);
+        _selectedCardImprovementPanel.GetComponent<SelectedCardPanel>().OnOpen(card);
     }
 
     public void CloseSelectedCardImprovementPanel()
     {
-        SelectedCardImprovementPanel.SetActive(false);
+        _selectedCardImprovementPanel.SetActive(false);
     }
 
     public void SaveGame()
     {
-        SaveData saveData = new SaveData(selectedInitialDeck, unlockedDungeonLevels, PrestigePoints, cardLevels);
-        saveData.AddCardsForSaving(deckEditorPanel.GetComponent<DeckEditorPanel>().unlockedCards);
+        SaveData saveData = new(_selectedInitialDeck, _unlockedDungeonLevels, PrestigePoints, _cardLevels);
+        saveData.AddCardsForSaving(_deckEditorPanel.GetComponent<DeckEditorPanel>().unlockedCards);
+
         string jsonData = JsonConvert.SerializeObject(saveData);
         string path = Application.persistentDataPath + "/savefile.json";
         System.IO.File.WriteAllText(path, jsonData);
@@ -157,18 +152,18 @@ public class GameManager : MonoBehaviour
     {
         string path = Application.persistentDataPath + "/savefile.json";
 
-        if (System.IO.File.Exists(path))
+        if (!System.IO.File.Exists(path))
         {
             try
             {
                 string jsonData = System.IO.File.ReadAllText(path);
                 SaveData saveData = JsonConvert.DeserializeObject<SaveData>(jsonData);
-                unlockedDungeonLevels = saveData.unlockedDungeonLevels;
+                _unlockedDungeonLevels = saveData.unlockedDungeonLevels;
                 PrestigePoints = saveData.PrestigePoints;
-                deckEditorPanel.GetComponent<DeckEditorPanel>().LoadCards(saveData);
-                cardLevels = saveData.cardLevels;
-                selectedInitialDeck = _container.Instantiate<InitialDeck>();
-                selectedInitialDeck.LoadCards(saveData.initialDeck);
+                _deckEditorPanel.GetComponent<DeckEditorPanel>().LoadCards(saveData);
+                _cardLevels = saveData.cardLevels;
+                _selectedInitialDeck = _container.Instantiate<InitialDeck>();
+                _selectedInitialDeck.LoadCards(saveData.initialDeck);
             }
             catch (System.Exception ex)
             {
@@ -184,9 +179,10 @@ public class GameManager : MonoBehaviour
 
     private void ResetToDefaultSaveData()
     {
-        selectedInitialDeck = _container.Instantiate<InitialDeck>();
-        unlockedDungeonLevels = new List<string> { "Forest" };
+        _selectedInitialDeck = _container.Instantiate<InitialDeck>();
+        _selectedInitialDeck.Initialize();
+        _unlockedDungeonLevels = new List<string> { "Forest" };
         PrestigePoints = 0;
-        deckEditorPanel.GetComponent<DeckEditorPanel>().FirstTimeSetup();
+        _deckEditorPanel.GetComponent<DeckEditorPanel>().FirstTimeSetup();
     }
 }

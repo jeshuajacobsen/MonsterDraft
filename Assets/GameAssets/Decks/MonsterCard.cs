@@ -9,7 +9,7 @@ public class MonsterCard : Card
             int addedAttack = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedAttack += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].attack;
+                addedAttack += _gameManager.GameData.GetBaseMonsterData(Name).levelData[i].attack;
             }
             return _attack + addedAttack;
         }
@@ -27,7 +27,7 @@ public class MonsterCard : Card
             int addedHealth = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedHealth += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].health;
+                addedHealth += _gameManager.GameData.GetBaseMonsterData(Name).levelData[i].health;
             }
             return _health + addedHealth;
         }
@@ -44,7 +44,7 @@ public class MonsterCard : Card
             int addedDefense = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedDefense += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].defense;
+                addedDefense += _gameManager.GameData.GetBaseMonsterData(Name).levelData[i].defense;
             }
             return _defense + addedDefense;
         }
@@ -61,7 +61,7 @@ public class MonsterCard : Card
             int addedMovement = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedMovement += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].movement;
+                addedMovement += _gameManager.GameData.GetBaseMonsterData(Name).levelData[i].movement;
             }
             return _movement + addedMovement;
         }
@@ -78,7 +78,7 @@ public class MonsterCard : Card
             int addedManaCost = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedManaCost += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].manaCost;
+                addedManaCost += _gameManager.GameData.GetBaseMonsterData(Name).levelData[i].manaCost;
             }
             return _manaCost + addedManaCost;
         }

@@ -7,12 +7,12 @@ public class CardImprovementPanel : MonoBehaviour
 {
     private CardImprovementButton.Factory _cardImprovementButtonFactory;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, 
+    public void Construct(IGameManager gameManager, 
                           CardImprovementButton.Factory cardImprovementButtonFactory, 
                           CardFactory cardFactory,
                           DiContainer container)
@@ -35,17 +35,17 @@ public class CardImprovementPanel : MonoBehaviour
         ClearPanel("TreasureCardPanel");
         ClearPanel("ActionCardPanel");
 
-        foreach (string cardName in _gameManager.gameData.GetAllMonsterNames())
+        foreach (string cardName in _gameManager.GameData.GetAllMonsterNames())
         {
             AddCardToPanel("MonsterCardPanel", cardName);
         }
 
-        foreach (string cardName in _gameManager.gameData.GetAllTreasureNames())
+        foreach (string cardName in _gameManager.GameData.GetAllTreasureNames())
         {
             AddCardToPanel("TreasureCardPanel", cardName);
         }
 
-        foreach (string cardName in _gameManager.gameData.GetAllActionNames())
+        foreach (string cardName in _gameManager.GameData.GetAllActionNames())
         {
             AddCardToPanel("ActionCardPanel", cardName);
         }
@@ -72,7 +72,7 @@ public class CardImprovementPanel : MonoBehaviour
         CardImprovementButton cardImprovementButton = _cardImprovementButtonFactory.Create();
         cardImprovementButton.transform.SetParent(transform.Find(panelName), false);
 
-        cardImprovementButton.Initialize(_cardFactory.CreateCard(cardName, _gameManager.cardLevels[cardName]));
+        cardImprovementButton.Initialize(_cardFactory.CreateCard(cardName, _gameManager.CardLevels[cardName]));
 
         cardImprovementButton.transform.GetComponent<Button>().onClick.AddListener(() => 
             _gameManager.OpenSelectedCardImprovementPanel(cardImprovementButton.card)

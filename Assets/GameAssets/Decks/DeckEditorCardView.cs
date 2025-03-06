@@ -15,11 +15,11 @@ public class DeckEditorCardView : MonoBehaviour
     public int boughtCardCount = 0;
     private int cardLimit = 0;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager, SpriteManager spriteManager)
+    public void Construct(IGameManager gameManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
         _spriteManager = spriteManager;

@@ -8,12 +8,12 @@ using Zenject;
 public class MenuPanel : MonoBehaviour
 {
     DungeonLevelData dungeonLevelData;
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private RunManager _runManager;
     private SpriteManager _spriteManager;
 
     [Inject]
-    public void Construct(GameManager gameManager, RunManager runManager, SpriteManager spriteManager)
+    public void Construct(IGameManager gameManager, RunManager runManager, SpriteManager spriteManager)
     {
         _gameManager = gameManager;
         _runManager = runManager;
@@ -38,24 +38,24 @@ public class MenuPanel : MonoBehaviour
 
     public void SetDungeonLevel(string dungeonLevel)
     {
-        dungeonLevelData = _gameManager.gameData.DungeonData(dungeonLevel);
+        dungeonLevelData = _gameManager.GameData.DungeonData(dungeonLevel);
         _runManager.currentDungeonLevel = dungeonLevelData;
         transform.Find("LevelImage").GetComponent<Image>().sprite = _spriteManager.GetLevelSprite(dungeonLevelData.selectedLevelSprite);
         transform.Find("DungeonLevelName").GetComponent<TextMeshProUGUI>().text = dungeonLevelData.name;
-        if (_gameManager.gameData.GetPreviousDungeonLevel(dungeonLevelData.key) == null)
+        if (_gameManager.GameData.GetPreviousDungeonLevel(dungeonLevelData.key) == null)
         {
             transform.Find("ButtonLeft").gameObject.SetActive(false);
         } else {
             transform.Find("ButtonLeft").gameObject.SetActive(true);
         }
-        if (_gameManager.gameData.GetNextDungeonLevel(dungeonLevelData.key) == null)
+        if (_gameManager.GameData.GetNextDungeonLevel(dungeonLevelData.key) == null)
         {
             transform.Find("ButtonRight").gameObject.SetActive(false);
         } else {
             transform.Find("ButtonRight").gameObject.SetActive(true);
         }
 
-        if (_gameManager.unlockedDungeonLevels.Contains(dungeonLevelData.key))
+        if (_gameManager.UnlockedDungeonLevels.Contains(dungeonLevelData.key))
         {
             transform.Find("StartRunButton").GetComponent<Button>().interactable = true;
             transform.Find("LockedPanel").gameObject.SetActive(false);
@@ -67,13 +67,13 @@ public class MenuPanel : MonoBehaviour
 
     public void ButtonRight()
     {
-        string nextDungeonLevel = _gameManager.gameData.GetNextDungeonLevel(dungeonLevelData.key);
+        string nextDungeonLevel = _gameManager.GameData.GetNextDungeonLevel(dungeonLevelData.key);
         SetDungeonLevel(nextDungeonLevel);
     }
 
     public void ButtonLeft()
     {
-        string previousDungeonLevel = _gameManager.gameData.GetPreviousDungeonLevel(dungeonLevelData.key);
+        string previousDungeonLevel = _gameManager.GameData.GetPreviousDungeonLevel(dungeonLevelData.key);
         SetDungeonLevel(previousDungeonLevel);
     }
 

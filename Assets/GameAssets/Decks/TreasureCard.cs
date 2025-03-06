@@ -11,7 +11,7 @@ public class TreasureCard : Card
             int addedCoinGeneration = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedCoinGeneration += _gameManager.gameData.GetTreasureData(Name).levelData[i].coinGeneration;
+                addedCoinGeneration += _gameManager.GameData.GetTreasureData(Name).levelData[i].coinGeneration;
             }
             return _coinGeneration + addedCoinGeneration;
         }
@@ -28,7 +28,7 @@ public class TreasureCard : Card
             int addedManaGeneration = 0;
             for(int i = 0; i < level - 1; i++)
             {
-                addedManaGeneration += _gameManager.gameData.GetTreasureData(Name).levelData[i].manaGeneration;
+                addedManaGeneration += _gameManager.GameData.GetTreasureData(Name).levelData[i].manaGeneration;
             }
             return _manaGeneration + addedManaGeneration;
         }
@@ -42,7 +42,7 @@ public class TreasureCard : Card
         get
         {
             string description = _description;
-            List<TreasureCardLevelData> levelData = _gameManager.gameData.GetTreasureData(Name).levelData;
+            List<TreasureCardLevelData> levelData = _gameManager.GameData.GetTreasureData(Name).levelData;
             for (int i = 0; i < level - 1; i++)
             {
                 if (!string.IsNullOrEmpty(levelData[i].description))
@@ -72,7 +72,7 @@ public class TreasureCard : Card
         string coinReplacement = "<color=#" + ColorUtility.ToHtmlStringRGB(coinColor) + ">" + CoinGeneration + "</color>";
         string manaReplacement = "<color=#" + ColorUtility.ToHtmlStringRGB(manaColor) + ">" + ManaGeneration + "</color>";
         string description = _description;
-        List<TreasureCardLevelData> levelData = _gameManager.gameData.GetTreasureData(Name).levelData;
+        List<TreasureCardLevelData> levelData = _gameManager.GameData.GetTreasureData(Name).levelData;
         for (int i = 0; i < level - 1; i++)
         {
             if (!string.IsNullOrEmpty(levelData[i].description))
@@ -85,7 +85,7 @@ public class TreasureCard : Card
         Dictionary<string, string> variableChanges = new Dictionary<string, string>();
         if (level > 1)
         {
-            variableChanges = _gameManager.gameData.GetTreasureData(Name).levelData[level - 2].effectVariableChanges;
+            variableChanges = _gameManager.GameData.GetTreasureData(Name).levelData[level - 2].effectVariableChanges;
         }
         foreach (var effectVariable in this.EffectVariables)
         {

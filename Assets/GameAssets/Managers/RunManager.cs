@@ -9,10 +9,11 @@ public class RunManager : MonoBehaviour
     
     public RunDeck runDeck;
 
-    [SerializeField] private GameObject roundPanel;
+    [SerializeField] private GameObject _roundPanel;
+    [SerializeField] private GameObject _menuPanel;
 
-    public GameObject SelectedLargeCardView;
-    public GameObject betweenRoundPanel;
+    private GameObject SelectedLargeCardView;
+    [SerializeField] private GameObject betweenRoundPanel;
 
     public Button doneButton;
 
@@ -22,13 +23,13 @@ public class RunManager : MonoBehaviour
 
     public UnityEvent startRoundEvent = new UnityEvent();
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private RoundManager _roundManager;
     private CardFactory _CardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, RoundManager roundManager, CardFactory cardFactory, DiContainer container)
+    public void Construct(IGameManager gameManager, RoundManager roundManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _roundManager = roundManager;
@@ -38,7 +39,7 @@ public class RunManager : MonoBehaviour
 
     public void Start()
     {
-        _gameManager.startRunEvent.AddListener(StartRun);
+        _gameManager.StartRunEvent.AddListener(StartRun);
         doneButton.onClick.AddListener(PickCard);
     }
 
@@ -117,7 +118,7 @@ public class RunManager : MonoBehaviour
 
     public void StartRun()
     {
-        runDeck = new RunDeck(_gameManager.selectedInitialDeck);
+        runDeck = new RunDeck(_gameManager.SelectedInitialDeck);
         currentDungeonIndex = 1;
         betweenRoundPanel.SetActive(false);
         StartRound();
@@ -126,7 +127,7 @@ public class RunManager : MonoBehaviour
 //TODO check if I can get rid of this dependency
     public void StartRound()
     {
-        roundPanel.gameObject.SetActive(true);
+        _roundPanel.gameObject.SetActive(true);
         startRoundEvent.Invoke();
     }
 
@@ -136,7 +137,7 @@ public class RunManager : MonoBehaviour
         currentDungeonIndex++;
         if (currentDungeonIndex <= currentDungeonLevel.dungeons.Count)
         {
-            roundPanel.gameObject.SetActive(false);
+            _roundPanel.gameObject.SetActive(false);
             betweenRoundPanel.gameObject.SetActive(true);
             SelectCards(_roundManager.cardsGainedThisRound);
         } else {
@@ -148,16 +149,16 @@ public class RunManager : MonoBehaviour
 
     public void EndRunWin()
     {
-        _gameManager.menuPanel.SetActive(true);
-        roundPanel.gameObject.SetActive(false);
-        _gameManager.unlockedDungeonLevels.Add(
-            _gameManager.gameData.GetNextDungeonLevel(currentDungeonLevel.key));
+        _menuPanel.SetActive(true);
+        _roundPanel.gameObject.SetActive(false);
+        _gameManager.AddUnlockedDungeonLevel(
+            _gameManager.GameData.GetNextDungeonLevel(currentDungeonLevel.key));
     }
 
     public void EndRoundLose()
     {
-        _gameManager.menuPanel.SetActive(true);
-        roundPanel.gameObject.SetActive(false);
+        _menuPanel.SetActive(true);
+        _roundPanel.gameObject.SetActive(false);
     }
 
     private void SelectCards(List<Card> gainedCards)
@@ -197,7 +198,7 @@ public class RunManager : MonoBehaviour
 
             if (gainedCards.Count == 0)
             {
-                Card treasureCard = _CardFactory.CreateCard("Copper", _gameManager.cardLevels["Copper"]);
+                Card treasureCard = _CardFactory.CreateCard("Copper", _gameManager.CardLevels["Copper"]);
                 largeCardViews[i].GetComponent<LargeCardView>().SetCard(treasureCard, new Vector2(0, 0), false);
             }
             

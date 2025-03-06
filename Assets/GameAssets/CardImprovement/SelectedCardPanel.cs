@@ -7,12 +7,12 @@ public class SelectedCardPanel : MonoBehaviour
 {
     private Card selectedCard;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
+    public void Construct(IGameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _cardFactory = cardFactory;
@@ -31,7 +31,7 @@ public class SelectedCardPanel : MonoBehaviour
     {
         selectedCard = card;
 
-        if (_gameManager.cardLevels[card.Name] >= card.maxLevel)
+        if (_gameManager.CardLevels[card.Name] >= card.maxLevel)
         {
             transform.Find("LargeCardViewMax").gameObject.SetActive(true);
             transform.Find("LevelMaxText").gameObject.SetActive(true);
@@ -52,7 +52,7 @@ public class SelectedCardPanel : MonoBehaviour
 
             LargeCardView largeCardViewAfter = transform.Find("LargeCardViewAfter").GetComponent<LargeCardView>();
 
-            largeCardViewAfter.SetCard(_cardFactory.CreateCard(card.Name, _gameManager.cardLevels[card.Name] + 1), new Vector2(), false);
+            largeCardViewAfter.SetCard(_cardFactory.CreateCard(card.Name, _gameManager.CardLevels[card.Name] + 1), new Vector2(), false);
 
             largeCardViewAfter.MarkImprovements();
 
@@ -74,11 +74,11 @@ public class SelectedCardPanel : MonoBehaviour
         if (_gameManager.PrestigePoints >= selectedCard.LevelUpPrestigeCost)
         {
             _gameManager.PrestigePoints -= selectedCard.LevelUpPrestigeCost;
-            _gameManager.cardLevels[selectedCard.Name]++;
+            _gameManager.CardLevels[selectedCard.Name]++;
 
             OnOpen(transform.Find("LargeCardViewAfter").GetComponent<LargeCardView>().card);
 
-            _gameManager.selectedInitialDeck.ResetLevels();
+            _gameManager.SelectedInitialDeck.ResetLevels();
             _gameManager.OpenCardImprovementPanel();
             _gameManager.SaveGame();
         }

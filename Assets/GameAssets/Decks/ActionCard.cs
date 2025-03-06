@@ -9,7 +9,7 @@ public class ActionCard : Card
         get
         {
             string description = _description;
-            List<ActionCardLevelData> levelData = _gameManager.gameData.GetActionData(Name).levelData;
+            List<ActionCardLevelData> levelData = _gameManager.GameData.GetActionData(Name).levelData;
             for (int i = 0; i < level - 1; i++)
             {
                 if (!string.IsNullOrEmpty(levelData[i].description))
@@ -36,7 +36,7 @@ public class ActionCard : Card
     public string GetColoredDescription()
     {
         string description = _description;
-        List<ActionCardLevelData> levelData = _gameManager.gameData.GetActionData(Name).levelData;
+        List<ActionCardLevelData> levelData = _gameManager.GameData.GetActionData(Name).levelData;
         for (int i = 0; i < level - 1; i++)
         {
             if (!string.IsNullOrEmpty(levelData[i].description))
@@ -48,7 +48,7 @@ public class ActionCard : Card
         Dictionary<string, string> variableChanges = new Dictionary<string, string>();
         if (level > 1)
         {
-            variableChanges = _gameManager.gameData.GetActionData(Name).levelData[level - 2].effectVariableChanges;
+            variableChanges = _gameManager.GameData.GetActionData(Name).levelData[level - 2].effectVariableChanges;
         }
         if (this.EffectVariables != null)
         {

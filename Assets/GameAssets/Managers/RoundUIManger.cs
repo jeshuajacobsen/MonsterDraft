@@ -29,10 +29,10 @@ public class RoundUIManager : MonoBehaviour
 
     private DiContainer _container;
     private RoundManager _roundManager;
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
 
     [Inject]
-    public void Construct(RoundManager roundManager, GameManager gameManager, DiContainer container)
+    public void Construct(RoundManager roundManager, IGameManager gameManager, DiContainer container)
     {
         _roundManager = roundManager;
         _gameManager = gameManager;
@@ -266,7 +266,7 @@ public class RoundUIManager : MonoBehaviour
         if (largeMonsterView1 != null)
         {
             
-            BaseMonsterData currentMonster = _gameManager.gameData.GetBaseMonsterData(monster.name);
+            BaseMonsterData currentMonster = _gameManager.GameData.GetBaseMonsterData(monster.name);
             Vector2 firstCardPosition = new Vector2(-1100, -250);
             Vector2 secondCardPosition = new Vector2(0, -250);
             Vector2 thirdCardPosition = new Vector2(1100, -250);
@@ -280,8 +280,8 @@ public class RoundUIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(monster.evolvesTo) && !string.IsNullOrEmpty(monster.evolvesFrom))
             {
-                BaseMonsterData evolvesTo = _gameManager.gameData.GetBaseMonsterData(monster.evolvesTo);
-                BaseMonsterData evolvesFrom = _gameManager.gameData.GetBaseMonsterData(monster.evolvesFrom);
+                BaseMonsterData evolvesTo = _gameManager.GameData.GetBaseMonsterData(monster.evolvesTo);
+                BaseMonsterData evolvesFrom = _gameManager.GameData.GetBaseMonsterData(monster.evolvesFrom);
                 
                 largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
                 largeMonsterView1.gameObject.SetActive(true);
@@ -294,28 +294,28 @@ public class RoundUIManager : MonoBehaviour
             
             if (!string.IsNullOrEmpty(monster.evolvesTo))
             {
-                BaseMonsterData evolvesTo = _gameManager.gameData.GetBaseMonsterData(monster.evolvesTo);
+                BaseMonsterData evolvesTo = _gameManager.GameData.GetBaseMonsterData(monster.evolvesTo);
                 largeMonsterView1.SetMonster(monster, firstCardPosition, false);
                 largeMonsterView1.gameObject.SetActive(true);
                 largeMonsterView2.SetMonsterFromBaseData(evolvesTo, secondCardPosition);
                 largeMonsterView2.gameObject.SetActive(true);
                 if (!string.IsNullOrEmpty(evolvesTo.evolvesTo))
                 {
-                    BaseMonsterData evolvesTo2 = _gameManager.gameData.GetBaseMonsterData(evolvesTo.evolvesTo);
+                    BaseMonsterData evolvesTo2 = _gameManager.GameData.GetBaseMonsterData(evolvesTo.evolvesTo);
                     largeMonsterView3.SetMonsterFromBaseData(evolvesTo2, thirdCardPosition);
                     largeMonsterView3.gameObject.SetActive(true);
                 }
             }
             else if (!string.IsNullOrEmpty(monster.evolvesFrom))
             {
-                BaseMonsterData evolvesFrom = _gameManager.gameData.GetBaseMonsterData(monster.evolvesFrom);
+                BaseMonsterData evolvesFrom = _gameManager.GameData.GetBaseMonsterData(monster.evolvesFrom);
                 largeMonsterView1.SetMonsterFromBaseData(evolvesFrom, firstCardPosition);
                 largeMonsterView1.gameObject.SetActive(true);
                 largeMonsterView2.SetMonster(monster, secondCardPosition, false);
                 largeMonsterView2.gameObject.SetActive(true);
                 if (!string.IsNullOrEmpty(evolvesFrom.evolvesFrom))
                 {
-                    BaseMonsterData evolvesFrom2 = _gameManager.gameData.GetBaseMonsterData(evolvesFrom.evolvesFrom);
+                    BaseMonsterData evolvesFrom2 = _gameManager.GameData.GetBaseMonsterData(evolvesFrom.evolvesFrom);
                     largeMonsterView3.SetMonsterFromBaseData(evolvesFrom2, thirdCardPosition);
                     largeMonsterView3.gameObject.SetActive(true);
                 }

@@ -12,7 +12,7 @@ public class StockPile : MonoBehaviour
     public int Cost { get; set; }
     public Card card;
 
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private RoundManager _roundManager;
     private PlayerStats _playerStats;
     private SpriteManager _spriteManager;
@@ -21,7 +21,7 @@ public class StockPile : MonoBehaviour
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, 
+    public void Construct(IGameManager gameManager, 
                           RoundManager roundManager, 
                           PlayerStats playerStats,
                           SpriteManager spriteManager, 
@@ -45,7 +45,7 @@ public class StockPile : MonoBehaviour
 
     public void Initialize(string name, int stockLeft)
     {
-        card = _cardFactory.CreateCard(name, _gameManager.cardLevels[name]);
+        card = _cardFactory.CreateCard(name, _gameManager.CardLevels[name]);
 
         this.Name = name;
 
@@ -81,7 +81,7 @@ public class StockPile : MonoBehaviour
 
             Card newCard = null;
 
-            newCard = _cardFactory.CreateCard(Name, _gameManager.cardLevels[Name]);
+            newCard = _cardFactory.CreateCard(Name, _gameManager.CardLevels[Name]);
 
             _cardManager.discardPile.AddCard(newCard);
             _roundManager.cardsGainedThisRound.Add(newCard);

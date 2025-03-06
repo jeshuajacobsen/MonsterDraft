@@ -6,10 +6,10 @@ public class GemOptionButton : MonoBehaviour
 {
     [SerializeField] private int cost;
     [SerializeField] private int gemAmount;
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(IGameManager gameManager)
     {
         _gameManager = gameManager;
     }

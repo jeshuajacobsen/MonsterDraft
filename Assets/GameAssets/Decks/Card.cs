@@ -12,11 +12,11 @@ public class Card
             for(int i = 0; i < level - 1; i++)
             {
                 if (this is MonsterCard)
-                    addedCost += _gameManager.gameData.GetBaseMonsterData(Name).levelData[i].coinCostChange;
+                    addedCost += _gameManager.GameData.GetBaseMonsterData(Name).levelData[i].coinCostChange;
                 else if (this is TreasureCard)
-                    addedCost += _gameManager.gameData.GetTreasureData(Name).levelData[i].coinCostChange;
+                    addedCost += _gameManager.GameData.GetTreasureData(Name).levelData[i].coinCostChange;
                 else if (this is ActionCard)
-                    addedCost += _gameManager.gameData.GetActionData(Name).levelData[i].coinCostChange;
+                    addedCost += _gameManager.GameData.GetActionData(Name).levelData[i].coinCostChange;
             }
             return _cost + addedCost;
         }
@@ -70,9 +70,9 @@ public class Card
             for(int i = 0; i < level - 1; i++)
             {
                 if (this is TreasureCard)
-                    changedEffects = _gameManager.gameData.GetTreasureData(Name).levelData[i].effectChanges;
+                    changedEffects = _gameManager.GameData.GetTreasureData(Name).levelData[i].effectChanges;
                 else if (this is ActionCard)
-                    changedEffects = _gameManager.gameData.GetActionData(Name).levelData[i].effectChanges;
+                    changedEffects = _gameManager.GameData.GetActionData(Name).levelData[i].effectChanges;
                 
                 if (changedEffects != null)
                 {
@@ -119,9 +119,9 @@ public class Card
             for(int i = 0; i < level - 1; i++)
             {
                 if (this is TreasureCard)
-                    variableChanges = _gameManager.gameData.GetTreasureData(Name).levelData[i].effectVariableChanges;
+                    variableChanges = _gameManager.GameData.GetTreasureData(Name).levelData[i].effectVariableChanges;
                 else if (this is ActionCard)
-                    variableChanges = _gameManager.gameData.GetActionData(Name).levelData[i].effectVariableChanges;
+                    variableChanges = _gameManager.GameData.GetActionData(Name).levelData[i].effectVariableChanges;
                 
                 if (variableChanges != null)
                 {
@@ -148,10 +148,10 @@ public class Card
     public int maxLevel = 1;
     public int level = 1;
 
-    protected GameManager _gameManager;
+    protected IGameManager _gameManager;
 
     [Inject]
-    public void Construct(GameManager gameManager)
+    public void Construct(IGameManager gameManager)
     {
         _gameManager = gameManager;
     }

@@ -1,0 +1,24 @@
+{
+    "name": "Tests.EditMode",
+    "rootNamespace": "EditMode",
+    "references": [
+        "Zenject",
+        "Zenject-TestFramework",
+        "GameAssets",
+        "nunit.framework",
+        "Unity.Nuget.Mono-Cecil"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "Assets/Tests/EditMode/Libraries/NSubstitute.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

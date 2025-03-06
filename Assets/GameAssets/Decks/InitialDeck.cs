@@ -3,19 +3,18 @@ using Zenject;
 
 public class InitialDeck : Deck, IInitializable
 {
-    private GameManager _gameManager;
+    private IGameManager _gameManager;
     private CardFactory _cardFactory;
     private DiContainer _container;
 
     [Inject]
-    public void Construct(GameManager gameManager, CardFactory cardFactory, DiContainer container)
+    public void Construct(IGameManager gameManager, CardFactory cardFactory, DiContainer container)
     {
         _gameManager = gameManager;
         _cardFactory = cardFactory;
         _container = container;
     }
 
-    // Runs after injection is complete
     public void Initialize()
     {
         cards = new List<Card>();
@@ -31,7 +30,7 @@ public class InitialDeck : Deck, IInitializable
     {
         for (int i = 0; i < count; i++)
         {
-            cards.Add(_cardFactory.CreateCard(cardName, _gameManager.cardLevels[cardName]));
+            cards.Add(_cardFactory.CreateCard(cardName, _gameManager.CardLevels[cardName]));
         }
     }
 
@@ -41,7 +40,7 @@ public class InitialDeck : Deck, IInitializable
 
         foreach (string card in cards)
         {
-            this.cards.Add(_cardFactory.CreateCard(card, _gameManager.cardLevels[card]));
+            this.cards.Add(_cardFactory.CreateCard(card, _gameManager.CardLevels[card]));
         }
     }
 
@@ -49,7 +48,7 @@ public class InitialDeck : Deck, IInitializable
     {
         foreach (Card card in cards)
         {
-            card.level = _gameManager.cardLevels[card.Name];
+            card.level = _gameManager.CardLevels[card.Name];
         }
     }
 }
